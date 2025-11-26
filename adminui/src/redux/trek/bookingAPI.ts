@@ -15,7 +15,7 @@ export const bookingAPI = createApi({
     baseQuery: baseQueryWithAuth,
     tagTypes: ["Booking"],
     endpoints: (builder) => ({
-        getAllBookings: builder.query<any, PaginationParams>({
+        getAllBooking: builder.query<any, PaginationParams>({
             query: (params) => ({
                 url: "/api/v1/booking/all",
                 method: "GET",
@@ -89,7 +89,7 @@ export const bookingAPI = createApi({
 });
 
 export const {
-    useGetAllBookingsQuery,
+    useGetAllBookingQuery,
     useGetBookingDetailQuery,
     useSaveBookingBasicMutation,
     useChangeBookingStatusMutation,

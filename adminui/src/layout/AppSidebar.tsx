@@ -208,6 +208,43 @@ const adminnavItems: NavItem[] = [
 const sunavItems: NavItem[] = [
   { icon: <GridIcon />, name: "Dashboard", path: "/superadmin/dashboard" },
   {
+    icon: <BoxCubeIcon />,
+    name: "Hotel",
+    subItems: [
+      { name: "Hotel", path: "/superadmin/hotel", pro: false },
+    ],
+  },
+  {
+    icon: <BoxCubeIcon />,
+    name: "Trek",
+    subItems: [
+      { name: "Trek", path: "/superadmin/trek/trek", pro: false },
+      { name: "Accessibility", path: "/superadmin/trek/accessibility", pro: false },
+      { name: "Activity Level", path: "/superadmin/trek/activitylevel", pro: false },
+      { name: "Activity Type", path: "/superadmin/trek/activitytype", pro: false },
+      { name: "Equipment", path: "/superadmin/trek/equipment", pro: false },
+      { name: "Equipment Category", path: "/superadmin/trek/equipmentcategory", pro: false },
+      { name: "Permit", path: "/superadmin/trek/permit", pro: false },
+      { name: "In-Ex Service", path: "/superadmin/trek/inexservice", pro: false },
+    ],
+  },
+  {
+    icon: <CalenderIcon />,
+    name: "Booking",
+    subItems: [
+      { name: "Bookings", path: "/superadmin/trek/booking", pro: false },
+    ],
+  },
+  {
+    icon: <ListIcon />,
+    name: "Other",
+    subItems: [
+      { name: "Tour Type", path: "/superadmin/trek/tourtype", pro: false },
+      { name: "City", path: "/superadmin/trek/city", pro: false },
+      { name: "Currency", path: "/superadmin/trek/currency", pro: false },
+    ],
+  },
+  {
     icon: <AIAssistantIcon />,
     name: "AI Assistant",
     subItems: [
