@@ -10,6 +10,19 @@ import { moderationAPI } from "./aibot/moderationAPI";
 import { systemPromptAPI } from "./aibot/systemPromptAPI";
 import { themeAPI } from "./aibot/themeAPI";
 import { supportAPI } from "./admin/SupportTicketAPI";
+import { accessibilityAPI } from "./trek/accessibilityAPI";
+import { activityLevelAPI } from "./trek/activityLevelAPI";
+import { activityTypeAPI } from "./trek/activityTypeAPI";
+import { bookingAPI } from "./trek/bookingAPI";
+import { cityAPI } from "./trek/cityAPI";
+import { currencyAPI } from "./trek/currencyAPI";
+import { equipmentAPI } from "./trek/equipmentAPI";
+import { equipmentCategoryAPI } from "./trek/equipmentCategoryAPI";
+import { inExServiceAPI } from "./trek/inExServiceAPI";
+import { permitAPI } from "./trek/permitAPI";
+import { tourTypeAPI } from "./trek/tourTypeAPI";
+import { trekAPI } from "./trek/trekAPI";
+import { chunkFileUploadAPI } from "./trek/chunkFileUploadAPI";
 
 
 export const store = configureStore({
@@ -23,7 +36,20 @@ export const store = configureStore({
     [moderationAPI.reducerPath]: moderationAPI.reducer,
     [systemPromptAPI.reducerPath]: systemPromptAPI.reducer,
     [themeAPI.reducerPath]: themeAPI.reducer,
-    [supportAPI.reducerPath]:supportAPI.reducer
+    [supportAPI.reducerPath]: supportAPI.reducer,
+    [accessibilityAPI.reducerPath]: accessibilityAPI.reducer,
+    [activityLevelAPI.reducerPath]: activityLevelAPI.reducer,
+    [activityTypeAPI.reducerPath]: activityTypeAPI.reducer,
+    [bookingAPI.reducerPath]: bookingAPI.reducer,
+    [cityAPI.reducerPath]: cityAPI.reducer,
+    [currencyAPI.reducerPath]: currencyAPI.reducer,
+    [equipmentAPI.reducerPath]: equipmentAPI.reducer,
+    [equipmentCategoryAPI.reducerPath]: equipmentCategoryAPI.reducer,
+    [inExServiceAPI.reducerPath]: inExServiceAPI.reducer,
+    [permitAPI.reducerPath]: permitAPI.reducer,
+    [tourTypeAPI.reducerPath]: tourTypeAPI.reducer,
+    [trekAPI.reducerPath]: trekAPI.reducer,
+    [chunkFileUploadAPI.reducerPath]: chunkFileUploadAPI.reducer,
 
 
   },
@@ -38,7 +64,20 @@ export const store = configureStore({
       moderationAPI.middleware,
       systemPromptAPI.middleware,
       themeAPI.middleware,
-      supportAPI.middleware
+      supportAPI.middleware,
+      accessibilityAPI.middleware,
+      activityLevelAPI.middleware,
+      activityTypeAPI.middleware,
+      bookingAPI.middleware,
+      cityAPI.middleware,
+      currencyAPI.middleware,
+      equipmentAPI.middleware,
+      equipmentCategoryAPI.middleware,
+      inExServiceAPI.middleware,
+      permitAPI.middleware,
+      tourTypeAPI.middleware,
+      trekAPI.middleware,
+      chunkFileUploadAPI.middleware
     ),
 });
 
