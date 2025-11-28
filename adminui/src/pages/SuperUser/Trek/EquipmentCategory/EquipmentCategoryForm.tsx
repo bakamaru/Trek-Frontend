@@ -46,13 +46,13 @@ const EquipmentCategoryForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                equipmentCategoryId: detailData.data.equipmentCategoryId,
-                name: detailData.data.name,
-                description: detailData.data.description,
-                tag: detailData.data.tag,
-                isActive: detailData.data.isActive,
+                equipmentCategoryId: detailData.Data.EquipmentCategoryId,
+                name: detailData.Data.Name,
+                description: detailData.Data.Description,
+                tag: detailData.Data.Tag,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -66,7 +66,7 @@ const EquipmentCategoryForm = () => {
 
             const response = await saveEquipmentCategory(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Equipment Category saved successfully!");
                 navigate("/superadmin/trek/equipmentcategory");
             } else {

@@ -98,7 +98,7 @@ export default function CurrencyList() {
             key: "currencyId",
             label: "#No",
             render: (item: any) => {
-                return item?.currencyId ? item?.currencyId : "N/A";
+                return item?.CurrencyId ? item?.CurrencyId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function CurrencyList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/currency/edit?id=${item?.currencyId}`}
+                    to={`/superadmin/trek/currency/edit?id=${item?.CurrencyId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function CurrencyList() {
             label: "Code",
             render: (item: any) => (
                 <>
-                    {item.code || "N/A"}
+                    {item.Code || "N/A"}
                 </>
             ),
         },
@@ -135,7 +135,7 @@ export default function CurrencyList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -146,7 +146,7 @@ export default function CurrencyList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/currency/edit?id=${row.currencyId}`);
+                            navigate(`/superadmin/trek/currency/edit?id=${row.CurrencyId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -156,7 +156,7 @@ export default function CurrencyList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.currencyId);
+                                handleDelete(row.CurrencyId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -171,7 +171,7 @@ export default function CurrencyList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteCurrency(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Currency deleted successfully!");
                 refetch();
             } else {
@@ -183,10 +183,10 @@ export default function CurrencyList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setCurrencies(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setCurrencies(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

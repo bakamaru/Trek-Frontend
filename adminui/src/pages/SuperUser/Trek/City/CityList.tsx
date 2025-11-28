@@ -98,7 +98,7 @@ export default function CityList() {
             key: "cityId",
             label: "#No",
             render: (item: any) => {
-                return item?.cityId ? item?.cityId : "N/A";
+                return item?.CityId ? item?.CityId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function CityList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/city/edit?id=${item?.cityId}`}
+                    to={`/superadmin/trek/city/edit?id=${item?.CityId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function CityList() {
             label: "State/Province",
             render: (item: any) => (
                 <>
-                    {item.stateProvince || "N/A"}
+                    {item.StateProvince || "N/A"}
                 </>
             ),
         },
@@ -126,7 +126,7 @@ export default function CityList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -137,7 +137,7 @@ export default function CityList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/city/edit?id=${row.cityId}`);
+                            navigate(`/superadmin/trek/city/edit?id=${row.CityId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -147,7 +147,7 @@ export default function CityList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.cityId);
+                                handleDelete(row.CityId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -162,7 +162,7 @@ export default function CityList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteCity(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("City deleted successfully!");
                 refetch();
             } else {
@@ -174,10 +174,10 @@ export default function CityList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setCities(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setCities(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

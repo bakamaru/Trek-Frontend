@@ -98,7 +98,7 @@ export default function EquipmentCategoryList() {
             key: "equipmentCategoryId",
             label: "#No",
             render: (item: any) => {
-                return item?.equipmentCategoryId ? item?.equipmentCategoryId : "N/A";
+                return item?.EquipmentCategoryId ? item?.EquipmentCategoryId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function EquipmentCategoryList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/equipmentcategory/edit?id=${item?.equipmentCategoryId}`}
+                    to={`/superadmin/trek/equipmentcategory/edit?id=${item?.EquipmentCategoryId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function EquipmentCategoryList() {
             label: "Description",
             render: (item: any) => (
                 <>
-                    {item.description || "N/A"}
+                    {item.Description || "N/A"}
                 </>
             ),
         },
@@ -135,7 +135,7 @@ export default function EquipmentCategoryList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -146,7 +146,7 @@ export default function EquipmentCategoryList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/equipmentcategory/edit?id=${row.equipmentCategoryId}`);
+                            navigate(`/superadmin/trek/equipmentcategory/edit?id=${row.EquipmentCategoryId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -156,7 +156,7 @@ export default function EquipmentCategoryList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.equipmentCategoryId);
+                                handleDelete(row.EquipmentCategoryId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -171,7 +171,7 @@ export default function EquipmentCategoryList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteEquipmentCategory(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Equipment Category deleted successfully!");
                 refetch();
             } else {
@@ -183,10 +183,10 @@ export default function EquipmentCategoryList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setEquipmentCategories(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setEquipmentCategories(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

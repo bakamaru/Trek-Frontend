@@ -1,3 +1,35 @@
+
+export interface TrekCategorySaveRequest {
+    trekCategoryId: number; // 0 or missing/0 => insert, >0 => update
+    name: string;
+    description: string;
+    isActive: boolean;
+}
+
+export interface TrekCategory {
+    trekCategoryId: number;
+    name: string;
+    description: string;
+    isActive: boolean;
+    // add more if you ever need audit fields on FE:
+    // isDeleted: boolean;
+    // addedOn: string;
+    // ...
+}
+
+export interface TrekRegionSaveRequest {
+    trekRegionId: number;
+    name: string;
+    description: string;
+    isActive: boolean;
+}
+
+export interface TrekRegion {
+    trekRegionId: number;
+    name: string;
+    description: string;
+    isActive: boolean;
+}
 export interface AccessibilitySaveRequest {
     accessibilityId?: number;
     name?: string;
@@ -21,6 +53,9 @@ export interface ActivityTypeSaveRequest {
 
 export interface BookingBasicSaveRequest {
     bookingId?: number;
+    userId?: number;
+    trekId?: number;
+    trekDepartureId?: number;
     productType: string;
     productId?: number;
     adult?: number;
@@ -28,6 +63,7 @@ export interface BookingBasicSaveRequest {
     preferedStartDate?: string | null;
     arrivalDate?: string | null;
     departureDate?: string | null;
+    bookingDate?: string;
     firstName: string;
     middleName?: string;
     lastName?: string;
@@ -37,13 +73,18 @@ export interface BookingBasicSaveRequest {
     email?: string;
     homePhoneNumber?: string;
     workPhoneNumber?: string;
+    contactName?: string;
+    contactEmail?: string;
+    contactPhone?: string;
     modeOfPayment?: string;
     paymentReference?: string;
     totalAmount?: number;
+    currency?: string;
     flightName?: string;
     flightNumber?: string;
     airportPickUp?: boolean;
     specialRequest?: string;
+    specialRequests?: string;
     bookingStatus?: string;
 }
 
@@ -101,6 +142,30 @@ export interface BookingTravellerSaveRequest {
     travellerType: string;
 }
 
+export interface BookingDetail {
+    BookingId?: number;
+    BookingStatus?: string;
+    PaymentStatus?: string;
+    ProductType?: string;
+    ProductId?: number;
+    ProductName?: string;
+    TrekName?: string;
+    ContactName?: string;
+    ContactEmail?: string;
+    ContactPhone?: string;
+    StartDate?: string;
+    EndDate?: string;
+    Adults?: number;
+    Children?: number;
+    TotalAmount?: number;
+    PaidAmount?: number;
+    DueAmount?: number;
+    BookingDate?: string;
+    SpecialRequest?: string;
+    CancellationReason?: string;
+}
+
+
 export interface CitySaveRequest {
     cityId?: number;
     countryId?: number;
@@ -142,6 +207,7 @@ export interface EquipmentSaveRequest {
 export interface InExServiceSaveRequest {
     inExServiceId?: number;
     name?: string;
+    description?: string;
     isIncluded?: boolean;
     isActive?: boolean;
 }
@@ -267,6 +333,26 @@ export interface TrekReviewSaveRequest {
     review?: string;
     reviewedByName?: string;
     isApproved?: boolean;
+}
+
+export interface TrekWhyUsSaveRequest {
+    trekWhyUsId?: number;
+    description?: string;
+    displayOrder?: number;
+}
+
+// Common params
+export interface PaginationParams {
+    offset?: number;
+    limit?: number;
+    query?: string;
+}
+
+export interface ApiResponse<T> {
+    Code: number;
+    Message: string;
+    Data: T;
+    Errors: string[];
 }
 
 export interface TrekWhyUsSaveRequest {

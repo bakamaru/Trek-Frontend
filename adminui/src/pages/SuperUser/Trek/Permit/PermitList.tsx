@@ -98,35 +98,35 @@ export default function PermitList() {
             key: "permitId",
             label: "#No",
             render: (item: any) => {
-                return item?.permitId ? item?.permitId : "N/A";
+                return item?.PermitId ? item?.PermitId : "N/A";
             },
         },
         {
-            key: "name",
-            label: "Name",
+            key: "permitName",
+            label: "Permit Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/permit/edit?id=${item?.permitId}`}
+                    to={`/superadmin/trek/permit/edit?id=${item?.PermitId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.PermitName}</span>
                 </Link>
             ),
         },
         {
-            key: "description",
-            label: "Description",
+            key: "fullPermitName",
+            label: "Full Permit Name",
             render: (item: any) => (
                 <>
-                    {item.description || "N/A"}
+                    {item.FullPermitName || "N/A"}
                 </>
             ),
         },
         {
-            key: "isActive",
-            label: "Is Active",
+            key: "agencyHandles",
+            label: "Agency Handles",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.AgencyHandles ? "Yes" : "No";
             },
         },
         {
@@ -137,7 +137,7 @@ export default function PermitList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/permit/edit?id=${row.permitId}`);
+                            navigate(`/superadmin/trek/permit/edit?id=${row.PermitId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -147,7 +147,7 @@ export default function PermitList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.permitId);
+                                handleDelete(row.PermitId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -162,7 +162,7 @@ export default function PermitList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deletePermit(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Permit deleted successfully!");
                 refetch();
             } else {
@@ -174,10 +174,10 @@ export default function PermitList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setPermits(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setPermits(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

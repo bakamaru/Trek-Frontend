@@ -47,15 +47,15 @@ const CurrencyForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                currencyId: detailData.data.currencyId,
-                code: detailData.data.code,
-                name: detailData.data.name,
-                symbol: detailData.data.symbol,
-                decimalPlaces: detailData.data.decimalPlaces,
-                isSystem: detailData.data.isSystem,
-                isActive: detailData.data.isActive,
+                currencyId: detailData.Data.CurrencyId,
+                code: detailData.Data.Code,
+                name: detailData.Data.Name,
+                symbol: detailData.Data.Symbol,
+                decimalPlaces: detailData.Data.DecimalPlaces,
+                isSystem: detailData.Data.IsSystem,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -69,7 +69,7 @@ const CurrencyForm = () => {
 
             const response = await saveCurrency(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Currency saved successfully!");
                 navigate("/superadmin/trek/currency");
             } else {

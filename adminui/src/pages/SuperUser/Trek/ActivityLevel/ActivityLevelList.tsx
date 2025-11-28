@@ -98,7 +98,7 @@ export default function ActivityLevelList() {
             key: "activityLevelId",
             label: "#No",
             render: (item: any) => {
-                return item?.activityLevelId ? item?.activityLevelId : "N/A";
+                return item?.ActivityLevelId ? item?.ActivityLevelId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function ActivityLevelList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/activitylevel/edit?id=${item?.activityLevelId}`}
+                    to={`/superadmin/trek/activitylevel/edit?id=${item?.ActivityLevelId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function ActivityLevelList() {
             label: "Description",
             render: (item: any) => (
                 <>
-                    {item.description || "N/A"}
+                    {item.Description || "N/A"}
                 </>
             ),
         },
@@ -126,7 +126,7 @@ export default function ActivityLevelList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -137,7 +137,7 @@ export default function ActivityLevelList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/activitylevel/edit?id=${row.activityLevelId}`);
+                            navigate(`/superadmin/trek/activitylevel/edit?id=${row.ActivityLevelId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -147,7 +147,7 @@ export default function ActivityLevelList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.activityLevelId);
+                                handleDelete(row.ActivityLevelId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -162,7 +162,7 @@ export default function ActivityLevelList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteActivityLevel(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Activity Level deleted successfully!");
                 refetch();
             } else {
@@ -174,10 +174,10 @@ export default function ActivityLevelList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setActivityLevels(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setActivityLevels(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

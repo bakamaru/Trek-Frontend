@@ -98,7 +98,7 @@ export default function TourTypeList() {
             key: "tourTypeId",
             label: "#No",
             render: (item: any) => {
-                return item?.tourTypeId ? item?.tourTypeId : "N/A";
+                return item?.TourTypeId ? item?.TourTypeId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function TourTypeList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/tourtype/edit?id=${item?.tourTypeId}`}
+                    to={`/superadmin/trek/tourtype/edit?id=${item?.TourTypeId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function TourTypeList() {
             label: "Description",
             render: (item: any) => (
                 <>
-                    {item.description || "N/A"}
+                    {item.Description || "N/A"}
                 </>
             ),
         },
@@ -126,7 +126,7 @@ export default function TourTypeList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -137,7 +137,7 @@ export default function TourTypeList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/tourtype/edit?id=${row.tourTypeId}`);
+                            navigate(`/superadmin/trek/tourtype/edit?id=${row.TourTypeId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -147,7 +147,7 @@ export default function TourTypeList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.tourTypeId);
+                                handleDelete(row.TourTypeId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -162,7 +162,7 @@ export default function TourTypeList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteTourType(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Tour Type deleted successfully!");
                 refetch();
             } else {
@@ -174,10 +174,10 @@ export default function TourTypeList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setTourTypes(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setTourTypes(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

@@ -45,12 +45,12 @@ const AccessibilityForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                accessibilityId: detailData.data.accessibilityId,
-                name: detailData.data.name,
-                description: detailData.data.description,
-                isActive: detailData.data.isActive,
+                accessibilityId: detailData.Data.AccessibilityId,
+                name: detailData.Data.Name,
+                description: detailData.Data.Description,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -64,7 +64,7 @@ const AccessibilityForm = () => {
 
             const response = await saveAccessibility(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Accessibility saved successfully!");
                 navigate("/superadmin/trek/accessibility");
             } else {

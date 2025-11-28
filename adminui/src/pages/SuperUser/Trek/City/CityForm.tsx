@@ -48,16 +48,16 @@ const CityForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                cityId: detailData.data.cityId,
-                countryId: detailData.data.countryId,
-                name: detailData.data.name,
-                stateProvince: detailData.data.stateProvince,
-                latitude: detailData.data.latitude,
-                longitude: detailData.data.longitude,
-                isSystem: detailData.data.isSystem,
-                isActive: detailData.data.isActive,
+                cityId: detailData.Data.CityId,
+                countryId: detailData.Data.CountryId,
+                name: detailData.Data.Name,
+                stateProvince: detailData.Data.StateProvince,
+                latitude: detailData.Data.Latitude,
+                longitude: detailData.Data.Longitude,
+                isSystem: detailData.Data.IsSystem,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -71,7 +71,7 @@ const CityForm = () => {
 
             const response = await saveCity(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("City saved successfully!");
                 navigate("/superadmin/trek/city");
             } else {

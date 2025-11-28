@@ -23,6 +23,8 @@ import { permitAPI } from "./trek/permitAPI";
 import { tourTypeAPI } from "./trek/tourTypeAPI";
 import { trekAPI } from "./trek/trekAPI";
 import { chunkFileUploadAPI } from "./trek/chunkFileUploadAPI";
+import { trekCategoryAPI } from "./trek/trekCategoryAPI";
+import { trekRegionAPI } from "./trek/trekRegionAPI";
 
 
 export const store = configureStore({
@@ -50,6 +52,8 @@ export const store = configureStore({
     [tourTypeAPI.reducerPath]: tourTypeAPI.reducer,
     [trekAPI.reducerPath]: trekAPI.reducer,
     [chunkFileUploadAPI.reducerPath]: chunkFileUploadAPI.reducer,
+    [trekCategoryAPI.reducerPath]: trekCategoryAPI.reducer,
+    [trekRegionAPI.reducerPath]: trekRegionAPI.reducer,
 
 
   },
@@ -77,7 +81,9 @@ export const store = configureStore({
       permitAPI.middleware,
       tourTypeAPI.middleware,
       trekAPI.middleware,
-      chunkFileUploadAPI.middleware
+      chunkFileUploadAPI.middleware,
+      trekCategoryAPI.middleware,
+      trekRegionAPI.middleware
     ),
 });
 

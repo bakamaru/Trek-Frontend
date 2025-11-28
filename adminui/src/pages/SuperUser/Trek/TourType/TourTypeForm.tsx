@@ -45,12 +45,12 @@ const TourTypeForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                tourTypeId: detailData.data.tourTypeId,
-                name: detailData.data.name,
-                description: detailData.data.description,
-                isActive: detailData.data.isActive,
+                tourTypeId: detailData.Data.TourTypeId,
+                name: detailData.Data.Name,
+                description: detailData.Data.Description,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -64,7 +64,7 @@ const TourTypeForm = () => {
 
             const response = await saveTourType(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Tour Type saved successfully!");
                 navigate("/superadmin/trek/tourtype");
             } else {

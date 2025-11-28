@@ -61,28 +61,28 @@ const TrekForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                trekId: detailData.data.trekId,
-                trekCategoryId: detailData.data.trekCategoryId,
-                activityLevelId: detailData.data.activityLevelId,
-                activityTypeId: detailData.data.activityTypeId,
-                name: detailData.data.name,
-                url: detailData.data.url,
-                description: detailData.data.description,
-                durationDays: detailData.data.durationDays,
-                maxAltitudeMeters: detailData.data.maxAltitudeMeters,
-                maxAltitudeFeet: detailData.data.maxAltitudeFeet,
-                priceInUSD: detailData.data.priceInUSD,
-                priceInNrs: detailData.data.priceInNrs,
-                startingPoint: detailData.data.startingPoint,
-                endingPoint: detailData.data.endingPoint,
-                baseAccommodationType: detailData.data.baseAccommodationType,
-                trekMap: detailData.data.trekMap,
-                trekRegionId: detailData.data.trekRegionId,
-                startCityId: detailData.data.startCityId,
-                endCityId: detailData.data.endCityId,
-                isActive: detailData.data.isActive,
+                trekId: detailData.Data.TrekId,
+                trekCategoryId: detailData.Data.TrekCategoryId,
+                activityLevelId: detailData.Data.ActivityLevelId,
+                activityTypeId: detailData.Data.ActivityTypeId,
+                name: detailData.Data.Name,
+                url: detailData.Data.Url,
+                description: detailData.Data.Description,
+                durationDays: detailData.Data.DurationDays,
+                maxAltitudeMeters: detailData.Data.MaxAltitudeMeters,
+                maxAltitudeFeet: detailData.Data.MaxAltitudeFeet,
+                priceInUSD: detailData.Data.PriceInUSD,
+                priceInNrs: detailData.Data.PriceInNrs,
+                startingPoint: detailData.Data.StartingPoint,
+                endingPoint: detailData.Data.EndingPoint,
+                baseAccommodationType: detailData.Data.BaseAccommodationType,
+                trekMap: detailData.Data.TrekMap,
+                trekRegionId: detailData.Data.TrekRegionId,
+                startCityId: detailData.Data.StartCityId,
+                endCityId: detailData.Data.EndCityId,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -96,7 +96,7 @@ const TrekForm = () => {
 
             const response = await saveTrekBasic(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Trek saved successfully!");
                 navigate("/superadmin/trek/trek");
             } else {

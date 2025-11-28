@@ -212,20 +212,23 @@ const sunavItems: NavItem[] = [
     name: "Hotel",
     subItems: [
       { name: "Hotel", path: "/superadmin/hotel", pro: false },
+      { name: "Accessibility", path: "/superadmin/trek/accessibility", pro: false },
     ],
   },
   {
     icon: <BoxCubeIcon />,
     name: "Trek",
     subItems: [
-      { name: "Trek", path: "/superadmin/trek/trek", pro: false },
-      { name: "Accessibility", path: "/superadmin/trek/accessibility", pro: false },
+      { name: "Category", path: "/superadmin/trek/category", pro: false },
+      { name: "Region", path: "/superadmin/trek/region", pro: false },
+
       { name: "Activity Level", path: "/superadmin/trek/activitylevel", pro: false },
       { name: "Activity Type", path: "/superadmin/trek/activitytype", pro: false },
       { name: "Equipment", path: "/superadmin/trek/equipment", pro: false },
       { name: "Equipment Category", path: "/superadmin/trek/equipmentcategory", pro: false },
       { name: "Permit", path: "/superadmin/trek/permit", pro: false },
       { name: "In-Ex Service", path: "/superadmin/trek/inexservice", pro: false },
+      { name: "Trek", path: "/superadmin/trek/trek", pro: false },
     ],
   },
   {

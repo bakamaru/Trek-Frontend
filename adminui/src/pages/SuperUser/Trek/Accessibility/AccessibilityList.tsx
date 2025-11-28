@@ -98,7 +98,7 @@ export default function AccessibilityList() {
             key: "accessibilityId",
             label: "#No",
             render: (item: any) => {
-                return item?.accessibilityId ? item?.accessibilityId : "N/A";
+                return item?.AccessibilityId ? item?.AccessibilityId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function AccessibilityList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/accessibility/edit?id=${item?.accessibilityId}`}
+                    to={`/superadmin/trek/accessibility/edit?id=${item?.AccessibilityId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function AccessibilityList() {
             label: "Description",
             render: (item: any) => (
                 <>
-                    {item.description || "N/A"}
+                    {item.Description || "N/A"}
                 </>
             ),
         },
@@ -126,7 +126,7 @@ export default function AccessibilityList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -137,7 +137,7 @@ export default function AccessibilityList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/accessibility/edit?id=${row.accessibilityId}`);
+                            navigate(`/superadmin/trek/accessibility/edit?id=${row.AccessibilityId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -147,7 +147,7 @@ export default function AccessibilityList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.accessibilityId);
+                                handleDelete(row.AccessibilityId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -162,7 +162,7 @@ export default function AccessibilityList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteAccessibility(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Accessibility deleted successfully!");
                 refetch();
             } else {
@@ -174,10 +174,10 @@ export default function AccessibilityList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setAccessibilities(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0); // Assuming API returns totalRows in the first item or separately. Adjust based on actual API response structure if needed.
+        if (data != undefined && data.Code == 200) {
+            setAccessibilities(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0); // Assuming API returns totalRows in the first item or separately. Adjust based on actual API response structure if needed.
                 // If the API structure is different (e.g. data.totalCount), adjust here.
                 // Based on AIAssistant, it used item.RowTotal.
                 // I will assume the new API follows a similar pattern or standard pagination.

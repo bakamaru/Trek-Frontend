@@ -28,7 +28,7 @@ const InExServiceForm = () => {
             inExServiceId: 0,
             name: "",
             description: "",
-            type: "INCLUSION", // Default
+            isIncluded: true, // Default to inclusion
             isActive: true,
         },
     });
@@ -47,13 +47,13 @@ const InExServiceForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                inExServiceId: detailData.data.inExServiceId,
-                name: detailData.data.name,
-                description: detailData.data.description,
-                type: detailData.data.type,
-                isActive: detailData.data.isActive,
+                inExServiceId: detailData.Data.InExServiceId,
+                name: detailData.Data.Name,
+                description: detailData.Data.Description,
+                isIncluded: detailData.Data.IsIncluded,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -67,7 +67,7 @@ const InExServiceForm = () => {
 
             const response = await saveInExService(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Service saved successfully!");
                 navigate("/superadmin/trek/inexservice");
             } else {
@@ -106,12 +106,15 @@ const InExServiceForm = () => {
                             labelName="Type"
                             placeholder="Select Type"
                             options={[
-                                { label: "Inclusion", value: "INCLUSION" },
-                                { label: "Exclusion", value: "EXCLUSION" },
+                                { label: "Inclusion", value: "true" },
+                                { label: "Exclusion", value: "false" },
                             ]}
-                            {...register("type", { required: "Type is required" })}
-                            error={!!errors?.type}
-                            errorMsg={errors?.type?.message}
+                            {...register("isIncluded", {
+                                required: "Type is required",
+                                setValueAs: (value) => value === "true"
+                            })}
+                            error={!!errors?.isIncluded}
+                            errorMsg={errors?.isIncluded?.message}
                         />
 
                         <Checkbox label="Active" {...register("isActive")} />

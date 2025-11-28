@@ -98,7 +98,7 @@ export default function EquipmentList() {
             key: "equipmentId",
             label: "#No",
             render: (item: any) => {
-                return item?.equipmentId ? item?.equipmentId : "N/A";
+                return item?.EquipmentId ? item?.EquipmentId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function EquipmentList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/equipment/edit?id=${item?.equipmentId}`}
+                    to={`/superadmin/trek/equipment/edit?id=${item?.EquipmentId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function EquipmentList() {
             label: "Description",
             render: (item: any) => (
                 <>
-                    {item.description || "N/A"}
+                    {item.Description || "N/A"}
                 </>
             ),
         },
@@ -126,7 +126,7 @@ export default function EquipmentList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -137,7 +137,7 @@ export default function EquipmentList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/equipment/edit?id=${row.equipmentId}`);
+                            navigate(`/superadmin/trek/equipment/edit?id=${row.EquipmentId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -147,7 +147,7 @@ export default function EquipmentList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.equipmentId);
+                                handleDelete(row.EquipmentId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -162,7 +162,7 @@ export default function EquipmentList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteEquipment(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Equipment deleted successfully!");
                 refetch();
             } else {
@@ -174,10 +174,10 @@ export default function EquipmentList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setEquipments(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setEquipments(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

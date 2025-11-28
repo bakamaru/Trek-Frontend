@@ -41,6 +41,11 @@ import TrekList from "../pages/SuperUser/Trek/Trek/TrekList";
 import TrekForm from "../pages/SuperUser/Trek/Trek/TrekForm";
 import BookingList from "../pages/SuperUser/Trek/Booking/BookingList";
 import BookingForm from "../pages/SuperUser/Trek/Booking/BookingForm";
+import BookingDetail from "../pages/SuperUser/Trek/Booking/BookingDetail";
+import TrekRegionForm from "../pages/SuperUser/Trek/Region/TrekRegionForm";
+import TrekRegionList from "../pages/SuperUser/Trek/Region/TrekRegionList";
+import TrekCategoryList from "../pages/SuperUser/Trek/Category/TrekCategoryList";
+import TrekCategoryForm from "../pages/SuperUser/Trek/Category/TrekCategoryForm";
 
 
 const appRoutes: RouteObject[] = [
@@ -137,9 +142,16 @@ const superUserRoutes: RouteObject = {
     { path: "trek/trek", element: <TrekList /> },
     { path: "trek/trek/new", element: <TrekForm /> },
     { path: "trek/trek/edit", element: <TrekForm /> },
+    { path: "trek/region", element: <TrekRegionList /> },
+    { path: "trek/region/new", element: <TrekRegionForm /> },
+    { path: "trek/region/edit", element: <TrekRegionForm /> },
+    { path: "trek/category", element: <TrekCategoryList /> },
+    { path: "trek/category/new", element: <TrekCategoryForm /> },
+    { path: "trek/category/edit", element: <TrekCategoryForm /> },
 
     { path: "trek/booking", element: <BookingList /> },
     { path: "trek/booking/new", element: <BookingForm /> },
+    { path: "trek/booking/detail", element: <BookingDetail /> },
     { path: "trek/booking/edit", element: <BookingForm /> },
   ],
 };

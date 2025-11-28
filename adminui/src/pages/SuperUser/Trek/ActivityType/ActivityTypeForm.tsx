@@ -45,12 +45,12 @@ const ActivityTypeForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                activityTypeId: detailData.data.activityTypeId,
-                name: detailData.data.name,
-                description: detailData.data.description,
-                isActive: detailData.data.isActive,
+                activityTypeId: detailData.Data.ActivityTypeId,
+                name: detailData.Data.Name,
+                description: detailData.Data.Description,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -64,7 +64,7 @@ const ActivityTypeForm = () => {
 
             const response = await saveActivityType(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Activity Type saved successfully!");
                 navigate("/superadmin/trek/activitytype");
             } else {

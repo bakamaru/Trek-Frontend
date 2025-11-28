@@ -45,12 +45,12 @@ const ActivityLevelForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                activityLevelId: detailData.data.activityLevelId,
-                name: detailData.data.name,
-                description: detailData.data.description,
-                isActive: detailData.data.isActive,
+                activityLevelId: detailData.Data.ActivityLevelId,
+                name: detailData.Data.Name,
+                description: detailData.Data.Description,
+                isActive: detailData.Data.IsActive,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -64,7 +64,7 @@ const ActivityLevelForm = () => {
 
             const response = await saveActivityLevel(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Activity Level saved successfully!");
                 navigate("/superadmin/trek/activitylevel");
             } else {

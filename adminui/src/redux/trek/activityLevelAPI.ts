@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "../../config/apiConfig";
-import { ActivityLevelSaveRequest, PaginationParams } from "../../types/trekTypes";
+import { ActivityLevelSaveRequest, PaginationParams, ApiResponse } from "../../types/trekTypes";
 
 export const activityLevelAPI = createApi({
     reducerPath: "activityLevelAPI",

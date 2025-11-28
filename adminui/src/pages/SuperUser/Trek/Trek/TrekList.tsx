@@ -98,7 +98,7 @@ export default function TrekList() {
             key: "trekId",
             label: "#No",
             render: (item: any) => {
-                return item?.trekId ? item?.trekId : "N/A";
+                return item?.TrekId ? item?.TrekId : "N/A";
             },
         },
         {
@@ -106,10 +106,10 @@ export default function TrekList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/trek/edit?id=${item?.trekId}`}
+                    to={`/superadmin/trek/trek/edit?id=${item?.TrekId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.name}</span>
+                    <span className=" break-words">{item.Name}</span>
                 </Link>
             ),
         },
@@ -118,7 +118,7 @@ export default function TrekList() {
             label: "Days",
             render: (item: any) => (
                 <>
-                    {item.durationDays || "N/A"}
+                    {item.DurationDays || "N/A"}
                 </>
             ),
         },
@@ -127,7 +127,7 @@ export default function TrekList() {
             label: "Difficulty",
             render: (item: any) => (
                 <>
-                    {item.difficulty || "N/A"}
+                    {item.Difficulty || "N/A"}
                 </>
             ),
         },
@@ -135,7 +135,7 @@ export default function TrekList() {
             key: "isActive",
             label: "Is Active",
             render: (item: any) => {
-                return item?.isActive ? "Yes" : "No";
+                return item?.IsActive ? "Yes" : "No";
             },
         },
         {
@@ -146,7 +146,7 @@ export default function TrekList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/trek/edit?id=${row.trekId}`);
+                            navigate(`/superadmin/trek/trek/edit?id=${row.TrekId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -156,7 +156,7 @@ export default function TrekList() {
                         title="Delete"
                         onClick={() => {
                             if (confirm("Are you sure?")) {
-                                handleDelete(row.trekId);
+                                handleDelete(row.TrekId);
                             }
                         }}
                         className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
@@ -171,7 +171,7 @@ export default function TrekList() {
     const handleDelete = async (id: number) => {
         try {
             var response: any = await deleteTrek(id).unwrap();
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Trek deleted successfully!");
                 refetch();
             } else {
@@ -183,10 +183,10 @@ export default function TrekList() {
     };
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setTreks(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setTreks(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);
