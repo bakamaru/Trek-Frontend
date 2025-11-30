@@ -37,8 +37,6 @@ import PermitList from "../pages/SuperUser/Trek/Permit/PermitList";
 import PermitForm from "../pages/SuperUser/Trek/Permit/PermitForm";
 import TourTypeList from "../pages/SuperUser/Trek/TourType/TourTypeList";
 import TourTypeForm from "../pages/SuperUser/Trek/TourType/TourTypeForm";
-import TrekList from "../pages/SuperUser/Trek/Trek/TrekList";
-import TrekForm from "../pages/SuperUser/Trek/Trek/TrekForm";
 import BookingList from "../pages/SuperUser/Trek/Booking/BookingList";
 import BookingForm from "../pages/SuperUser/Trek/Booking/BookingForm";
 import BookingDetail from "../pages/SuperUser/Trek/Booking/BookingDetail";
