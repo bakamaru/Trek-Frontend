@@ -173,7 +173,7 @@ export default function BookingList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Booking List">
+                <ComponentCard title="Bookings">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterBooking
@@ -205,7 +205,7 @@ export default function BookingList() {
                             data={bookings || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

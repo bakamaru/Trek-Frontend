@@ -78,8 +78,9 @@ const AdminTrekManagement: React.FC = () => {
         handlePagination,
         filterList,
         setFilter,
-        query,
         offset,
+        searchText,
+        filterData,
     } = useFilter<IFilter>({
         defaultValues: {
             Name: "",
@@ -89,11 +90,7 @@ const AdminTrekManagement: React.FC = () => {
     });
 
     // Fetch trek list
-    const { data: listData, isLoading: isListLoading, refetch: refetchList } = useGetAllTrekQuery({
-        query: query,
-        limit,
-        offset
-    });
+    const { data: listData, isLoading: isListLoading, refetch: refetchList } = useGetAllTrekQuery({ query: searchText, limit, offset, ...filterData });
 
     const [deleteTrek] = useDeleteTrekMutation();
 
@@ -139,17 +136,17 @@ const AdminTrekManagement: React.FC = () => {
             ),
         },
         {
-            key: "regionName",
+            key: "Region",
             label: "Region",
             render: (item: any) => (
-                <>{item.RegionName || "N/A"}</>
+                <>{item.Region || "N/A"}</>
             ),
         },
         {
-            key: "categoryName",
+            key: "Category",
             label: "Category",
             render: (item: any) => (
-                <>{item.CategoryName || "N/A"}</>
+                <>{item.Category || "N/A"}</>
             ),
         },
         {
@@ -160,10 +157,10 @@ const AdminTrekManagement: React.FC = () => {
             },
         },
         {
-            key: "activityLevelName",
+            key: "ActivityLevel",
             label: "Activity Level",
             render: (item: any) => (
-                <>{item.ActivityLevelName || "N/A"}</>
+                <>{item.ActivityLevel || "N/A"}</>
             ),
         },
         {
@@ -210,7 +207,7 @@ const AdminTrekManagement: React.FC = () => {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Trek Management">
+                <ComponentCard title="Treks">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterTrek
@@ -239,7 +236,7 @@ const AdminTrekManagement: React.FC = () => {
                             data={trekList || []}
                             text={`Total Treks (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

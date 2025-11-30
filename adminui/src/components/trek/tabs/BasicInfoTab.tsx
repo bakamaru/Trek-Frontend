@@ -2,7 +2,23 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { TrekBasicSaveRequest } from "../../../types/trekTypes";
 
-const BasicInfoTab: React.FC = () => {
+interface BasicInfoTabProps {
+    activeCategories: any;
+    activeRegions: any;
+    activeActivityTypes: any;
+    activeActivityLevels: any;
+    activeCities: any;
+    activeCurrencies: any;
+}
+
+const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
+    activeCategories,
+    activeRegions,
+    activeActivityTypes,
+    activeActivityLevels,
+    activeCities,
+    activeCurrencies,
+}) => {
     const {
         register,
         formState: { errors },
@@ -22,8 +38,8 @@ const BasicInfoTab: React.FC = () => {
                             id="name"
                             {...register("name", { required: "Name is required" })}
                             className={`mt-1 block w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1 ${errors.name
-                                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                                    : "border-gray-300 focus:border-gray-900 focus:ring-gray-900"
+                                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                : "border-gray-300 focus:border-gray-900 focus:ring-gray-900"
                                 }`}
                             placeholder="e.g., Everest Base Camp Trek"
                         />
@@ -41,8 +57,8 @@ const BasicInfoTab: React.FC = () => {
                             id="url"
                             {...register("url", { required: "URL is required" })}
                             className={`mt-1 block w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1 ${errors.url
-                                    ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                                    : "border-gray-300 focus:border-gray-900 focus:ring-gray-900"
+                                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                                : "border-gray-300 focus:border-gray-900 focus:ring-gray-900"
                                 }`}
                             placeholder="e.g., everest-base-camp-trek"
                         />
@@ -56,54 +72,74 @@ const BasicInfoTab: React.FC = () => {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                         <label htmlFor="trekCategoryId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Trek Category ID
+                            Trek Category
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="trekCategoryId"
                             {...register("trekCategoryId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="Category ID"
-                        />
+                        >
+                            <option value={0}>Select Category</option>
+                            {activeCategories?.Data?.map((item: any) => (
+                                <option key={item.TrekCategoryId} value={item.TrekCategoryId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
                         <label htmlFor="trekRegionId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Trek Region ID
+                            Trek Region
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="trekRegionId"
                             {...register("trekRegionId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="Region ID"
-                        />
+                        >
+                            <option value={0}>Select Region</option>
+                            {activeRegions?.Data?.map((item: any) => (
+                                <option key={item.TrekRegionId} value={item.TrekRegionId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
                         <label htmlFor="activityTypeId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Activity Type ID
+                            Activity Type
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="activityTypeId"
                             {...register("activityTypeId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="Activity Type ID"
-                        />
+                        >
+                            <option value={0}>Select Activity Type</option>
+                            {activeActivityTypes?.Data?.map((item: any) => (
+                                <option key={item.ActivityTypeId} value={item.ActivityTypeId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
                         <label htmlFor="activityLevelId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Activity Level ID
+                            Activity Level
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="activityLevelId"
                             {...register("activityLevelId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="Activity Level ID"
-                        />
+                        >
+                            <option value={0}>Select Activity Level</option>
+                            {activeActivityLevels?.Data?.map((item: any) => (
+                                <option key={item.ActivityLevelId} value={item.ActivityLevelId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 
@@ -238,41 +274,56 @@ const BasicInfoTab: React.FC = () => {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <div>
                         <label htmlFor="startCityId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Start City ID
+                            Start City
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="startCityId"
                             {...register("startCityId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="City ID"
-                        />
+                        >
+                            <option value={0}>Select Start City</option>
+                            {activeCities?.Data?.map((item: any) => (
+                                <option key={item.CityId} value={item.CityId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
                         <label htmlFor="endCityId" className="block text-xs font-medium text-gray-700 uppercase">
-                            End City ID
+                            End City
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="endCityId"
                             {...register("endCityId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="City ID"
-                        />
+                        >
+                            <option value={0}>Select End City</option>
+                            {activeCities?.Data?.map((item: any) => (
+                                <option key={item.CityId} value={item.CityId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
                         <label htmlFor="defaultCurrencyId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Default Currency ID
+                            Default Currency
                         </label>
-                        <input
-                            type="number"
+                        <select
                             id="defaultCurrencyId"
                             {...register("defaultCurrencyId", { valueAsNumber: true })}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                            placeholder="Currency ID"
-                        />
+                        >
+                            <option value={0}>Select Currency</option>
+                            {activeCurrencies?.Data?.map((item: any) => (
+                                <option key={item.CurrencyId} value={item.CurrencyId}>
+                                    {item.Name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 

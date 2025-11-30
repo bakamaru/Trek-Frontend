@@ -3,6 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { TrekBasicSaveRequest } from "../../../../types/trekTypes";
 import { useGetTrekDetailQuery, useSaveTrekBasicMutation } from "../../../../redux/trek/trekAPI";
+import { useGetAllCurrencyActiveQuery } from "../../../../redux/trek/currencyAPI";
+import { useGetAllActivityTypeActiveQuery } from "../../../../redux/trek/activityTypeAPI";
+import { useGetAllActivityLevelActiveQuery } from "../../../../redux/trek/activityLevelAPI";
+import { useGetAllTrekRegionActiveQuery } from "../../../../redux/trek/trekRegionAPI";
+import { useGetAllTrekCategoryActiveQuery } from "../../../../redux/trek/trekCategoryAPI";
+import { useGetAllCityActiveQuery } from "../../../../redux/trek/cityAPI";
 import toaster from "../../../../components/toster";
 import ComponentCard from "../../../../components/common/ComponentCard";
 import BasicInfoTab from "../../../../components/trek/tabs/BasicInfoTab";
@@ -58,6 +64,13 @@ const TrekFormPage: React.FC = () => {
     const { data: detailData, isLoading: isDetailLoading } = useGetTrekDetailQuery(trekId, {
         skip: trekId === 0,
     });
+
+    const { data: activeCurrencies } = useGetAllCurrencyActiveQuery({});
+    const { data: activeActivityTypes } = useGetAllActivityTypeActiveQuery({});
+    const { data: activeActivityLevels } = useGetAllActivityLevelActiveQuery({});
+    const { data: activeRegions } = useGetAllTrekRegionActiveQuery({});
+    const { data: activeCategories } = useGetAllTrekCategoryActiveQuery({});
+    const { data: activeCities } = useGetAllCityActiveQuery({});
 
     const [saveTrekBasic, { isLoading: isSaving }] = useSaveTrekBasicMutation();
 
@@ -202,7 +215,16 @@ const TrekFormPage: React.FC = () => {
                                     </div>
                                 ) : (
                                     <>
-                                        {activeTab === "basic" && <BasicInfoTab />}
+                                        {activeTab === "basic" && (
+                                            <BasicInfoTab
+                                                activeCategories={activeCategories}
+                                                activeRegions={activeRegions}
+                                                activeActivityTypes={activeActivityTypes}
+                                                activeActivityLevels={activeActivityLevels}
+                                                activeCities={activeCities}
+                                                activeCurrencies={activeCurrencies}
+                                            />
+                                        )}
                                         {activeTab === "gallery" && <GalleryTab trekId={trekId} detailData={detailData} />}
                                         {activeTab === "itinerary" && <ItineraryTab trekId={trekId} detailData={detailData} />}
                                         {activeTab === "inclusionExclusion" && <InclusionExclusionTab trekId={trekId} detailData={detailData} />}

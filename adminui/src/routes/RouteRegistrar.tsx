@@ -46,6 +46,9 @@ import TrekRegionForm from "../pages/SuperUser/Trek/Region/TrekRegionForm";
 import TrekRegionList from "../pages/SuperUser/Trek/Region/TrekRegionList";
 import TrekCategoryList from "../pages/SuperUser/Trek/Category/TrekCategoryList";
 import TrekCategoryForm from "../pages/SuperUser/Trek/Category/TrekCategoryForm";
+import AdminTrekManagement from "../pages/SuperUser/Trek/Trek/AdminTrekManagement";
+import TrekFormPage from "../pages/SuperUser/Trek/Trek/TrekFormPage";
+import MenuManagement from "../pages/SuperUser/Menu/MenuManagement";
 
 
 const appRoutes: RouteObject[] = [
@@ -75,6 +78,7 @@ const superUserRoutes: RouteObject = {
   element: <AdminLayout />,
   children: [
     { path: "dashboard", element: <Dashboard /> },
+    { path: "menu", element: <MenuManagement /> },
     { path: "llmprovider", element: <LLMProvider /> },
     { path: "llmprovider/new", element: <NewLLMProvider /> },
     { path: "llmprovider/edit", element: <NewLLMProvider /> },
@@ -139,9 +143,10 @@ const superUserRoutes: RouteObject = {
     { path: "trek/tourtype/new", element: <TourTypeForm /> },
     { path: "trek/tourtype/edit", element: <TourTypeForm /> },
 
-    { path: "trek/trek", element: <TrekList /> },
-    { path: "trek/trek/new", element: <TrekForm /> },
-    { path: "trek/trek/edit", element: <TrekForm /> },
+    { path: "trek/trek", element: <AdminTrekManagement /> },
+    { path: "trek/trek/new", element: <TrekFormPage /> },
+    { path: "trek/trek/edit", element: <TrekFormPage /> },
+
     { path: "trek/region", element: <TrekRegionList /> },
     { path: "trek/region/new", element: <TrekRegionForm /> },
     { path: "trek/region/edit", element: <TrekRegionForm /> },

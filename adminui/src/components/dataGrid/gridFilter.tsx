@@ -64,7 +64,7 @@ const GridFilter = ({
   };
 
   const handleRemoveFilter = (item: string) => {
-    removeFilter&&removeFilter(item);
+    removeFilter && removeFilter(item);
   };
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const GridFilter = ({
         <form onSubmit={handleSearchClicked} className="flex md:min-w-[25rem]">
           <input
             type="search"
-            name="search"
+            name="query"
             onChange={(e) => setSearch(e.target.value)}
             placeholder={placeholder}
             className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
@@ -158,7 +158,7 @@ const GridFilter = ({
                   ? formatDateUS(item?.value)
                   : item?.value}
               </span>
-              <button 
+              <button
                 onClick={() => handleRemoveFilter(item?.key)}
                 className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]"
               >

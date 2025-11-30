@@ -73,11 +73,18 @@ export const trekAPI = createApi({
             }),
             invalidatesTags: ["Trek"],
         }),
-        saveTrekGallery: builder.mutation<any, { trekId: number; data: TrekImageSaveRequest[] }>({
+        saveTrekGallery: builder.mutation<any, { trekId: number; data: FormData }>({
             query: ({ trekId, data }) => ({
                 url: `/api/v1/trek/${trekId}/gallery/save`,
                 method: "POST",
-                body: data,
+                body: data
+            }),
+            invalidatesTags: ["Trek"],
+        }),
+        deleteTrekGallery: builder.mutation<any, { trekId: number; trekImageId: number }>({
+            query: ({ trekId, trekImageId }) => ({
+                url: `/api/v1/trek/${trekId}/gallery/delete/${trekImageId}`,
+                method: "DELETE",
             }),
             invalidatesTags: ["Trek"],
         }),
@@ -129,6 +136,13 @@ export const trekAPI = createApi({
             }),
             invalidatesTags: ["Trek"],
         }),
+        deleteTrekReview: builder.mutation<any, { trekId: number; trekReviewId: number }>({
+            query: ({ trekId, trekReviewId }) => ({
+                url: `/api/v1/trek/${trekId}/reviews/delete/${trekReviewId}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Trek"],
+        }),
         saveTrekDepartures: builder.mutation<any, { trekId: number; data: TrekDepartureSaveRequest[] }>({
             query: ({ trekId, data }) => ({
                 url: `/api/v1/trek/${trekId}/departures/save`,
@@ -165,4 +179,6 @@ export const {
     useSaveTrekReviewsMutation,
     useSaveTrekDeparturesMutation,
     useSaveTrekGuidesMutation,
+    useDeleteTrekGalleryMutation,
+    useDeleteTrekReviewMutation
 } = trekAPI;

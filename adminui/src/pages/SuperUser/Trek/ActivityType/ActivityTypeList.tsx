@@ -185,7 +185,7 @@ export default function ActivityTypeList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Activity Type List">
+                <ComponentCard title="Activity Types">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterActivityType
@@ -216,7 +216,7 @@ export default function ActivityTypeList() {
                             data={activityTypes || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

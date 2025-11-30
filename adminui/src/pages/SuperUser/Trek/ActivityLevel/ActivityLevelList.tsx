@@ -185,7 +185,7 @@ export default function ActivityLevelList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Activity Level List">
+                <ComponentCard title="Activity Levels">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterActivityLevel
@@ -216,7 +216,7 @@ export default function ActivityLevelList() {
                             data={activityLevels || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

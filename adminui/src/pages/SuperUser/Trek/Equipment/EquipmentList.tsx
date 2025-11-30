@@ -185,7 +185,7 @@ export default function EquipmentList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Equipment List">
+                <ComponentCard title="Equipments">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterEquipment
@@ -216,7 +216,7 @@ export default function EquipmentList() {
                             data={equipments || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

@@ -185,7 +185,7 @@ export default function TourTypeList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Tour Type List">
+                <ComponentCard title="Tour Types">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterTourType
@@ -216,7 +216,7 @@ export default function TourTypeList() {
                             data={tourTypes || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

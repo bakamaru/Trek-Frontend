@@ -186,7 +186,7 @@ export default function InExServiceList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Inclusion/Exclusion Service List">
+                <ComponentCard title="Inclusion/Exclusion Services">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
                             <FilterInExService
@@ -217,7 +217,7 @@ export default function InExServiceList() {
                             data={inExServices || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={rowTotal}
+                            totalPage={(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

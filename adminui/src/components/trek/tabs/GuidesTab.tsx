@@ -13,9 +13,14 @@ const GuidesTab: React.FC<GuidesTabProps> = ({ trekId, detailData }) => {
     const [saveGuides, { isLoading: isSaving }] = useSaveTrekGuidesMutation();
 
     useEffect(() => {
-        if (detailData && detailData.code === 200) {
-            const guideData = detailData.data?.guides || [];
-            setGuides(guideData);
+        if (detailData && detailData.Code === 200) {
+            const guideData = detailData.Data?.Guides || [];
+            const mappedGuides = guideData.map((item: any) => ({
+                trekAvailableGuideId: item.TrekAvailableGuideId,
+                guideId: item.GuideId,
+                isRecommended: item.IsRecommended,
+            }));
+            setGuides(mappedGuides);
         }
     }, [detailData]);
 
@@ -48,7 +53,7 @@ const GuidesTab: React.FC<GuidesTabProps> = ({ trekId, detailData }) => {
 
         try {
             const response = await saveGuides({ trekId, data: guides }).unwrap();
-            if (response.code === 200) {
+            if (response.Code === 200) {
                 toaster.success("Guides saved successfully!");
             } else {
                 toaster.error("Failed to save guides.");
@@ -62,7 +67,7 @@ const GuidesTab: React.FC<GuidesTabProps> = ({ trekId, detailData }) => {
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium text-gray-900">Available Guides</h3>
-                <button
+                <button type="button"
                     onClick={handleAdd}
                     className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-800"
                 >
@@ -73,7 +78,7 @@ const GuidesTab: React.FC<GuidesTabProps> = ({ trekId, detailData }) => {
             {guides.length === 0 ? (
                 <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center">
                     <p className="text-sm text-gray-500">No guides assigned yet.</p>
-                    <button
+                    <button type="button"
                         onClick={handleAdd}
                         className="mt-2 text-xs text-gray-700 underline hover:text-gray-900"
                     >
@@ -116,7 +121,7 @@ const GuidesTab: React.FC<GuidesTabProps> = ({ trekId, detailData }) => {
                                             )}
                                         </span>
                                     </label>
-                                    <button
+                                    <button type="button"
                                         onClick={() => handleRemove(index)}
                                         className="text-xs text-red-600 hover:text-red-800"
                                     >

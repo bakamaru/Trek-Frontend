@@ -14,9 +14,16 @@ const FAQTab: React.FC<FAQTabProps> = ({ trekId, detailData }) => {
     const [saveFaqs, { isLoading: isSaving }] = useSaveTrekFaqsMutation();
 
     useEffect(() => {
-        if (detailData && detailData.code === 200) {
-            const faqData = detailData.data?.faqs || [];
-            setFaqs(faqData.sort((a: any, b: any) => (a.priority || 0) - (b.priority || 0)));
+        if (detailData && detailData.Code === 200) {
+            const faqData = detailData.Data?.Faqs || [];
+            const mappedFaqs = faqData.map((item: any) => ({
+                trekFAQId: item.TrekFAQId,
+                category: item.Category,
+                question: item.Question,
+                solution: item.Solution,
+                priority: item.Priority,
+            }));
+            setFaqs(mappedFaqs.sort((a: any, b: any) => (a.priority || 0) - (b.priority || 0)));
         }
     }, [detailData]);
 
@@ -52,7 +59,7 @@ const FAQTab: React.FC<FAQTabProps> = ({ trekId, detailData }) => {
 
         try {
             const response = await saveFaqs({ trekId, data: faqs }).unwrap();
-            if (response.code === 200) {
+            if (response.Code === 200) {
                 toaster.success("FAQs saved successfully!");
             } else {
                 toaster.error("Failed to save FAQs.");
@@ -66,7 +73,7 @@ const FAQTab: React.FC<FAQTabProps> = ({ trekId, detailData }) => {
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium text-gray-900">Frequently Asked Questions</h3>
-                <button
+                <button type="button"
                     onClick={handleAdd}
                     className="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-800"
                 >
@@ -82,7 +89,7 @@ const FAQTab: React.FC<FAQTabProps> = ({ trekId, detailData }) => {
                 <div className="space-y-2">
                     {faqs.map((faq, index) => (
                         <div key={index} className="rounded-lg border border-gray-200 bg-white">
-                            <button
+                            <button type="button"
                                 onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                                 className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
                             >
@@ -147,7 +154,7 @@ const FAQTab: React.FC<FAQTabProps> = ({ trekId, detailData }) => {
                                         />
                                     </div>
 
-                                    <button
+                                    <button type="button"
                                         onClick={() => handleRemove(index)}
                                         className="text-xs text-red-600 hover:text-red-800"
                                     >

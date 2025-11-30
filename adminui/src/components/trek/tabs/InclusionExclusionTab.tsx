@@ -13,9 +13,16 @@ const InclusionExclusionTab: React.FC<InclusionExclusionTabProps> = ({ trekId, d
     const [saveInclusions, { isLoading: isSaving }] = useSaveTrekInclusionsMutation();
 
     useEffect(() => {
-        if (detailData && detailData.code === 200) {
-            const inclusionData = detailData.data?.inclusionsExclusions || detailData.data?.inclusions || [];
-            setItems(inclusionData);
+        if (detailData && detailData.Code === 200) {
+            const inclusionData = detailData.Data?.InclusionsExclusions || [];
+            const mappedItems = inclusionData.map((item: any) => ({
+                trekInclusionExclusionId: item.TrekInclusionExclusionId,
+                description: item.Description,
+                isIncluded: item.IsIncluded,
+                isOptional: item.IsOptional,
+                optionalCostDetails: item.OptionalCostDetails,
+            }));
+            setItems(mappedItems);
         }
     }, [detailData]);
 
@@ -50,7 +57,7 @@ const InclusionExclusionTab: React.FC<InclusionExclusionTabProps> = ({ trekId, d
 
         try {
             const response = await saveInclusions({ trekId, data: items }).unwrap();
-            if (response.code === 200) {
+            if (response.Code === 200) {
                 toaster.success("Inclusions/Exclusions saved successfully!");
             } else {
                 toaster.error("Failed to save.");
@@ -72,7 +79,7 @@ const InclusionExclusionTab: React.FC<InclusionExclusionTabProps> = ({ trekId, d
                 <div className="rounded-lg border border-gray-200 bg-white p-4">
                     <div className="flex items-center justify-between mb-3">
                         <h4 className="text-xs font-medium text-green-800 uppercase">✔ Included</h4>
-                        <button
+                        <button type="button"
                             onClick={() => handleAddItem(true)}
                             className="rounded bg-green-100 px-2 py-1 text-xs font-medium text-green-800 hover:bg-green-200"
                         >
@@ -105,7 +112,7 @@ const InclusionExclusionTab: React.FC<InclusionExclusionTabProps> = ({ trekId, d
                                                 />
                                                 Optional
                                             </label>
-                                            <button
+                                            <button type="button"
                                                 onClick={() => handleRemoveItem(index)}
                                                 className="text-xs text-red-600 hover:text-red-800"
                                             >
@@ -132,7 +139,7 @@ const InclusionExclusionTab: React.FC<InclusionExclusionTabProps> = ({ trekId, d
                 <div className="rounded-lg border border-gray-200 bg-white p-4">
                     <div className="flex items-center justify-between mb-3">
                         <h4 className="text-xs font-medium text-red-800 uppercase">✖ Excluded</h4>
-                        <button
+                        <button type="button"
                             onClick={() => handleAddItem(false)}
                             className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-800 hover:bg-red-200"
                         >
@@ -155,7 +162,7 @@ const InclusionExclusionTab: React.FC<InclusionExclusionTabProps> = ({ trekId, d
                                             className="mb-2 block w-full rounded border border-red-300 px-2 py-1 text-xs focus:border-red-600 focus:outline-none focus:ring-1 focus:ring-red-600"
                                             placeholder="Description..."
                                         />
-                                        <button
+                                        <button type="button"
                                             onClick={() => handleRemoveItem(index)}
                                             className="text-xs text-red-600 hover:text-red-800"
                                         >

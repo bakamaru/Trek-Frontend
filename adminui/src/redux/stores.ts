@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { userAPI } from "./user/userAPI";
+import { menuAPI } from "./menu/menuAPI";
 import { aiAssistantAPI } from "./aibot/aiAssistantAPI";
 import { categoryAPI } from "./aibot/categoryAPI";
 import { collectionAPI } from "./aibot/collectionAPI";
@@ -30,6 +31,7 @@ import { trekRegionAPI } from "./trek/trekRegionAPI";
 export const store = configureStore({
   reducer: {
     [userAPI.reducerPath]: userAPI.reducer,
+    [menuAPI.reducerPath]: menuAPI.reducer,
     [aiAssistantAPI.reducerPath]: aiAssistantAPI.reducer,
     [categoryAPI.reducerPath]: categoryAPI.reducer,
     [collectionAPI.reducerPath]: collectionAPI.reducer,
@@ -60,6 +62,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       userAPI.middleware,
+      menuAPI.middleware,
       aiAssistantAPI.middleware,
       categoryAPI.middleware,
       collectionAPI.middleware,
