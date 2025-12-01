@@ -1,11 +1,13 @@
 
 
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useGetHeroBannerQuery } from '../redux/api/contentAPI';
+import LoadingSpinner from './LoadingSpinner';
 
 const Hero: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Flight');
+  const { data: heroData, isLoading, error } = useGetHeroBannerQuery(undefined);
 
   const renderForm = () => {
     switch (activeTab) {
@@ -29,7 +31,7 @@ const Hero: React.FC = () => {
         );
       case 'Hotel':
         return (
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Location</label>
               <input type="text" placeholder="Enter a destination or hotel" className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-700 outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" />
@@ -68,22 +70,33 @@ const Hero: React.FC = () => {
     }
   };
 
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <div className="text-red-500 text-center p-4">Failed to load hero content</div>;
+
+  const { title, subtitle, image } = heroData || {
+    title: "Amazing Tour In Hampshire",
+    subtitle: "7 days, 8 night tour",
+    image: "" // Default or leave empty to rely on CSS class if needed, but better to handle gracefully
+  };
+
   return (
-    <section className="hero-bg bg-cover bg-center h-screen flex items-center justify-center relative">
+    <section
+      className="hero-bg bg-cover bg-center h-screen flex items-center justify-center relative"
+      style={image ? { backgroundImage: `url(${image})` } : {}}
+    >
       <div className="absolute inset-0 bg-black bg-opacity-40"></div>
       <div className="container mx-auto px-4 z-10 text-center text-white mt-20">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 animate-fade-in-down">Amazing Tour In Hampshire</h1>
-        <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto">7 days, 8 night tour</p>
-        
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 animate-fade-in-down">{title}</h1>
+        <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto">{subtitle}</p>
+
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-2xl max-w-5xl mx-auto text-left">
           <div className="flex border-b dark:border-gray-700 mb-6">
             {['Flight', 'Hotel', 'Car Rent'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-3 px-6 font-semibold text-lg transition-colors duration-300 ${
-                  activeTab === tab ? 'border-b-4 border-blue-700 text-gray-800 dark:text-white' : 'text-gray-500 dark:text-gray-400'
-                }`}
+                className={`py-3 px-6 font-semibold text-lg transition-colors duration-300 ${activeTab === tab ? 'border-b-4 border-blue-700 text-gray-800 dark:text-white' : 'text-gray-500 dark:text-gray-400'
+                  }`}
               >
                 {tab}
               </button>

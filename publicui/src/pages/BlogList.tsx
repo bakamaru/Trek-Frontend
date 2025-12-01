@@ -1,21 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { BLOG_POSTS_DATA } from '../const/constants';
+import React from 'react';
 import { BlogPost } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import BlogCard from '../components/blog/BlogCard';
-
+import { useGetBlogListQuery } from '../redux/api/blogAPI';
 
 const BlogList: React.FC = () => {
-    const [loading, setLoading] = useState(true);
-    const [posts, setPosts] = useState<BlogPost[]>([]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setPosts(BLOG_POSTS_DATA);
-            setLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, []);
+    const { data: posts, isLoading, error } = useGetBlogListQuery(undefined);
 
     return (
         <div className="pt-20">
@@ -28,12 +18,14 @@ const BlogList: React.FC = () => {
 
             <section className="py-20">
                 <div className="container mx-auto px-4">
-                    {loading ? (
+                    {isLoading ? (
                         <LoadingSpinner />
+                    ) : error ? (
+                        <div className="text-red-500 text-center">Failed to load blog posts</div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {posts.map((post) => (
-                                <BlogCard post={post} />
+                            {posts?.map((post: BlogPost) => (
+                                <BlogCard key={post.id} post={post} />
                             ))}
                         </div>
                     )}

@@ -1,17 +1,17 @@
 import React from 'react';
 
 export interface NavLink {
-  label: string;
-  href: string;
-  megaMenu?: MegaMenuItem[];
+    label: string;
+    href: string;
+    megaMenu?: MegaMenuItem[];
 }
 
 export interface MegaMenuItem {
-  title: string;
-  links: {
-    label: string;
-    href: string;
-  }[];
+    title: string;
+    links: {
+        label: string;
+        href: string;
+    }[];
 }
 
 export interface Service {
@@ -129,32 +129,32 @@ export interface DestinationDetail {
 }
 
 export interface Flight {
-  id: string;
-  airline: string;
-  airlineLogo: string;
-  from: { code: string; city: string; time: string };
-  to: { code: string; city: string; time: string };
-  duration: string;
-  stops: number;
-  price: number;
+    id: string;
+    airline: string;
+    airlineLogo: string;
+    from: { code: string; city: string; time: string };
+    to: { code: string; city: string; time: string };
+    duration: string;
+    stops: number;
+    price: number;
 }
 
 export interface Hotel {
-  id: string;
-  name: string;
-  image: string;
-  location: string;
-  rating: number;
-  reviews: number;
-  price: number;
+    id: string;
+    name: string;
+    image: string;
+    location: string;
+    rating: number;
+    reviews: number;
+    price: number;
 }
 
 export interface RoomType {
-  name: string;
-  price: number;
-  beds: string;
-  guests: number;
-  image: string;
+    name: string;
+    price: number;
+    beds: string;
+    guests: number;
+    image: string;
 }
 
 export interface HotelReview {
@@ -167,23 +167,23 @@ export interface HotelReview {
 
 
 export interface HotelDetail extends Hotel {
-  overview: string;
-  amenities: string[];
-  gallery: string[];
-  rooms: RoomType[];
-  reviewsData: HotelReview[];
-  mapEmbedUrl: string;
+    overview: string;
+    amenities: string[];
+    gallery: string[];
+    rooms: RoomType[];
+    reviewsData: HotelReview[];
+    mapEmbedUrl: string;
 }
 
 export interface CarRental {
-  id: string;
-  name: string;
-  image: string;
-  company: string;
-  companyLogo: string;
-  pricePerDay: number;
-  rating: number;
-  type: 'Economy' | 'Compact' | 'SUV' | 'Luxury';
+    id: string;
+    name: string;
+    image: string;
+    company: string;
+    companyLogo: string;
+    pricePerDay: number;
+    rating: number;
+    type: 'Economy' | 'Compact' | 'SUV' | 'Luxury';
 }
 
 export interface CarRentalDetail extends CarRental {
@@ -264,4 +264,51 @@ export interface Invoice {
     amount: number;
     status: 'Paid' | 'Due' | 'Overdue';
     tripName: string;
+}
+
+export interface HeroBanner {
+    title: string;
+    subtitle: string;
+    image: string;
+    ctaText: string;
+    ctaLink: string;
+}
+
+export interface AboutContent {
+    title: string;
+    content: string;
+    image: string;
+    mission: string;
+    vision: string;
+}
+
+export interface ContactContent {
+    address: string;
+    phone: string;
+    email: string;
+    mapEmbedUrl: string;
+}
+
+export interface FooterLink {
+    label: string;
+    href: string;
+}
+
+export interface FooterSection {
+    title: string;
+    links: FooterLink[];
+}
+
+export interface FooterMenu {
+    sections: FooterSection[];
+    socialLinks: {
+        platform: string;
+        url: string;
+        icon: string;
+    }[];
+}
+
+export interface LoginStatus {
+    isLoggedIn: boolean;
+    user?: UserProfile;
 }

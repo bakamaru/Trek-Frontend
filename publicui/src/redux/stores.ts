@@ -12,6 +12,11 @@ import { themeAPI } from "./aibot/themeAPI";
 import { supportAPI } from "./admin/SupportTicketAPI";
 
 
+import { contentAPI } from "./api/contentAPI";
+import { blogAPI } from "./api/blogAPI";
+import { tourAPI } from "./api/tourAPI";
+import { authAPI } from "./api/authAPI";
+
 export const store = configureStore({
   reducer: {
     [userAPI.reducerPath]: userAPI.reducer,
@@ -23,9 +28,11 @@ export const store = configureStore({
     [moderationAPI.reducerPath]: moderationAPI.reducer,
     [systemPromptAPI.reducerPath]: systemPromptAPI.reducer,
     [themeAPI.reducerPath]: themeAPI.reducer,
-    [supportAPI.reducerPath]:supportAPI.reducer
-
-
+    [supportAPI.reducerPath]: supportAPI.reducer,
+    [contentAPI.reducerPath]: contentAPI.reducer,
+    [blogAPI.reducerPath]: blogAPI.reducer,
+    [tourAPI.reducerPath]: tourAPI.reducer,
+    [authAPI.reducerPath]: authAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -38,7 +45,11 @@ export const store = configureStore({
       moderationAPI.middleware,
       systemPromptAPI.middleware,
       themeAPI.middleware,
-      supportAPI.middleware
+      supportAPI.middleware,
+      contentAPI.middleware,
+      blogAPI.middleware,
+      tourAPI.middleware,
+      authAPI.middleware
     ),
 });
 

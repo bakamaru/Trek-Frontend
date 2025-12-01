@@ -1,11 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { TOURS_DATA } from '../const/constants';
+import React from 'react';
 import { Tour } from '../types/types';
 import LoadingSpinner from './LoadingSpinner';
 import { Link } from 'react-router-dom';
-
-
-
+import { useGetPopularToursQuery } from '../redux/api/tourAPI';
 
 const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${filled ? 'text-yellow-400' : 'text-gray-300'}`} viewBox="0 0 20 20" fill="currentColor">
@@ -14,16 +11,7 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
 );
 
 const PopularTours: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [tours, setTours] = useState<Tour[]>([]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTours(TOURS_DATA);
-      setLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, []);
+  const { data: tours, isLoading, error } = useGetPopularToursQuery(undefined);
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800">
@@ -32,11 +20,13 @@ const PopularTours: React.FC = () => {
           <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">Most Popular Tours</h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Discover the tours that our customers love the most.</p>
         </div>
-        {loading ? (
+        {isLoading ? (
           <LoadingSpinner />
+        ) : error ? (
+          <div className="text-red-500 text-center">Failed to load tours</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tours.map((tour) => (
+            {tours?.map((tour: Tour) => (
               <div key={tour.id} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden group">
                 <div className="relative">
                   <img src={tour.image} alt={tour.title} className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300" />
@@ -57,7 +47,7 @@ const PopularTours: React.FC = () => {
                       </div>
                       <span className="text-gray-600 dark:text-gray-300 ml-2">({tour.reviews} reviews)</span>
                     </div>
-                     <Link to={`/tour/${tour.id}`} className="text-blue-700 font-semibold hover:underline">
+                    <Link to={`/tour/${tour.id}`} className="text-blue-700 font-semibold hover:underline">
                       View Details
                     </Link>
                   </div>

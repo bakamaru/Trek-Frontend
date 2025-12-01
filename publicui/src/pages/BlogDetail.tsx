@@ -1,33 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { BLOG_POSTS_DATA } from '../const/constants';
-import { BlogPost } from '../types/types';
+import React from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
 import { useParams } from 'react-router-dom';
+import { useGetBlogDetailQuery } from '../redux/api/blogAPI';
 
 interface BlogDetailProps {
- // postId: string;
+  // postId: string;
 }
 
 const BlogDetail: React.FC<BlogDetailProps> = () => {
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
   const { slug } = useParams();
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      const foundPost = BLOG_POSTS_DATA.find(p => p.id === slug);
-      setPost(foundPost || null);
-      setLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [slug]);
+  const { data: post, isLoading, error } = useGetBlogDetailQuery(slug || '', {
+    skip: !slug
+  });
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner fullPage={true} />;
   }
 
-  if (!post) {
+  if (error || !post) {
     return (
       <div className="pt-20 h-screen flex items-center justify-center">
         <h1 className="text-3xl font-bold">Blog Post Not Found</h1>
@@ -37,14 +28,14 @@ const BlogDetail: React.FC<BlogDetailProps> = () => {
 
   return (
     <div className="pt-20">
-      <SEO 
-        title={post.title} 
+      <SEO
+        title={post.title}
         description={post.excerpt}
         image={post.image}
         type="article"
         context={`Blog post titled "${post.title}" by ${post.author}. Excerpt: ${post.excerpt}`}
       />
-      <section 
+      <section
         className="h-96 bg-cover bg-center flex items-center justify-center text-white relative"
         style={{ backgroundImage: `url(${post.image})` }}
       >
@@ -57,10 +48,10 @@ const BlogDetail: React.FC<BlogDetailProps> = () => {
 
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-4xl">
-            <div 
-                className="prose lg:prose-xl text-gray-700 dark:prose-invert"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+          <div
+            className="prose lg:prose-xl text-gray-700 dark:prose-invert"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </div>
       </section>
     </div>

@@ -1,9 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { TREKS_DATA } from '../const/constants';
-import { Trek as TrekType } from '../types/types';
+import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
 import { Link, useParams } from 'react-router-dom';
+import { useGetTrekDetailQuery } from '../redux/api/tourAPI';
 
 
 
@@ -14,26 +13,19 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
 );
 
 interface TrekDetailProps {
-   // trekId: string;
+    // trekId: string;
 }
 
 const TrekDetail: React.FC<TrekDetailProps> = () => {
-    const [trek, setTrek] = useState<TrekType | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { slug } = useParams();
+    const { data: trek, isLoading, error } = useGetTrekDetailQuery(slug || '', {
+        skip: !slug
+    });
+
     const [activeItinerary, setActiveItinerary] = useState<number | null>(1);
     const [activeFaq, setActiveFaq] = useState<number | null>(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
-    const { slug } = useParams();
-    useEffect(() => {
-        setLoading(true);
-        const timer = setTimeout(() => {
-            const foundTrek = TREKS_DATA.find(t => t.id === slug);
-            setTrek(foundTrek || null);
-            setLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, [slug]);
 
 
     useEffect(() => {
@@ -47,11 +39,11 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [lightboxOpen, lightboxIndex, trek]);
 
-    if (loading) {
+    if (isLoading) {
         return <LoadingSpinner fullPage={true} />;
     }
 
-    if (!trek) {
+    if (error || !trek) {
         return (
             <div className="pt-20 h-screen flex items-center justify-center">
                 <h1 className="text-3xl font-bold">Trek Not Found</h1>
