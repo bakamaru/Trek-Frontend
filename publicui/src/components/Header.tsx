@@ -72,7 +72,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-20">
           <Link to="/" className="text-3xl font-extrabold text-gray-800 dark:text-white">
-            Heavenly<span className="text-blue-700">Pathways</span>
+            Territory <span className="text-blue-700">Himalaya</span>
           </Link>
 
           <nav className="hidden lg:flex items-center space-x-8">

@@ -21,7 +21,7 @@
 
 //     return (
 //         <div className="pt-20 min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-//             <SEO title="Login" description="Log in to your Heavenly Pathways account to manage bookings." />
+//             <SEO title="Login" description="Log in to your Territory Himalayas account to manage bookings." />
 //             <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
 //                 <div className="text-center mb-8">
 //                     <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Welcome Back</h1>

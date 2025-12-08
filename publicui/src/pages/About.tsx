@@ -17,10 +17,10 @@ const About: React.FC = () => {
   if (error) return <div className="pt-20 text-center text-red-500">Failed to load about content</div>;
 
   const { title, content, image, mission } = aboutData || {
-    title: "About Heavenly Pathways",
+    title: "About Territory Himalayas",
     content: "Your journey begins here. We are dedicated to crafting unforgettable travel experiences tailored just for you.",
     image: "https://picsum.photos/seed/about-mission/600/400",
-    mission: "At Heavenly Pathways, our mission is to make travel accessible, enjoyable, and enriching for everyone."
+    mission: "At Territory Himalayas, our mission is to make travel accessible, enjoyable, and enriching for everyone."
   };
 
   return (

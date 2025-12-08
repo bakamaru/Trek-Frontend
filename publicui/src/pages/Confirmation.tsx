@@ -14,7 +14,7 @@ const Confirmation: React.FC = () => {
                         </div>
                         <h1 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-4">Booking Confirmed!</h1>
                         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-                            Thank you for booking with Heavenly Pathways. Your adventure awaits! A confirmation email with all your trip details has been sent to your inbox.
+                            Thank you for booking with Territory Himalayas. Your adventure awaits! A confirmation email with all your trip details has been sent to your inbox.
                         </p>
                         <div className="text-left bg-gray-50 dark:bg-gray-700 p-6 rounded-md border dark:border-gray-600 mb-8">
                             <h3 className="text-xl font-bold dark:text-gray-200 mb-4">Next Steps</h3>

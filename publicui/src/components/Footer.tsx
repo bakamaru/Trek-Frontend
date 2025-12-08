@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-3xl font-extrabold text-white mb-4">
               <Link to="/" className="hover:text-white">
-                Heavenly<span className="text-blue-700">Pathways</span>
+                Territory Himalaya<span className="text-blue-700">Pathways</span>
               </Link>
             </h3>
             <p className="mb-4">
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
       </div>
       <div className="bg-gray-900 dark:bg-black py-4">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Heavenly Pathways. All Rights Reserved. Created with React & Tailwind CSS.</p>
+          <p>&copy; {new Date().getFullYear()} Territory Himalayas. All Rights Reserved. Created with React & Tailwind CSS.</p>
         </div>
       </div>
     </footer>

@@ -12,7 +12,7 @@ const Contact: React.FC = () => {
         title: "Contact Us",
         subtitle: "We'd love to hear from you! Whether you have a question about our tours or need help planning your next adventure, we're here to help.",
         address: "123 Travel Lane, Adventure City, 98765",
-        email: "hello@heavenlypathways.com",
+        email: "hello@TerritoryHimalaya.com",
         phone: "+1 (234) 567-890",
         mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.086434444983!2d-122.42172048468135!3d37.78916987975661!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809a6bbeb6d3%3A0x440212f1dbaa1843!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2s!4v1628892693892!5m2!1sen!2s"
     };

@@ -33,7 +33,7 @@
 
 //     return (
 //         <div className="pt-20 min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
-//             <SEO title="Sign Up" description="Create a Heavenly Pathways account." />
+//             <SEO title="Sign Up" description="Create a Territory Himalayas account." />
 //             <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
 //                 <div className="text-center mb-8">
 //                     <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">Create Account</h1>

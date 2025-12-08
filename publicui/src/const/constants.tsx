@@ -29,43 +29,43 @@ const CAR_TOYOTA_CAMRY_ID = 'toyota-camry-2023';
 
 
 export const NAV_LINKS: NavLink[] = [
-  { label: 'Home', href: '/' },
-  {
-    label: 'Treks & Tours',
-    href: '#',
-    megaMenu: [
-      {
-        title: 'Popular Treks',
-        links: [
-          { label: 'Manaslu Circuit Trek', href: `/trek/${MANASLU_TREK_ID}` },
-          { label: 'Everest Base Camp', href: `/trek/${EBC_TREK_ID}` },
-          { label: 'Annapurna Circuit', href: '/trek/annapurna-circuit' },
+    { label: 'Home', href: '/' },
+    {
+        label: 'Treks & Tours',
+        href: '#',
+        megaMenu: [
+            {
+                title: 'Popular Treks',
+                links: [
+                    { label: 'Manaslu Circuit Trek', href: `/trek/${MANASLU_TREK_ID}` },
+                    { label: 'Everest Base Camp', href: `/trek/${EBC_TREK_ID}` },
+                    { label: 'Annapurna Circuit', href: '/trek/annapurna-circuit' },
+                ],
+            },
+            {
+                title: 'Popular Tours',
+                links: [
+                    { label: 'Romantic Paris Getaway', href: `/tour/${PARIS_ID}` },
+                    { label: 'Temples of Kyoto', href: `/tour/${KYOTO_ID}` },
+                    { label: 'Wonders of Rome', href: `/tour/${ROME_ID}` },
+                ],
+            },
+            {
+                title: 'Destinations',
+                links: [
+                    { label: 'Nepal', href: '/destinations/nepal' },
+                    { label: 'Thailand', href: '/destinations/thailand' },
+                    { label: 'Peru', href: '/destinations/peru' },
+                    { label: 'France', href: '/destinations/france' },
+                    { label: 'All Destinations', href: '/destinations' },
+                ],
+            },
         ],
-      },
-       {
-        title: 'Popular Tours',
-        links: [
-          { label: 'Romantic Paris Getaway', href: `/tour/${PARIS_ID}` },
-          { label: 'Temples of Kyoto', href: `/tour/${KYOTO_ID}` },
-          { label: 'Wonders of Rome', href: `/tour/${ROME_ID}` },
-        ],
-      },
-      {
-        title: 'Destinations',
-        links: [
-          { label: 'Nepal', href: '/destinations/nepal' },
-          { label: 'Thailand', href: '/destinations/thailand' },
-          { label: 'Peru', href: '/destinations/peru' },
-          { label: 'France', href: '/destinations/france' },
-          { label: 'All Destinations', href: '/destinations' },
-        ],
-      },
-    ],
-  },
-  { label: 'Trip Planner', href: '/trip-planner' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+    },
+    { label: 'Trip Planner', href: '/trip-planner' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
 ];
 
 export const SERVICES_DATA: Service[] = [
@@ -191,7 +191,7 @@ export const TOURS_DETAIL_DATA: TourDetail[] = [
         mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d505703.9772986423!2d98.0577732296875!3d7.970222899999992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x305031e17a43586d%3A0x102202358358480!2sPhuket%2C%20Thailand!5e0!3m2!1sen!2snp!4v1680512948639!5m2!1sen!2snp',
         faqs: [
             { question: 'What is the best time to visit Phuket?', answer: 'The best time to visit Phuket is during the dry season, from November to April, when the weather is sunny and the seas are calm.' },
-            { question: 'Is this tour suitable for families with children?', answer: 'Yes, this tour is family-friendly. However, the speedboat ride can be bumpy, so it may not be suitable for very young infants.'}
+            { question: 'Is this tour suitable for families with children?', answer: 'Yes, this tour is family-friendly. However, the speedboat ride can be bumpy, so it may not be suitable for very young infants.' }
         ],
         tags: ['beach', 'relaxation', 'adventure', 'nature'],
     },
@@ -210,14 +210,14 @@ export const TREKS_DATA: Trek[] = [
         reviews: 189,
         overview: 'The Manaslu Circuit Trek is a stunning 17-day journey through the remote and restricted region of Nepal. It offers a unique opportunity to experience pristine Himalayan nature and rich Tibetan-influenced culture. The trek circumnavigates the majestic Mount Manaslu, the eighth highest peak in the world, and culminates in crossing the challenging Larkya La Pass. This less-crowded alternative to the Annapurna Circuit provides an authentic and adventurous trekking experience.',
         tripFacts: [
-            { icon: <MountainIcon />, label: 'Max Altitude', value: '5,106m (Larkya La Pass)'},
-            { icon: <CalendarIcon />, label: 'Trip Duration', value: '17 Days'},
-            { icon: <UserGroupIcon />, label: 'Group Size', value: '2-12 People'},
-            { icon: <SunIcon />, label: 'Best Seasons', value: 'Mar-May, Sep-Nov'},
-            { icon: <HomeIcon />, label: 'Accommodation', value: 'Teahouse / Lodge'},
+            { icon: <MountainIcon />, label: 'Max Altitude', value: '5,106m (Larkya La Pass)' },
+            { icon: <CalendarIcon />, label: 'Trip Duration', value: '17 Days' },
+            { icon: <UserGroupIcon />, label: 'Group Size', value: '2-12 People' },
+            { icon: <SunIcon />, label: 'Best Seasons', value: 'Mar-May, Sep-Nov' },
+            { icon: <HomeIcon />, label: 'Accommodation', value: 'Teahouse / Lodge' },
         ],
         itinerary: [
-             { day: 1, title: 'Arrival in Kathmandu', altitude: '1,400m', duration: 'N/A', meals: 'Dinner', description: 'Upon arrival at Tribhuvan International Airport, our representative will greet you and transfer you to your hotel. In the evening, there will be a welcome dinner and a briefing about the trek.', image: 'https://picsum.photos/seed/day1/800/400' },
+            { day: 1, title: 'Arrival in Kathmandu', altitude: '1,400m', duration: 'N/A', meals: 'Dinner', description: 'Upon arrival at Tribhuvan International Airport, our representative will greet you and transfer you to your hotel. In the evening, there will be a welcome dinner and a briefing about the trek.', image: 'https://picsum.photos/seed/day1/800/400' },
             { day: 2, title: 'Drive to Machha Khola', altitude: '930m', duration: '8-9 hours drive', meals: 'Breakfast, Lunch, Dinner', description: 'An early morning scenic drive from Kathmandu takes us towards the western mountains. We drive through winding roads along the Trishuli River, eventually reaching the starting point of our trek, Machha Khola.', image: 'https://picsum.photos/seed/day2/800/400' },
             { day: 3, title: 'Trek to Jagat', altitude: '1,340m', duration: '6-7 hours', meals: 'Breakfast, Lunch, Dinner', description: 'The trail today follows the Budi Gandaki River, passing through small villages, terraced fields, and waterfalls. We cross several suspension bridges before reaching the village of Jagat, the entry point to the restricted Manaslu region.', image: 'https://picsum.photos/seed/day3/800/400' },
             { day: 4, title: 'Trek to Deng', altitude: '1,860m', duration: '6-7 hours', meals: 'Breakfast, Lunch, Dinner', description: 'We continue our trek, entering a region of Tibetan-influenced culture. The trail involves some steep sections and offers beautiful views of the Sringi Himal. We pass through forests of bamboo and rhododendron before reaching Deng.', image: 'https://picsum.photos/seed/day4/800/400' },
@@ -401,19 +401,19 @@ export const GALLERY_IMAGES: GalleryImage[] = [
 
 export const TESTIMONIALS_DATA: Testimonial[] = [
     {
-        quote: 'An absolutely unforgettable experience! The guides were knowledgeable and friendly, and the scenery was breathtaking. I can\'t wait to book my next trip with Heavenly Pathways.',
+        quote: 'An absolutely unforgettable experience! The guides were knowledgeable and friendly, and the scenery was breathtaking. I can\'t wait to book my next trip with Territory Himalayas.',
         image: 'https://picsum.photos/seed/person1/100/100',
         name: 'Sarah Johnson',
         role: 'Travel Enthusiast'
     },
     {
-        quote: 'The whole trip was perfectly organized from start to finish. Heavenly Pathways took care of everything, allowing us to just relax and enjoy the journey. Highly recommended!',
+        quote: 'The whole trip was perfectly organized from start to finish. Territory Himalayas took care of everything, allowing us to just relax and enjoy the journey. Highly recommended!',
         image: 'https://picsum.photos/seed/person2/100/100',
         name: 'Michael Chen',
         role: 'Adventurer'
     },
     {
-        quote: 'I\'ve traveled with many companies, but Heavenly Pathways stands out for their attention to detail and commitment to customer satisfaction. The Everest Base Camp trek was a dream come true.',
+        quote: 'I\'ve traveled with many companies, but Territory Himalayas stands out for their attention to detail and commitment to customer satisfaction. The Everest Base Camp trek was a dream come true.',
         image: 'https://picsum.photos/seed/person3/100/100',
         name: 'Emily Davis',
         role: 'Seasoned Traveler'

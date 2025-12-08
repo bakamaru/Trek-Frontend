@@ -10,15 +10,15 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({ title, description, image, type = 'website', context }) => {
   const [meta, setMeta] = useState({
-    title: `${title} | Heavenly Pathways`,
-    description: description || 'Discover amazing tours, treks, and travel experiences with Heavenly Pathways.',
+    title: `${title} | Territory Himalayas`,
+    description: description || 'Discover amazing tours, treks, and travel experiences with Territory Himalayas.',
     image: image || 'https://picsum.photos/seed/travel-hero/1200/630',
   });
 
   useEffect(() => {
     let isMounted = true;
 
- 
+
 
     return () => { isMounted = false; };
   }, [title, context, image, description]);
@@ -27,21 +27,21 @@ const SEO: React.FC<SEOProps> = ({ title, description, image, type = 'website', 
     document.title = meta.title;
 
     const updateTag = (selector: string, content: string) => {
-        let el = document.querySelector(selector);
-        if (!el) {
-            const head = document.head;
-            el = document.createElement('meta');
-            
-            if (selector.includes('name')) {
-                const name = selector.match(/name="([^"]+)"/)?.[1];
-                if(name) el.setAttribute('name', name);
-            } else if (selector.includes('property')) {
-                 const property = selector.match(/property="([^"]+)"/)?.[1];
-                 if(property) el.setAttribute('property', property);
-            }
-            head.appendChild(el);
+      let el = document.querySelector(selector);
+      if (!el) {
+        const head = document.head;
+        el = document.createElement('meta');
+
+        if (selector.includes('name')) {
+          const name = selector.match(/name="([^"]+)"/)?.[1];
+          if (name) el.setAttribute('name', name);
+        } else if (selector.includes('property')) {
+          const property = selector.match(/property="([^"]+)"/)?.[1];
+          if (property) el.setAttribute('property', property);
         }
-        el.setAttribute('content', content);
+        head.appendChild(el);
+      }
+      el.setAttribute('content', content);
     };
 
     updateTag('meta[name="description"]', meta.description);

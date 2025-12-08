@@ -14,10 +14,10 @@ import SEO from '../components/SEO';
 const Home: React.FC = () => {
   return (
     <>
-      <SEO 
-        title="Home" 
-        description="Welcome to Heavenly Pathways. Discover your next adventure with our curated treks, tours, and travel experiences worldwide."
-        context="Heavenly Pathways is a leading travel agency offering treks in Nepal, tours in Europe, and beach vacations in Thailand. Best price guaranteed and 24/7 support."
+      <SEO
+        title="Home"
+        description="Welcome to Territory Himalayas. Discover your next adventure with our curated treks, tours, and travel experiences worldwide."
+        context="Territory Himalayas is a leading travel agency offering treks in Nepal, tours in Europe, and beach vacations in Thailand. Best price guaranteed and 24/7 support."
       />
       <Hero />
       <Services />

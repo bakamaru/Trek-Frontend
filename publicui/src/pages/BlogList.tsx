@@ -12,7 +12,7 @@ const BlogList: React.FC = () => {
             <section className="bg-gray-100 dark:bg-gray-800 py-20 text-center">
                 <div className="container mx-auto px-4">
                     <h1 className="text-5xl font-extrabold text-gray-800 dark:text-gray-100">Our Blog</h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-400 mt-4 max-w-3xl mx-auto">Travel stories, tips, and inspiration from the Heavenly Pathways team.</p>
+                    <p className="text-xl text-gray-600 dark:text-gray-400 mt-4 max-w-3xl mx-auto">Travel stories, tips, and inspiration from the Territory Himalayas team.</p>
                 </div>
             </section>
 
