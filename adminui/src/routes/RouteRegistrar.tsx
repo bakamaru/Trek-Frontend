@@ -52,7 +52,7 @@ import MenuManagement from "../pages/SuperUser/Menu/MenuManagement";
 const appRoutes: RouteObject[] = [
   {
     path: "/",
-    element: <><p>Hello</p></>
+    element: <SignIn />,
   },
   {
     path: "/signin",

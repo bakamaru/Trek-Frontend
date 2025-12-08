@@ -247,37 +247,37 @@ const sunavItems: NavItem[] = [
       { name: "Currency", path: "/superadmin/trek/currency", pro: false },
     ],
   },
-  {
-    icon: <AIAssistantIcon />,
-    name: "AI Assistant",
-    subItems: [
-      { name: "LLM Provider", path: "/superadmin/llmprovider", pro: false },
-      { name: "System Prompt", path: "/superadmin/systemprompt", pro: false },
-      { name: "Moderation", path: "/superadmin/moderation", pro: false },
-      { name: "Assistant", path: "/superadmin/aiassistant", pro: false },
-      { name: "Collection", path: "/superadmin/collection", pro: false },
-      { name: "Category", path: "/superadmin/category", pro: false },
-      { name: "Usage Summary", path: "/superadmin/usagesummary", pro: false },
-      { name: "Assistant Theme", path: "/superadmin/assistant/theme", pro: false },
-    ],
-  },
-  {
-    icon: <SupportIcon />,
-    name: "Support",
-    subItems: [
-      { name: "Tickets", path: "/superadmin/supprot/ticket", pro: false },
-      { name: "Support Team", path: "/superadmin/support/team", pro: false },
-      { name: "Settings", path: "/superadmin/support/setting", pro: false },
-    ],
-  },
-  {
-    icon: <AgentIcon />,
-    name: "Agent",
-    subItems: [
-      { name: "Agent Tasks", path: "/superadmin/agent/task", pro: false },
-      { name: "Task Builder", path: "/superadmin/agent/taskbuilder", pro: false },
-    ],
-  },
+  // {
+  //   icon: <AIAssistantIcon />,
+  //   name: "AI Assistant",
+  //   subItems: [
+  //     { name: "LLM Provider", path: "/superadmin/llmprovider", pro: false },
+  //     { name: "System Prompt", path: "/superadmin/systemprompt", pro: false },
+  //     { name: "Moderation", path: "/superadmin/moderation", pro: false },
+  //     { name: "Assistant", path: "/superadmin/aiassistant", pro: false },
+  //     { name: "Collection", path: "/superadmin/collection", pro: false },
+  //     { name: "Category", path: "/superadmin/category", pro: false },
+  //     { name: "Usage Summary", path: "/superadmin/usagesummary", pro: false },
+  //     { name: "Assistant Theme", path: "/superadmin/assistant/theme", pro: false },
+  //   ],
+  // },
+  // {
+  //   icon: <SupportIcon />,
+  //   name: "Support",
+  //   subItems: [
+  //     { name: "Tickets", path: "/superadmin/supprot/ticket", pro: false },
+  //     { name: "Support Team", path: "/superadmin/support/team", pro: false },
+  //     { name: "Settings", path: "/superadmin/support/setting", pro: false },
+  //   ],
+  // },
+  // {
+  //   icon: <AgentIcon />,
+  //   name: "Agent",
+  //   subItems: [
+  //     { name: "Agent Tasks", path: "/superadmin/agent/task", pro: false },
+  //     { name: "Task Builder", path: "/superadmin/agent/taskbuilder", pro: false },
+  //   ],
+  // },
   {
     icon: <ThemeIcon />,
     name: "Theme",
