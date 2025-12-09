@@ -26,6 +26,8 @@ import { trekAPI } from "./trek/trekAPI";
 import { chunkFileUploadAPI } from "./trek/chunkFileUploadAPI";
 import { trekCategoryAPI } from "./trek/trekCategoryAPI";
 import { trekRegionAPI } from "./trek/trekRegionAPI";
+import { blogAPI } from "./trek/blogAPI";
+import { bannerAPI } from "./trek/bannerAPI";
 
 
 export const store = configureStore({
@@ -56,6 +58,8 @@ export const store = configureStore({
     [chunkFileUploadAPI.reducerPath]: chunkFileUploadAPI.reducer,
     [trekCategoryAPI.reducerPath]: trekCategoryAPI.reducer,
     [trekRegionAPI.reducerPath]: trekRegionAPI.reducer,
+    [blogAPI.reducerPath]: blogAPI.reducer,
+    [bannerAPI.reducerPath]: bannerAPI.reducer,
 
 
   },
@@ -86,7 +90,9 @@ export const store = configureStore({
       trekAPI.middleware,
       chunkFileUploadAPI.middleware,
       trekCategoryAPI.middleware,
-      trekRegionAPI.middleware
+      trekRegionAPI.middleware,
+      blogAPI.middleware,
+      bannerAPI.middleware,
     ),
 });
 

@@ -15,4 +15,8 @@ export default defineConfig({
       },
     }),
   ],
+  define: {
+    // Polyfill Node.js globals for browser
+    global: "globalThis",
+  },
 });

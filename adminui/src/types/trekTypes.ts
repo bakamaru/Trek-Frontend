@@ -367,3 +367,52 @@ export interface PaginationParams {
     limit?: number;
     query?: string;
 }
+
+export interface BannerSaveRequest {
+    bannerId?: number;
+    name?: string;
+    key?: string;
+    isActive?: boolean;
+}
+
+export interface Banner {
+    BannerId: number;
+    Name: string;
+    Key: string;
+    IsActive: boolean;
+    UpdatedDate?: string;
+    RowTotal?: number;
+}
+
+export interface BannerItemSaveRequest {
+    bannerItemId?: number;
+    bannerId?: number;
+    heading?: string;
+    subheading?: string;
+    ctaText?: string;
+    ctaLink?: string;
+    imageUrl?: string;
+    secondaryImageUrl?: string;
+    animation?: string;
+    contentPosition?: string;
+    overlayOpacity?: number;
+    displayOrder?: number;
+    isActive?: boolean;
+}
+
+export interface BannerItem {
+    BannerItemId: number;
+    BannerId: number;
+    Heading: string;
+    SubHeading: string;
+    CTAText: string;
+    CTALink: string;
+    ImageUrl: string;
+    SecondaryImageUrl: string;
+    Animation: string; // 'fade' | 'slide-up' | 'zoom-in' | 'slide-right'
+    ContentPosition: string; // 'left' | 'center' | 'right'
+    OverlayOpacity: number;
+    DisplayOrder: number;
+    IsActive: boolean;
+    IsImageDirectUrl: boolean;
+}

@@ -209,6 +209,22 @@ const sunavItems: NavItem[] = [
   { icon: <GridIcon />, name: "Dashboard", path: "/superadmin/dashboard" },
   {
     icon: <BoxCubeIcon />,
+    name: "Banner",
+    subItems: [
+      { name: "Banner", path: "/superadmin/banner", pro: false }
+    ],
+  },
+  {
+    icon: <BoxCubeIcon />,
+    name: "Blog",
+    subItems: [
+      { name: "Posts", path: "/superadmin/blog", pro: false },
+      { name: "Category", path: "/superadmin/blog/category", pro: false },
+      { name: "Setting", path: "/superadmin/blog/setting", pro: false },
+    ],
+  },
+  {
+    icon: <BoxCubeIcon />,
     name: "Hotel",
     subItems: [
       { name: "Hotel", path: "/superadmin/hotel", pro: false },

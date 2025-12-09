@@ -47,6 +47,14 @@ import TrekCategoryForm from "../pages/SuperUser/Trek/Category/TrekCategoryForm"
 import AdminTrekManagement from "../pages/SuperUser/Trek/Trek/AdminTrekManagement";
 import TrekFormPage from "../pages/SuperUser/Trek/Trek/TrekFormPage";
 import MenuManagement from "../pages/SuperUser/Menu/MenuManagement";
+import BlogList from "../pages/SuperUser/Blog/BlogList";
+import BlogForm from "../pages/SuperUser/Blog/BlogForm";
+import PostCategoryList from "../pages/SuperUser/Blog/PostCategoryList";
+import PostCategoryForm from "../pages/SuperUser/Blog/PostCategoryForm";
+import BlogSettingForm from "../pages/SuperUser/Blog/BlogSettingForm";
+import BannerList from "../pages/SuperUser/Banner/BannerList";
+import BannerForm from "../pages/SuperUser/Banner/BannerForm";
+import BannerSlideEditor from "../pages/SuperUser/Banner/BannerSlideEditor";
 
 
 const appRoutes: RouteObject[] = [
@@ -77,6 +85,15 @@ const superUserRoutes: RouteObject = {
   children: [
     { path: "dashboard", element: <Dashboard /> },
     { path: "menu", element: <MenuManagement /> },
+
+    { path: "blog", element: <BlogList /> },
+    { path: "blog/new", element: <BlogForm /> },
+    { path: "blog/edit", element: <BlogForm /> },
+    { path: "blog/setting", element: <BlogSettingForm /> },
+    { path: "blog/category", element: <PostCategoryList /> },
+    { path: "blog/category/new", element: <PostCategoryForm /> },
+    { path: "blog/category/edit", element: <PostCategoryForm /> },
+
     { path: "llmprovider", element: <LLMProvider /> },
     { path: "llmprovider/new", element: <NewLLMProvider /> },
     { path: "llmprovider/edit", element: <NewLLMProvider /> },
@@ -156,6 +173,13 @@ const superUserRoutes: RouteObject = {
     { path: "trek/booking/new", element: <BookingForm /> },
     { path: "trek/booking/detail", element: <BookingDetail /> },
     { path: "trek/booking/edit", element: <BookingForm /> },
+
+    { path: "banner", element: <BannerList /> },
+    { path: "banner/new", element: <BannerForm /> },
+    { path: "banner/edit", element: <BannerForm /> },
+    { path: "banner/slides", element: <BannerSlideEditor /> },
+
+
   ],
 };
 const adminRoutes: RouteObject = {
