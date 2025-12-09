@@ -1,61 +1,90 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "../../config/apiConfig";
 
-export const contentAPI = createApi({
-    reducerPath: "contentAPI",
+type TestimonialListQuery = {
+    offset?: number;
+    limit?: number;
+    query?: string;
+};
+
+export const testimonialAPI = createApi({
+    reducerPath: "testimonialAPI",
     baseQuery: baseQueryWithAuth,
+    tagTypes: ["Testimonial"],
     endpoints: (builder) => ({
-        getMegaMenu: builder.query({
-            query: () => ({
-                url: "/api/v1/content/megamenu",
-                method: "GET",
-            }),
+        // GET /api/v1/testimonial/all/active
+        getActiveTestimonials: builder.query<any, TestimonialListQuery>({
+            query: (params = {}) => {
+                const {
+                    offset = 1,
+                    limit = 20,
+                    query = "",
+                } = params;
+
+                return {
+                    url: `/api/v1/testimonial/all/active?offset=${offset}&limit=${limit}&query=${encodeURIComponent(
+                        query
+                    )}`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["Testimonial"],
         }),
-        getHeroBanner: builder.query({
-            query: () => ({
-                url: "/api/v1/content/hero",
-                method: "GET",
-            }),
+
+        // GET /api/v1/testimonial/all
+        getAllTestimonials: builder.query<any, TestimonialListQuery>({
+            query: (params = {}) => {
+                const {
+                    offset = 1,
+                    limit = 20,
+                    query = "",
+                } = params;
+
+                return {
+                    url: `/api/v1/testimonial/all?offset=${offset}&limit=${limit}&query=${encodeURIComponent(
+                        query
+                    )}`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["Testimonial"],
         }),
-        getGallery: builder.query({
-            query: () => ({
-                url: "/api/v1/content/gallery",
+
+        // GET /api/v1/testimonial/{id}
+        getTestimonialById: builder.query<any, number>({
+            query: (id) => ({
+                url: `/api/v1/testimonial/${id}`,
                 method: "GET",
             }),
+            providesTags: ["Testimonial"],
         }),
-        getTestimonials: builder.query({
-            query: () => ({
-                url: "/api/v1/content/testimonials",
-                method: "GET",
+
+        // POST /api/v1/testimonial/save
+        // NOTE: backend expects x-www-form-urlencoded (or you can send FormData)
+        saveTestimonial: builder.mutation<any, FormData | Record<string, any>>({
+            query: (body) => ({
+                url: "/api/v1/testimonial/save",
+                method: "POST",
+                body,
             }),
+            invalidatesTags: ["Testimonial"],
         }),
-        getFooterMenu: builder.query({
-            query: () => ({
-                url: "/api/v1/content/footer",
-                method: "GET",
+
+        // DELETE /api/v1/testimonial/{id}
+        deleteTestimonial: builder.mutation<any, number>({
+            query: (id) => ({
+                url: `/api/v1/testimonial/${id}`,
+                method: "DELETE",
             }),
-        }),
-        getAboutUs: builder.query({
-            query: () => ({
-                url: "/api/v1/content/about",
-                method: "GET",
-            }),
-        }),
-        getContactUs: builder.query({
-            query: () => ({
-                url: "/api/v1/content/contact",
-                method: "GET",
-            }),
+            invalidatesTags: ["Testimonial"],
         }),
     }),
 });
 
 export const {
-    useGetMegaMenuQuery,
-    useGetHeroBannerQuery,
-    useGetGalleryQuery,
-    useGetTestimonialsQuery,
-    useGetFooterMenuQuery,
-    useGetAboutUsQuery,
-    useGetContactUsQuery,
-} = contentAPI;
+    useGetActiveTestimonialsQuery,
+    useGetAllTestimonialsQuery,
+    useGetTestimonialByIdQuery,
+    useSaveTestimonialMutation,
+    useDeleteTestimonialMutation,
+} = testimonialAPI;

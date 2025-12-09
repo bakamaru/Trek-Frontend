@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useGetFooterMenuQuery } from '../redux/api/contentAPI';
+//import { useGetFooterMenu } from '../redux/api/menuAPI';
 import LoadingSpinner from './LoadingSpinner';
 import { FooterMenu, FooterSection } from '../types/types';
 
 const Footer: React.FC = () => {
-  const { data: footerData, isLoading, error } = useGetFooterMenuQuery(undefined);
+  //const { data: footerData, isLoading, error } = useGetFooterMenuQuery(undefined);
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-500 text-center p-4">Failed to load footer</div>;
+  // if (isLoading) return <LoadingSpinner />;
+  // if (error) return <div className="text-red-500 text-center p-4">Failed to load footer</div>;
 
-  const { sections, socialLinks } = footerData || {
-    sections: [],
-    socialLinks: []
-  };
+  // const { sections, socialLinks } = footerData || {
+  //   sections: [],
+  //   socialLinks: []
+  // };
 
   return (
     <footer className="bg-gray-800 dark:bg-gray-900 text-gray-300">
@@ -30,14 +30,14 @@ const Footer: React.FC = () => {
               We are a passionate team of travel experts dedicated to creating unforgettable journeys for our clients.
             </p>
             <div className="flex space-x-4">
-              {socialLinks?.map((link, index) => (
+              {/* {socialLinks?.map((link, index) => (
                 <a key={index} href={link.url} className="hover:text-blue-700 transition-colors duration-300">{link.platform}</a>
-              ))}
+              ))} */}
             </div>
           </div>
 
           {/* Dynamic Sections */}
-          {sections?.map((section: FooterSection, index: number) => (
+          {/* {sections?.map((section: FooterSection, index: number) => (
             <div key={index}>
               <h4 className="text-xl font-bold text-white mb-6">{section.title}</h4>
               <ul className="space-y-3">
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
                 ))}
               </ul>
             </div>
-          ))}
+          ))} */}
 
           {/* Newsletter */}
           <div>
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
       </div>
       <div className="bg-gray-900 dark:bg-black py-4">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Territory Himalayas. All Rights Reserved. Created with React & Tailwind CSS.</p>
+          <p>&copy; {new Date().getFullYear()} Territory Himalayas. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

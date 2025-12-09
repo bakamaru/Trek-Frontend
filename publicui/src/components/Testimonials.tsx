@@ -1,17 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { useGetTestimonialsQuery } from '../redux/api/contentAPI';
+import { useGetActiveTestimonialsQuery } from '../redux/api/testimonialAPI';
 import LoadingSpinner from './LoadingSpinner';
-import { Testimonial } from '../types/types';
+
+// Match your backend Testimonial model
+type ApiTestimonial = {
+  Id: number;
+  Name: string;
+  ThumbnailImage: string;
+  Description: string;
+  ShortDescription: string;
+  Designation: string;
+  Email: string;
+  Url: string;
+  ShowInHome: boolean;
+  IsApproved: boolean;
+};
+
+type TestimonialApiResponse = {
+  Code: number;
+  Message: string;
+  Data: ApiTestimonial[];
+  Errors?: any[];
+};
 
 const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { data: testimonials, isLoading, error } = useGetTestimonialsQuery(undefined);
+
+  const { data: rawData, isLoading, error } = useGetActiveTestimonialsQuery({
+    offset: 1,
+    limit: 5,
+    query: "",
+  });
+
+  const response = rawData as TestimonialApiResponse | undefined;
+  const testimonials: ApiTestimonial[] = response?.Data ?? [];
 
   useEffect(() => {
     if (!testimonials || testimonials.length === 0) return;
+
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(timer);
   }, [testimonials]);
@@ -28,8 +57,12 @@ const Testimonials: React.FC = () => {
     <section className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">What Our Client Say</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Real stories from our satisfied travelers.</p>
+          <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">
+            What Our Clients Say
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Real stories from our satisfied travelers.
+          </p>
         </div>
 
         <div className="relative max-w-3xl mx-auto overflow-hidden">
@@ -37,13 +70,28 @@ const Testimonials: React.FC = () => {
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {testimonials.map((testimonial: Testimonial, index: number) => (
-              <div key={index} className="w-full flex-shrink-0 px-4">
+            {testimonials.map((testimonial, index) => (
+              <div key={testimonial.Id ?? index} className="w-full flex-shrink-0 px-4">
                 <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-md text-center">
-                  <p className="text-gray-600 dark:text-gray-300 italic text-lg mb-6">"{testimonial.quote}"</p>
-                  <img src={testimonial.image} alt={testimonial.name} className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-blue-200" />
-                  <h4 className="font-bold text-xl text-gray-800 dark:text-gray-100">{testimonial.name}</h4>
-                  <p className="text-gray-500 dark:text-gray-400">{testimonial.role}</p>
+                  <p className="text-gray-600 dark:text-gray-300 italic text-lg mb-6">
+                    "
+                    {testimonial.ShortDescription || testimonial.Description}
+                    "
+                  </p>
+                  <img
+                    src={
+                      testimonial.ThumbnailImage ||
+                      'https://via.placeholder.com/150?text=User'
+                    }
+                    alt={testimonial.Name}
+                    className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover"
+                  />
+                  <h4 className="font-bold text-xl text-gray-800 dark:text-gray-100">
+                    {testimonial.Name}
+                  </h4>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {testimonial.Designation}
+                  </p>
                 </div>
               </div>
             ))}
@@ -55,7 +103,9 @@ const Testimonials: React.FC = () => {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors duration-300 ${currentIndex === index ? 'bg-blue-700' : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
+              className={`w-3 h-3 rounded-full transition-colors duration-300 ${currentIndex === index
+                  ? 'bg-blue-700'
+                  : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             ></button>

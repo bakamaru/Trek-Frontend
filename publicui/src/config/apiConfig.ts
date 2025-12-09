@@ -8,28 +8,21 @@ import { jwtDecode } from "jwt-decode";
 import { ITokenInfo, ITokenResponse } from "../types";
 import { BaseEndpoints } from "./BaseEndpoints";
 
-// const getAppToken = async () => {
-//     const res = await fetch(`${BaseEndpoints.base}/connect/token`);
-//     const data: ITokenResponse = await res.json();
-//     return data;
-// };
+/**
+ * Get a client-credentials token from IdentityServer
+ */
 const getAppToken = async (): Promise<ITokenResponse> => {
-    // Encode client credentials in Base64 format
-    //const credentials = btoa(`${clientId}:${clientSecret}`);
-
     const res = await fetch(`${BaseEndpoints.base}/connect/token`, {
-        method: 'POST',
-        mode: 'cors', 
+        method: "POST",
+        mode: "cors",
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            //'Authorization': `Basic ${credentials}`
+            "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-            'client_id': import.meta.env.VITE_API_CLIENTID,
-            'client_secret': import.meta.env.VITE_API_SECRET,
-            'grant_type': 'client_credentials',
-            // 'scope': 'api.read api.write' 
-        })
+            client_id: import.meta.env.VITE_API_CLIENTID,
+            client_secret: import.meta.env.VITE_API_SECRET,
+            grant_type: "client_credentials",
+        }),
     });
 
     if (!res.ok) {
@@ -37,86 +30,112 @@ const getAppToken = async (): Promise<ITokenResponse> => {
     }
 
     const data: ITokenResponse = await res.json();
-    console.log("token",data)
+    console.log("Fetched new token:", data);
     return data;
 };
-const setAccessToken = (token: string, exp: number) => {
-    localStorage.setItem("token", token);
+
+const setAccessToken = (token: string) => {
+    try {
+        localStorage.setItem("token", token);
+    } catch (e) {
+        console.warn("Unable to persist token to localStorage:", e);
+    }
 };
-const getAccessToken = () => {
-    const accessToken = localStorage.getItem("token");
-    if (accessToken) return accessToken;
-    else return null;
+
+const getAccessToken = (): string | null => {
+    try {
+        const accessToken = localStorage.getItem("token");
+        return accessToken || null;
+    } catch {
+        return null;
+    }
+};
+
+const removeAccessToken = () => {
+    try {
+        localStorage.removeItem("token");
+    } catch (e) {
+        console.warn("Unable to remove token from localStorage:", e);
+    }
 };
 
 export const baseQueryWithAuth: BaseQueryFn<
     string | FetchArgs,
     unknown,
-    FetchBaseQueryError,
-    { baseUrl?: string }
+    FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-    const baseUrl = BaseEndpoints.base;// extraOptions?.baseUrl || ``;
-    const baseQuery = fetchBaseQuery({ baseUrl });
+    const baseQuery = fetchBaseQuery({
+        baseUrl: BaseEndpoints.base,
+    });
 
-    const accessToken = getAccessToken();
+    // ---- 1) Get current token (if any) ----
+    let tokenToUse: string | null = getAccessToken();
 
-    const fetchArgs: FetchArgs =
-        typeof args === "string" ? { url: args } : { ...args };
-
-    const headers: Record<string, string> = fetchArgs.headers
-        ? fetchArgs.headers instanceof Headers
-            ? Object.fromEntries(fetchArgs.headers.entries())
-            : Array.isArray(fetchArgs.headers)
-                ? Object.fromEntries(fetchArgs.headers)
-                : fetchArgs.headers
-        : {};
-   // let headers:any={};
-   // headers['Content-Type'] = 'application/x-www-form-urlencoded';
-    headers['Access-Control-Allow-Origin'] = '*';
-
-     const currentAccessToken = getAccessToken();
-    let tokenToUse = currentAccessToken;
-    
-    if (currentAccessToken) {
+    if (tokenToUse) {
         try {
-            const currentTokenInfo = jwtDecode(currentAccessToken) as ITokenInfo;
-            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-            
-            // Check if token is expired (add 60 seconds buffer for safety)
-            if (currentTokenInfo.exp && currentTokenInfo.exp < (currentTime + 60)) {
-                console.log("Token expired or about to expire, refreshing...");
-                tokenToUse = null; // Force token refresh
+            const currentTokenInfo = jwtDecode(tokenToUse) as ITokenInfo;
+            const currentTime = Math.floor(Date.now() / 1000); // in seconds
+
+            // If token expired or about to expire in the next 60s → refresh
+            if (
+                currentTokenInfo.exp &&
+                currentTokenInfo.exp < currentTime + 60
+            ) {
+                console.log("Token expired / expiring soon, refreshing...");
+                removeAccessToken(); // Clear expired token
+                tokenToUse = null;
             }
         } catch (error) {
             console.error("Error decoding existing token:", error);
-            tokenToUse = null; // Force token refresh on decode error
+            removeAccessToken(); // Clear invalid token
+            tokenToUse = null;
         }
     }
 
-    // If no valid token, get a new one
+    // ---- 2) Fetch new token if needed ----
     if (!tokenToUse) {
         try {
             const data = await getAppToken();
             if (data?.access_token) {
                 const tokenInfo = jwtDecode(data.access_token) as ITokenInfo;
-                console.log("New token decoded", tokenInfo, data);                
-                setAccessToken(data.access_token, tokenInfo.exp);
+                console.log("New token decoded:", tokenInfo);
+                setAccessToken(data.access_token);
                 tokenToUse = data.access_token;
             } else {
-                throw new Error("Failed to get access token");
+                throw new Error("No access_token in token response");
             }
         } catch (error) {
             console.error("Error getting new token:", error);
-            // Handle token refresh failure (redirect to login, etc.)
-            // window.location.href = "/login";
-            throw error;
+            // You can choose to redirect, logout, etc. here.
+            return {
+                error: {
+                    status: 401,
+                    data: { message: "Unable to obtain access token" },
+                } as FetchBaseQueryError,
+            };
         }
     }
 
-     // Set authorization header with the valid token
-    headers["Authorization"] = `Bearer ${tokenToUse}`;
-     fetchArgs.headers = headers;
+    // ---- 3) Build request args & add Authorization header ----
+    const fetchArgs: FetchArgs =
+        typeof args === "string" ? { url: args } : { ...args };
+
+    // Normalize headers to plain object
+    const existingHeaders: Record<string, string> =
+        fetchArgs.headers instanceof Headers
+            ? Object.fromEntries(fetchArgs.headers.entries())
+            : (fetchArgs.headers as Record<string, string>) || {};
+
+    fetchArgs.headers = {
+        ...existingHeaders,
+        // Don't set Access-Control-Allow-Origin here; this is a *response* header
+        Authorization: `Bearer ${tokenToUse}`,
+    };
+
+    // ---- 4) Call underlying baseQuery ----
     const result = await baseQuery(fetchArgs, api, extraOptions);
+
+    // ---- 5) Handle your API's { Code, Message, Data } envelope if present ----
     if (result.data && typeof result.data === "object" && "Code" in result.data) {
         const code = (result.data as any).Code;
         if (typeof code === "number" && (code < 200 || code >= 300)) {

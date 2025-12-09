@@ -22,7 +22,7 @@ const Home: React.FC = () => {
       <Hero />
       <Services />
       <TopDestinations />
-      <PopularTours />
+      {/* <PopularTours /> */}
       <PopularTreks />
       <VideoPromo />
       <WhyChooseUs />

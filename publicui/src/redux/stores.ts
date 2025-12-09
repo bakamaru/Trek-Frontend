@@ -11,11 +11,15 @@ import { systemPromptAPI } from "./aibot/systemPromptAPI";
 import { themeAPI } from "./aibot/themeAPI";
 import { supportAPI } from "./admin/SupportTicketAPI";
 
-
+import { menuAPI } from "./api/menuAPI";
 import { contentAPI } from "./api/contentAPI";
 import { blogAPI } from "./api/blogAPI";
 import { tourAPI } from "./api/tourAPI";
 import { authAPI } from "./api/authAPI";
+import { bannerAPI } from "./api/bannerAPI";
+import { destinationAPI } from "./api/destinationAPI";
+import { trekAPI } from "./api/trekAPI";
+import { testimonialAPI } from "./api/testimonialAPI";
 
 export const store = configureStore({
   reducer: {
@@ -33,6 +37,11 @@ export const store = configureStore({
     [blogAPI.reducerPath]: blogAPI.reducer,
     [tourAPI.reducerPath]: tourAPI.reducer,
     [authAPI.reducerPath]: authAPI.reducer,
+    [menuAPI.reducerPath]: menuAPI.reducer,
+    [bannerAPI.reducerPath]: bannerAPI.reducer,
+    [destinationAPI.reducerPath]: destinationAPI.reducer,
+    [trekAPI.reducerPath]: trekAPI.reducer,
+    [testimonialAPI.reducerPath]: testimonialAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -49,7 +58,12 @@ export const store = configureStore({
       contentAPI.middleware,
       blogAPI.middleware,
       tourAPI.middleware,
-      authAPI.middleware
+      authAPI.middleware,
+      menuAPI.middleware,
+      bannerAPI.middleware,
+      destinationAPI.middleware,
+      trekAPI.middleware,
+      testimonialAPI.middleware,
     ),
 });
 

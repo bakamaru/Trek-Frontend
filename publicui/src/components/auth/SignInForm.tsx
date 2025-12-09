@@ -43,7 +43,7 @@ export default function SignInForm() {
         if (Array.isArray(userInfo.role)) {
           if ((userInfo.role as string[]).includes("SuperAdmin")) {
             //navigate("/superadmin/dashboard");
-             navigate("/admin/superadmin/dashboard");
+            navigate("/admin/superadmin/dashboard");
           }
           if ((userInfo.role as string[]).includes("Admin")) {
             navigate("/admin/dashboard");
@@ -52,8 +52,8 @@ export default function SignInForm() {
           }
 
         } else if (userInfo.role === "SuperAdmin") {
-           navigate("/superadmin/dashboard");
-           //navigate("/admin/dashboard");
+          navigate("/superadmin/dashboard");
+          //navigate("/admin/dashboard");
         }
         else if (userInfo.role === "Admin") {
           navigate("/admin/dashboard");
@@ -83,81 +83,80 @@ export default function SignInForm() {
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
           <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign In
-            </h1>
+            <h2 className="mb-2 text-2xl font-bold text-blue-600 dark:text-white sm:text-3xl">
+              Welcome back
+            </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign in!
+              Please enter your details to sign in.
             </p>
           </div>
           <div>
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-6">
-
+            <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+              <div>
                 <Input
-                  labelName="Email"
-                  placeholder="info@gmail.com"
+                  labelName="Email Address"
+                  placeholder="name@company.com"
                   type="email"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  className="!py-3" // Specific override example or adjust base Input if needed
                 />
+              </div>
 
-                <Input
-                  labelName="Password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Password
+                  </label>
+                </div>
                 <div className="relative">
-                  {/* <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                  >
-                    {showPassword ? (
-                      <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                    ) : (
-                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                    )}
-                  </span> */}
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="!py-3"
+                  />
+                  {/* Toggle Password Visibility Icon could go here absolutely positioned */}
                   {formError && (
                     <p className="mt-2 text-sm text-red-500">{formError}</p>
                   )}
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={(e:any)=>setIsChecked(e.target.checked)} />
-                    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                      Remember me
-                    </span>
-                  </div>
-                  <Link
-                    to="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-                <div>
-                  <Button className="w-full" size="sm" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign in"}
-                  </Button>
-                </div>
+              </div>
 
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Checkbox checked={isChecked} onChange={(e: any) => setIsChecked(e.target.checked)} />
+                  <span className="block text-sm text-gray-700 dark:text-gray-400">
+                    Remember me
+                  </span>
+                </div>
+                <Link
+                  to="/reset-password"
+                  className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+
+              <div>
+                <Button className="w-full !py-3 !text-base" size="md" disabled={isLoading}>
+                  {isLoading ? "Signing in..." : "Sign in"}
+                </Button>
               </div>
             </form>
 
-            {/* <div className="mt-5">
-              <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Don&apos;t have an account? {""}
+            <div className="mt-6">
+              <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                Don't have an account? {" "}
                 <Link
                   to="/signup"
-                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                  className="font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400"
                 >
-                  Sign Up
+                  Sign up
                 </Link>
               </p>
-            </div> */}
+            </div>
             {/* <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>

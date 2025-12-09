@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useGetMegaMenuQuery } from '../redux/api/contentAPI';
+import { useGetMainNavigationQuery } from '../redux/api/menuAPI';
 import LoadingSpinner from './LoadingSpinner';
 import { MegaMenuItem } from '../types/types';
 
@@ -9,7 +9,7 @@ interface MegaMenuProps {
 }
 
 const MegaMenu: React.FC<MegaMenuProps> = ({ items: propItems }) => {
-    const { data: apiItems, isLoading, error } = useGetMegaMenuQuery(undefined, {
+    const { data: apiItems, isLoading, error } = useGetMainNavigationQuery(undefined, {
         skip: !!propItems, // Skip fetching if items are passed as props
     });
 

@@ -49,3 +49,78 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #f9fafb !important;
   /* gray-50 */
 }
+
+/* Custom animations used by Hero/Banner components */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 700ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft 700ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 700ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 700ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+/* Optional long zoom (used inline in BannerSlideItem) */
+@keyframes zoomInLong {
+  0% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.animate-zoom-long {
+  animation: zoomInLong 10s ease-out forwards;
+}
+
+/* Small utilities for animation-fill-mode / performance */
+.anim-preserve {
+  animation-fill-mode: both;
+}
