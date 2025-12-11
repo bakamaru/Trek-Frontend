@@ -1,9 +1,10 @@
 
 
-import React from 'react';
-import { SERVICES_DATA } from '../const/constants';
+import React from 'react';'../const/constants';
+
 
 const Services: React.FC = () => {
+  const SERVICES_DATA = [];
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800">
       <div className="container mx-auto px-4">

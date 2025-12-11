@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { TOURS_DETAIL_DATA } from '../const/constants';
 import { TourDetail as TourDetailType } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
@@ -27,7 +26,7 @@ const TourDetail: React.FC<TourDetailProps> = () => {
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
-      const foundTour = TOURS_DETAIL_DATA.find(t => t.id === slug);
+      const foundTour:any = {};//TOURS_DETAIL_DATA.find(t => t.id === slug);
       setTour(foundTour || null);
       setLoading(false);
     }, 1000);

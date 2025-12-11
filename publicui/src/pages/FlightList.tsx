@@ -1,6 +1,5 @@
 
 import React, { useContext, useState, useEffect } from 'react';
-import { FLIGHTS_DATA } from '../const/constants';
 import { Flight } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
@@ -29,7 +28,7 @@ const FlightList: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setFlights(FLIGHTS_DATA);
+      //setFlights(FLIGHTS_DATA);
       setLoading(false);
     }, 1200);
     return () => clearTimeout(timer);

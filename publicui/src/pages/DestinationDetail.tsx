@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { DESTINATIONS_DETAIL_DATA } from '../const/constants';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
+import { useGetDestinationBySlugQuery, useGetDestinationTreksQuery } from '../redux/api/destinationAPI';
 import { Tour, DestinationDetail as DestinationDetailType } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
@@ -21,15 +21,60 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
   const [destination, setDestination] = useState<DestinationDetailType | null>(null);
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
+
+  // Fetch destination by slug
+  const { data: destResp, isLoading: isLoadingDest, error: destError } = useGetDestinationBySlugQuery(slug ?? '', { skip: !slug });
+
+  // Extract destination DTO from API response (handles envelope { Code, Message, Data })
+  const destApi = (destResp && (destResp as any).Data) ? (destResp as any).Data : destResp;
+
+  // Get destinationId for treks
+  const destinationId = destApi?.DestinationId ?? null;
+
+  // Fetch treks for destination (skip until we have an id)
+  const { data: treksResp, isLoading: isLoadingTreks } = useGetDestinationTreksQuery(
+    destinationId ? { destinationId, offset: 1, limit: 20 } : (undefined as any),
+    { skip: !destinationId }
+  );
+
+  // Map treks response into frontend Tour[] shape (best-effort mapping)
+  const mappedTours: Tour[] = useMemo(() => {
+    const raw = treksResp && (treksResp as any).Data ? (treksResp as any).Data : treksResp ?? [];
+    if (!Array.isArray(raw)) return [];
+    return raw.map((t: any, idx: number) => ({
+      id: t.TrekId?.toString(),
+      image: t.ImageUrl || t.Image || t.image || '',
+      slug: t.Url || '',
+      price: t.PriceInUSD || 0,
+      location: t.Location || t.Region || '',
+      duration: t.Duration || '',
+      title: t.Title || t.Name || '',
+      rating: t.Rating ?? 5,
+      reviews: t.ReviewsCount ?? 0,
+    }));
+  }, [treksResp]);
+
+  // Build destination for UI when destApi is available
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      const foundDestination = DESTINATIONS_DETAIL_DATA.find(d => d.slug === slug);
-      setDestination(foundDestination || null);
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [slug]);
+    const anyLoading = isLoadingDest || isLoadingTreks;
+    setLoading(anyLoading);
+
+    if (!isLoadingDest && destApi) {
+      const mapped: DestinationDetailType = {
+        slug: slug || String(destApi.DestinationId ?? ''),
+        country: destApi.CountryName ,
+        subtitle: destApi.CountrySubtitle || '',
+        name: destApi.Name || 'N/A',
+        description: destApi.ShortDescription || destApi.Description || '',
+        heroImage: destApi.CoverImage || destApi.ThumbnailImage || '',
+        tours: mappedTours,
+      };
+      setDestination(mapped);
+    }
+    if (!destApi && !isLoadingDest) {
+      setDestination(null);
+    }
+  }, [destApi, mappedTours, isLoadingDest, isLoadingTreks, slug]);
 
   if (loading) {
     return <LoadingSpinner fullPage={true} />;
@@ -58,8 +103,10 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
       >
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
         <div className="container mx-auto px-4 z-10 text-center">
-          <h1 className="text-5xl lg:text-7xl font-extrabold">{destination.name}</h1>
-          <p className="text-xl mt-4">Discover the adventures that await you.</p>
+          <h1 className="text-5xl lg:text-7xl font-extrabold">{destination.country}</h1>
+          <p className="text-xl mt-4">
+            {destination.subtitle||""}
+          </p>
         </div>
       </section>
 
@@ -73,11 +120,11 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
         </div>
       </section>
 
-      {/* Tours Section */}
+      {/* Trek Section */}
       <section className="py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">Tours in {destination.name}</h2>
+            <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">Treks in {destination.name}</h2>
             <p className="text-gray-600 dark:text-gray-400 mt-2">Explore our curated list of tours for an unforgettable experience.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -102,13 +149,16 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
                       </div>
                       <span className="text-gray-600 dark:text-gray-300 ml-2">({tour.reviews} reviews)</span>
                     </div>
-                    <Link to={`/tour/${tour.id}`} className="text-blue-700 font-semibold hover:underline">
-                      View Details
+                    <Link to={`/trek/${tour.slug}`} className="text-blue-700 font-semibold hover:underline">
+                      Know More
                     </Link>
                   </div>
                 </div>
               </div>
             ))}
+            {destination.tours.length === 0 && (
+              <p className="text-center text-gray-600 dark:text-gray-400 col-span-full">No tours/treks available for this destination at the moment.</p>
+            )}
           </div>
         </div>
       </section>

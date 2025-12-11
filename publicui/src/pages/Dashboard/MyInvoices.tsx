@@ -1,5 +1,4 @@
 import React from 'react';
-import { USER_INVOICES_DATA } from '../../const/constants';
 
 const MyInvoices: React.FC = () => {
 
@@ -31,7 +30,7 @@ const MyInvoices: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {USER_INVOICES_DATA.length > 0 ? (
+                        {/* {USER_INVOICES_DATA.length > 0 ? (
                             USER_INVOICES_DATA.map(invoice => (
                                 <tr key={invoice.id} className="border-b dark:border-gray-700">
                                     <td className="p-3 text-gray-800 dark:text-gray-200 font-medium">{invoice.id}</td>
@@ -54,7 +53,7 @@ const MyInvoices: React.FC = () => {
                                     You have no invoices.
                                 </td>
                             </tr>
-                        )}
+                        )} */}
                     </tbody>
                 </table>
             </div>

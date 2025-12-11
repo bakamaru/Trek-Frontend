@@ -123,20 +123,20 @@ const appRoutes: RouteObject[] = [
     ],
   },
   {
-    path: "/destinations",
+    path: "/destination",
     element: <PublicLayout />,
     children: [
       { index: true, element: <Destinations /> },
     ],
   },
 
-  // {
-  //   path: "/destinations/:slug",
-  //   element: <PublicLayout />,
-  //   children: [
-  //     { index: true, element: <DestinationDetail /> },
-  //   ],
-  // },
+  {
+    path: "/destination/:slug",
+    element: <PublicLayout />,
+    children: [
+      { index: true, element: <DestinationDetail /> },
+    ],
+  },
   // {
   //   path: "/flights",
   //   element: <PublicLayout />,

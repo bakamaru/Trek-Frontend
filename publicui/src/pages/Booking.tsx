@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo } from 'react';
-import { TREKS_DATA } from '../const/constants';
+//import { TREKS_DATA } from '../const/constants';
 import { useParams } from 'react-router-dom';
 
 interface BookingProps {
@@ -8,7 +8,7 @@ interface BookingProps {
 
 const Booking: React.FC<BookingProps> = () => {
     const { slug } = useParams();
-    const trek = useMemo(() => TREKS_DATA.find(t => t.id === slug), [slug]);
+    const trek:any = useMemo(() => {}, [slug]);
 
     const [numTravelers, setNumTravelers] = useState(1);
     const [bookingDate, setBookingDate] = useState(new Date().toISOString().split('T')[0]);

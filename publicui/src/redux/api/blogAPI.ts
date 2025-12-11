@@ -1,7 +1,7 @@
 // src/redux/api/blogAPI.ts
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuth } from "../../config/apiConfig";
-import { Post, ApiResponse } from "../../types/blogTypes";
+import { Post, ApiResponse, PostWithSEO } from "../../types/blogTypes";
 
 type LatestPostQuery = {
     offset?: number;
@@ -47,7 +47,7 @@ export const blogAPI = createApi({
         }),
 
         // GET /api/v1/post/detail/{url}
-        getPostDetailByUrl: builder.query<ApiResponse<Post>, string>({
+        getPostDetailByUrl: builder.query<ApiResponse<PostWithSEO>, string>({
             query: (urlSlug) => ({
                 url: `/api/v1/post/detail/${encodeURIComponent(urlSlug)}`,
                 method: "GET",

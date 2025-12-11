@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { FLIGHTS_DATA } from '../const/constants';
+//import { FLIGHTS_DATA } from '../const/constants';
 import { Flight } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useParams } from 'react-router-dom';
@@ -16,7 +16,7 @@ const FlightDetail: React.FC<FlightDetailProps> = () => {
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
-      const foundFlight = FLIGHTS_DATA.find(f => f.id === slug);
+      const foundFlight:any ={};// FLIGHTS_DATA.find(f => f.id === slug);
       setFlight(foundFlight || null);
       setLoading(false);
     }, 900);

@@ -34,6 +34,36 @@ const getAppToken = async (): Promise<ITokenResponse> => {
     return data;
 };
 
+// Module-level pending promise used to serialize token fetches so multiple
+// concurrent API requests don't trigger parallel token calls. When a token
+// request is already in progress other callers will await the same promise.
+let pendingTokenPromise: Promise<ITokenResponse> | null = null;
+
+const fetchTokenIfNeeded = async (): Promise<string | null> => {
+    // If a token fetch is already in progress, wait for it
+    if (pendingTokenPromise) {
+        try {
+            const data = await pendingTokenPromise;
+            return data?.access_token ?? null;
+        } catch (err) {
+            // ensure we clear pending on error so next caller can retry
+            pendingTokenPromise = null;
+            throw err;
+        }
+    }
+
+    // Start a new token fetch and store the promise so others can await it
+    pendingTokenPromise = getAppToken();
+    try {
+        const data = await pendingTokenPromise;
+        pendingTokenPromise = null;
+        return data?.access_token ?? null;
+    } catch (err) {
+        pendingTokenPromise = null;
+        throw err;
+    }
+};
+
 const setAccessToken = (token: string) => {
     try {
         localStorage.setItem("token", token);
@@ -92,15 +122,19 @@ export const baseQueryWithAuth: BaseQueryFn<
         }
     }
 
-    // ---- 2) Fetch new token if needed ----
+    // ---- 2) Fetch new token if needed (serialized across concurrent callers) ----
     if (!tokenToUse) {
         try {
-            const data = await getAppToken();
-            if (data?.access_token) {
-                const tokenInfo = jwtDecode(data.access_token) as ITokenInfo;
-                console.log("New token decoded:", tokenInfo);
-                setAccessToken(data.access_token);
-                tokenToUse = data.access_token;
+            const accessToken = await fetchTokenIfNeeded();
+            if (accessToken) {
+                try {
+                    const tokenInfo = jwtDecode(accessToken) as ITokenInfo;
+                    console.log("New token decoded:", tokenInfo);
+                } catch (e) {
+                    // decoding is best-effort
+                }
+                setAccessToken(accessToken);
+                tokenToUse = accessToken;
             } else {
                 throw new Error("No access_token in token response");
             }

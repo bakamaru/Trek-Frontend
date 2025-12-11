@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { USER_BOOKINGS_DATA, TREKS_DATA, TOURS_DETAIL_DATA } from '../../const/constants';
 import { UserBooking, Trek, TourDetail } from '../../types/types';
 
 const StarIcon: React.FC<{ filled: boolean; onClick?: () => void }> = ({ filled, onClick }) => (
@@ -16,7 +15,7 @@ const StarIcon: React.FC<{ filled: boolean; onClick?: () => void }> = ({ filled,
 
 const MyBookings: React.FC = () => {
    
-    const [bookings, setBookings] = useState<UserBooking[]>(USER_BOOKINGS_DATA);
+    const [bookings, setBookings] = useState<UserBooking[]>([]);
     
     // State for modals
     const [isCancelModalOpen, setCancelModalOpen] = useState(false);
@@ -68,7 +67,7 @@ const MyBookings: React.FC = () => {
     };
     
     const handlePayBalance = (booking: UserBooking) => {
-        const tripItem = [...TREKS_DATA, ...TOURS_DETAIL_DATA].find(item => item.id === booking.tripId);
+        const tripItem = [].find(item => item.id === booking.tripId);
         if (tripItem) {
             // setBookingDetails({
             //     item: tripItem,
@@ -83,7 +82,7 @@ const MyBookings: React.FC = () => {
     };
 
     const handleViewDetails = (booking: UserBooking) => {
-        const allTrips = [...TREKS_DATA, ...TOURS_DETAIL_DATA];
+        const allTrips = [];
         const tripDetails = allTrips.find(trip => trip.id === booking.tripId);
         if (tripDetails) {
             setSelectedTripDetails(tripDetails);

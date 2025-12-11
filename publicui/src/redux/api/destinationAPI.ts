@@ -11,6 +11,20 @@ export interface DestinationTrekQueryArgs extends PagedQueryArgs {
     destinationId: number;
 }
 
+// Destination DTO (matches backend Destination model)
+export interface Destination {
+    DestinationId: number;
+    CountryId: number;
+    CountryName: string;
+    CountrySubtitle: string;
+    Name: string;
+    Description?: string;
+    ShortDescription?: string;
+    CoverImage?: string;
+    ThumbnailImage?: string;
+    IsTopDestination?: boolean;
+}
+
 const DEFAULT_OFFSET = 1;
 const DEFAULT_LIMIT = 20;
 const DEFAULT_QUERY = "";
@@ -53,6 +67,15 @@ export const destinationAPI = createApi({
                     params: { offset, limit, query },
                 };
             },
+            providesTags: ["Destination"],
+        }),
+
+        // GET /api/v1/destination/byslug/{slug}
+        getDestinationBySlug: builder.query<any, string>({
+            query: (slug) => ({
+                url: `/api/v1/destination/byslug/${encodeURIComponent(slug)}`,
+                method: 'GET',
+            }),
             providesTags: ["Destination"],
         }),
 
@@ -125,6 +148,7 @@ export const destinationAPI = createApi({
 export const {
     useGetDestinationsActiveQuery,
     useGetDestinationsQuery,
+    useGetDestinationBySlugQuery,
     useGetDestinationByIdQuery,
     useGetTopDestinationsQuery,
     useGetDestinationTreksQuery,

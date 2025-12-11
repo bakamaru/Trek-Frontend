@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { TREKS_DATA, TOURS_DATA, DESTINATIONS_DATA } from '../const/constants';
 
 interface Message {
     sender: 'user' | 'ai';
@@ -16,9 +15,9 @@ const ChatWidget: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const systemInstruction = useMemo(() => {
-        const trekSummary = TREKS_DATA.map(trek => `- ${trek.title} (${trek.duration}, $${trek.price}, Difficulty: ${trek.difficulty})`).join('\n');
-        const tourSummary = TOURS_DATA.map(tour => `- ${tour.title} (${tour.duration}, $${tour.price}, Location: ${tour.location})`).join('\n');
-        const destinationSummary = DESTINATIONS_DATA.map(dest => dest.name).join(', ');
+        const trekSummary =[] ;//TREKS_DATA.map(trek => `- ${trek.title} (${trek.duration}, $${trek.price}, Difficulty: ${trek.difficulty})`).join('\n');
+        const tourSummary =[];// TOURS_DATA.map(tour => `- ${tour.title} (${tour.duration}, $${tour.price}, Location: ${tour.location})`).join('\n');
+        const destinationSummary =[];// DESTINATIONS_DATA.map(dest => dest.name).join(', ');
 
         return `You are a friendly and knowledgeable travel assistant for Territory Himalayas, a premier travel agency.
 Your goal is to help users find the perfect trip based ONLY on the information provided to you.

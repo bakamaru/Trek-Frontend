@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { USER_PROFILE_DATA } from '../../const/constants';
 
 const MyProfile: React.FC = () => {
-    const [profile, setProfile] = useState(USER_PROFILE_DATA);
+    const [profile, setProfile] = useState<any>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

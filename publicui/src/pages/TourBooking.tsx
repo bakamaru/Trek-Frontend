@@ -1,5 +1,4 @@
 import React, { useState, useContext, useMemo } from 'react';
-import { TOURS_DETAIL_DATA } from '../const/constants';
 import { useParams } from 'react-router-dom';
 
 interface TourBookingProps {
@@ -8,7 +7,7 @@ interface TourBookingProps {
 
 const TourBooking: React.FC<TourBookingProps> = () => {
      const { slug } = useParams();
-    const tour = useMemo(() => TOURS_DETAIL_DATA.find(t => t.id === slug), [slug]);
+    const tour:any = useMemo(() => {}, [slug]);
   
     const [numTravelers, setNumTravelers] = useState(1);
     const [bookingDate, setBookingDate] = useState(new Date().toISOString().split('T')[0]);

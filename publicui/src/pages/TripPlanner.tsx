@@ -1,6 +1,5 @@
 
 import React, { useState, useContext } from 'react';
-import { TREKS_DATA, TOURS_DETAIL_DATA, SIGHTSEEING_SPOTS_DATA } from '../const/constants';
 import { Trek, TourDetail, SightseeingSpot, CustomTrip } from '../types/types';
 
 type TravelStyle = 'adventure' | 'relaxation' | 'culture';
@@ -51,7 +50,7 @@ const TripPlanner: React.FC = () => {
 
         const [minBudget, maxBudget] = budgetMap[budget];
 
-        const allActivities: (Trek | TourDetail)[] = [...TREKS_DATA, ...TOURS_DETAIL_DATA];
+        const allActivities: (Trek | TourDetail)[] = [...[], ...[]];
         
         const possibleActivities = allActivities.filter(activity => {
             const durationInDays = parseInt(activity.duration.split(' ')[0]);
@@ -81,10 +80,11 @@ const TripPlanner: React.FC = () => {
         
         let sightseeing: SightseeingSpot[] = [];
         if (remainingDays > 0 && location) {
-            const possibleSpots = SIGHTSEEING_SPOTS_DATA.filter(spot => 
-                spot.location.includes(location) &&
-                interests.some(i => spot.tags.includes(i))
-            ).sort(() => 0.5 - Math.random());
+            const possibleSpots =[];
+            // SIGHTSEEING_SPOTS_DATA.filter(spot => 
+            //     spot.location.includes(location) &&
+            //     interests.some(i => spot.tags.includes(i))
+            // ).sort(() => 0.5 - Math.random());
             
             for(const spot of possibleSpots) {
                 if(remainingBudget >= spot.estimatedCost) {

@@ -59,13 +59,13 @@ const TopDestinations: React.FC = () => {
                 "https://via.placeholder.com/600x800?text=Destination";
 
               return (
-                <Link
-                  to={`/destinations/${slugify(dest.Name)}`}
+                <a
+                  href={`/destination/${slugify(dest.Name)}`}
                   key={dest.DestinationId ?? index}
                 >
                   <div className="relative rounded-lg overflow-hidden group shadow-lg h-80">
                     <img
-                      src={image}
+                      src={image + "?w=400&h=200&mode=crop"}
                       alt={dest.Name}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                     />
@@ -79,19 +79,19 @@ const TopDestinations: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </Link>
+                </a>
               );
             })}
           </div>
         )}
 
         <div className="text-center mt-16">
-          <Link
-            to="/destinations"
+          <a
+            href="/destination"
             className="bg-blue-700 text-white px-8 py-4 rounded-md font-semibold hover:bg-blue-800 transition-colors duration-300 text-lg"
           >
             View All Destinations
-          </Link>
+          </a>
         </div>
       </div>
     </section>

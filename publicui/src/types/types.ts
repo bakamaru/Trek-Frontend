@@ -28,6 +28,7 @@ export interface Destination {
 
 export interface Tour {
     id: string;
+    slug:string
     image: string;
     price: number;
     location: string;
@@ -122,6 +123,8 @@ export interface CustomTrip {
 
 export interface DestinationDetail {
     slug: string;
+    country:string;
+    subtitle:string;
     name: string;
     description: string;
     heroImage: string;
@@ -212,6 +215,7 @@ export interface Testimonial {
 
 export interface BlogPost {
     id: string;
+    slug: string;
     title: string;
     image: string;
     date: string;

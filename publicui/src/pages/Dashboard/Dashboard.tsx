@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
-import { USER_PROFILE_DATA, USER_BOOKINGS_DATA, REWARD_POINTS_TOTAL } from '../../const/constants';
 import { Link } from 'react-router-dom';
 
 
 
 
 const Dashboard: React.FC = () => {
+    const USER_BOOKINGS_DATA=[];
+    const USER_PROFILE_DATA:any={};
+    const REWARD_POINTS_TOTAL = 0;
     const upcomingTrips = USER_BOOKINGS_DATA.filter(b => b.status === 'Confirmed');
     const nextTrip = upcomingTrips[0];
 

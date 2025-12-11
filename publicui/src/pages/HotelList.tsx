@@ -1,6 +1,5 @@
 
 import React, { useContext, useState, useEffect, useMemo } from 'react';
-import { HOTELS_DATA } from '../const/constants';
 import { Hotel } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
@@ -48,7 +47,7 @@ const HotelList: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setHotels(HOTELS_DATA);
+     // setHotels(HOTELS_DATA);
       setLoading(false);
     }, 1200);
     return () => clearTimeout(timer);

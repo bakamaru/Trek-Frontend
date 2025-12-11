@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef, useMemo } from 'react';
-import { NAV_LINKS } from '../const/constants';
 import { NavLink as NavLinkType } from '../types/types';
 import MegaMenu from './MegaMenu';
 import { Link } from 'react-router-dom';
@@ -36,12 +35,7 @@ const Header: React.FC = () => {
     return [...items].sort((a, b) => a.MenuOrder - b.MenuOrder);
   }, [menuData]);
 
-  // Find NAV_LINKS config for "Tour & Treks" to get its megaMenu definition
-  const tourMegaConfig: NavLinkType | undefined = useMemo(
-    () => NAV_LINKS.find(link => link.label === "Tour & Treks"),
-    []
-  );
-
+ 
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 100);
@@ -197,7 +191,7 @@ const Header: React.FC = () => {
         className={`lg:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden bg-white dark:bg-gray-800`}
       >
         <nav className="flex flex-col p-4 space-y-2">
-          {NAV_LINKS.map((link) => (
+          {/* {sortedMenuItems.map((link) => (
             // Basic mobile menu, doesn't support megamenu dropdowns
             <Link
               key={link.label}
@@ -206,7 +200,7 @@ const Header: React.FC = () => {
             >
               {link.label}
             </Link>
-          ))}
+          ))} */}
           {loginStatus?.isLoggedIn ? (
             <Link
               to="/user/dashboard/dashboard"

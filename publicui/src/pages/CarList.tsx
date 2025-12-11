@@ -1,6 +1,6 @@
 
 import React, { useContext, useState, useEffect, useMemo } from 'react';
-import { CARS_DATA } from '../const/constants';
+//import { CARS_DATA } from '../const/constants';
 import { CarRental } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
@@ -48,7 +48,7 @@ const CarList: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setCars(CARS_DATA);
+      //setCars(CARS_DATA);
       setLoading(false);
     }, 1200);
     return () => clearTimeout(timer);

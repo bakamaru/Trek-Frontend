@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { HOTELS_DETAIL_DATA } from '../const/constants';
+
 import { HotelDetail as HotelDetailType } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useParams } from 'react-router-dom';
@@ -22,7 +22,7 @@ const HotelDetail: React.FC<HotelDetailProps> = () => {
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
-      const foundHotel = HOTELS_DETAIL_DATA.find(h => h.id === slug);
+      const foundHotel:any ={};// HOTELS_DETAIL_DATA.find(h => h.id === slug);
       setHotel(foundHotel || null);
       setLoading(false);
     }, 1000);

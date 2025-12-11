@@ -94,9 +94,7 @@ const PopularTreks: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {treks.map((trek) => {
               const price =
-                trek.PriceInUSD ??
-                trek.PriceInNrs ??
-                0;
+                trek.PriceInUSD 
 
               const durationLabel = trek.DurationDays
                 ? `${trek.DurationDays} Days`
@@ -107,14 +105,10 @@ const PopularTreks: React.FC = () => {
               const reviews = trek.TotalReviews || 0;
 
               // Choose image source (if you later add CoverImage/ThumbnailImage, this will just work)
-              const image =
-                trek.CoverImage ||
-                trek.ThumbnailImage ||
-                'https://via.placeholder.com/800x600?text=Trek';
+              const image = trek.ThumbnailImage ;
 
               const overview =
                 trek.OverviewDescription?.substring(0, 100) ?? '';
-
               const trekUrl = trek.Url || slugify(trek.Name);
 
               return (
@@ -122,14 +116,18 @@ const PopularTreks: React.FC = () => {
                   key={trek.TrekId}
                   className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden group"
                 >
-                  <div className="relative">
+                    <div className="relative">
                     <img
                       src={image}
                       alt={trek.Name}
                       className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-4 left-4 bg-blue-700 text-white text-lg font-bold px-4 py-2 rounded-md">
-                      {price > 0 ? `$${price}` : 'Contact us'}
+                      { `$${price}`}
+                    </div>
+                    {/* Region badge to attract attention */}
+                    <div className="absolute top-4 right-4 bg-white/90 text-gray-900 text-sm font-semibold px-3 py-1 rounded-full shadow">
+                      {trek.Region ?? 'Region'}
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                       <h3 className="text-xl font-bold text-white">
@@ -171,7 +169,7 @@ const PopularTreks: React.FC = () => {
                         to={`/trek/${trekUrl}`}
                         className="text-blue-700 font-semibold hover:underline"
                       >
-                        View Details
+                        Know More
                       </Link>
                     </div>
                   </div>

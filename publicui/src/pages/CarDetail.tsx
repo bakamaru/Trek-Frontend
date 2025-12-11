@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { CARS_DETAIL_DATA } from '../const/constants';
 import { CarRentalDetail as CarRentalDetailType } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useParams } from 'react-router-dom';
@@ -17,7 +16,7 @@ const CarDetail: React.FC<CarDetailProps> = () => {
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
-        const foundCar = CARS_DETAIL_DATA.find(c => c.id === slug);
+        const foundCar:any ={};// CARS_DETAIL_DATA.find(c => c.id === slug);
         setCar(foundCar || null);
         setLoading(false);
     }, 1000);

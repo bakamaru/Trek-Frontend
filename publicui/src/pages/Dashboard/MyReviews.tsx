@@ -1,5 +1,4 @@
 import React from 'react';
-import { USER_REVIEWS_DATA } from '../../const/constants';
 
 const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${filled ? 'text-yellow-400' : 'text-gray-300'}`} viewBox="0 0 20 20" fill="currentColor">
@@ -13,7 +12,7 @@ const MyReviews: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-gray-800 dark:text-gray-100 mb-6">My Reviews</h1>
 
             <div className="space-y-6">
-                {USER_REVIEWS_DATA.length > 0 ? (
+                {/* {USER_REVIEWS_DATA.length > 0 ? (
                     USER_REVIEWS_DATA.map(review => (
                         <div key={review.id} className="p-4 border dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700/50">
                             <div className="flex flex-col md:flex-row gap-4">
@@ -39,7 +38,7 @@ const MyReviews: React.FC = () => {
                     <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                         You haven't left any reviews yet. Complete a trip to share your experience!
                     </p>
-                )}
+                )} */}
             </div>
         </div>
     );

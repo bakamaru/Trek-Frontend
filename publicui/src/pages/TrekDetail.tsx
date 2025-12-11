@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
 import { Link, useParams } from 'react-router-dom';
-import { useGetTrekDetailQuery } from '../redux/api/tourAPI';
+import { useGetTrekDetailByUrlQuery } from '../redux/api/trekAPI';
 
 
 
@@ -18,12 +18,163 @@ interface TrekDetailProps {
 
 const TrekDetail: React.FC<TrekDetailProps> = () => {
     const { slug } = useParams();
-    const { data: trek, isLoading, error } = useGetTrekDetailQuery(slug || '', {
+    const { data: rawData, isLoading, error } = useGetTrekDetailByUrlQuery(slug || '', {
         skip: !slug
     });
 
+    // API may return envelope { Code, Message, Data } or raw DTO
+    const dto: any = rawData && (rawData.Data ?? rawData);
+
+    // Map DTO to UI-friendly shape used below
+    const trek = React.useMemo(() => {
+        if (!dto) return null;
+
+        const d = dto as any;
+
+        // helpers to read image url from gallery item or other image fields
+        const CDN = (import.meta && (import.meta as any).env && (import.meta as any).env.VITE_CDN_PATH) || '';
+        const normalizePath = (p: string) => {
+            if (!p) return '';
+            const s = p.toString();
+            if (s.startsWith('http://') || s.startsWith('https://') || s.startsWith('//')) return s;
+            // ensure single slash between CDN and path
+            const base = CDN.endsWith('/') ? CDN.slice(0, -1) : CDN;
+            const path = s.startsWith('/') ? s : `/${s}`;
+            return base ? `${base}${path}` : path;
+        };
+
+        // Accept either a string or an object with common keys
+        const getImgUrl = (img: any) => {
+            if (!img) return '';
+            if (typeof img === 'string') return normalizePath(img);
+            // common object keys from API
+            const candidates = [img.ImagePath, img.ImageUrl, img.Url, img.Path, img.PathUrl, img.CoverImage];
+            for (const c of candidates) {
+                if (c) return normalizePath(c);
+            }
+            return '';
+        };
+
+        const gallery: string[] = Array.isArray(d.Gallery) ? d.Gallery.map((g: any) => getImgUrl(g)).filter(Boolean) : [];
+
+        const itinerary = Array.isArray(d.Itineraries)
+            ? d.Itineraries.map((it: any, idx: number) => ({
+                day: it.Day ?? it.DayNumber ?? it.DayNumber ?? idx + 1,
+                title: it.DayTitle ?? it.Title ?? it.Name ?? `Day ${it.Day ?? idx + 1}`,
+                image: getImgUrl(it.Image ?? it.ImageUrl ?? it.CoverImage),
+                altitude: it.AltitudeMeters ?? it.MaxAltitudeMeters ?? null,
+                // Trek-specific fields
+                startLocation: it.StartLocation ?? it.StartLocationName ?? '',
+                overnightLocation: it.OvernightLocation ?? it.OvernightLocationName ?? '',
+                trekTimeHours: typeof it.TrekTimeHours !== 'undefined' ? it.TrekTimeHours : (it.TrekTime ?? null),
+                trekDistanceKM: typeof it.TrekDistanceKM !== 'undefined' ? it.TrekDistanceKM : (it.TrekDistance ?? null),
+                transportMethod: it.TransportMethod ?? it.Transport ?? '',
+                accommodationType: it.AccommodationType ?? it.Accommodation ?? '',
+                mealsIncluded: it.MealsIncluded ?? it.Meals ?? '',
+                dailyActivity: it.DailyActivityDetails ?? it.Description ?? it.Details ?? it.Overview ?? '',
+                duration: it.Duration ?? it.DurationText ?? null,
+                meals: it.Meals ?? null,
+                description: it.Description ?? it.Overview ?? it.Details ?? '',
+            }))
+            : [];
+
+        // InclusionsExclusions: split by a flag or a Type property
+        const inclusions: string[] = [];
+        const exclusions: string[] = [];
+        if (Array.isArray(d.InclusionsExclusions)) {
+            d.InclusionsExclusions.forEach((ie: any) => {
+                const text = ie.Description ?? ie.Text ?? ie.Item ?? ie.Name ?? '';
+                const isInclude = ie.IsIncluded ?? (ie.Type && ie.Type.toString().toLowerCase().includes('include')) ?? null;
+                if (isInclude === false) exclusions.push(text);
+                else inclusions.push(text);
+            });
+        }
+
+        // WhyUs mapping (ordered)
+        const whyUs = Array.isArray(d.WhyUs)
+            ? d.WhyUs
+                .slice()
+                .sort((a: any, b: any) => (a.DisplayOrder ?? 0) - (b.DisplayOrder ?? 0))
+                .map((w: any) => ({ id: w.TrekWhyUsId ?? w.Id, text: w.Description ?? w.Text ?? '' }))
+            : [];
+
+        // Highlights: accept array or delimited/string form
+        let highlights: string[] = [];
+        if (Array.isArray(d.Highlights)) {
+            highlights = d.Highlights.map((h: any) => (typeof h === 'string' ? h : (h.Text ?? h.Description ?? ''))).filter(Boolean);
+        } else if (typeof d.Highlights === 'string' && d.Highlights.trim()) {
+            highlights = d.Highlights.split(/\r?\n|;|,/).map((s: string) => s.trim()).filter(Boolean);
+        }
+
+        // FAQs mapping and grouping by category
+        const rawFaqs = Array.isArray(d.Faqs) ? d.Faqs : [];
+        const faqGroups: Record<string, Array<{ question: string; answer: string }>> = {};
+        rawFaqs.forEach((f: any) => {
+            const cat = f.Category ?? 'General';
+            const q = f.Question ?? f.Title ?? '';
+            const a = f.Solution ?? f.Answer ?? f.Response ?? '';
+            if (!faqGroups[cat]) faqGroups[cat] = [];
+            faqGroups[cat].push({ question: q, answer: a });
+        });
+
+        // Reviews: compute count and avg rating if possible
+        let reviewsCount = 0;
+        let avgRating = 0;
+        if (Array.isArray(d.Reviews) && d.Reviews.length > 0) {
+            reviewsCount = d.Reviews.length;
+            const sum = d.Reviews.reduce((s: number, r: any) => s + (r.Rating ?? r.Stars ?? 0), 0);
+            avgRating = Math.round((sum / reviewsCount) || 0);
+        }
+
+        // Trip facts
+        const tripFacts = [
+            { label: 'Duration', value: `${d.DurationDays ?? d.Duration ?? 0} Days`, icon: '⏱' },
+            { label: 'Max Altitude', value: `${d.MaxAltitudeMeters ?? d.MaxAltitude ?? 0} m`, icon: '🗻' },
+            { label: 'Start', value: d.StartingPoint ?? d.StartCityName ?? '', icon: '📍' },
+            { label: 'End', value: d.EndingPoint ?? d.EndCityName ?? '', icon: '🏁' },
+        ];
+
+        // Difficulty mapping from ActivityLevelId
+        const difficulty = (() => {
+            const lvl = d.ActivityLevelId ?? d.ActivityLevel ?? null;
+            if (lvl === 1) return 'Easy';
+            if (lvl === 2) return 'Moderate';
+            if (lvl === 3) return 'Strenuous';
+            return d.ActivityLevelName ?? 'Moderate';
+        })();
+
+        return {
+            id: d.TrekId,
+            title: d.Name ?? d.Title ?? '',
+            url: d.Url,
+            image: gallery[0] ?? getImgUrl(d.CoverImage) ?? '',
+            overview: d.OverviewDescription ?? d.Description ?? d.Overview ?? '',
+            duration: `${d.DurationDays ?? d.Duration ?? 0} Days`,
+            price: Number(d.PriceInUSD ?? d.PriceInUSD) || 0,
+            priceNpr: Number(d.PriceInNrs ?? d.PriceInNrs) || 0,
+            rating: avgRating,
+            reviews: reviewsCount,
+            gallery,
+            itinerary,
+            highlights,
+            // Equipment may not be present in DTO; default to empty array
+            equipment: Array.isArray(d.Equipment) ? d.Equipment.map((e: any) => ({ category: e.Category ?? e.Group ?? 'General', items: e.Items ?? e.List ?? [] })) : (d.EquipmentList || d.Equipments || []),
+            included: inclusions,
+            excluded: exclusions,
+            videoEmbedUrl: d.VideoLink ?? d.VideoUrl ?? null,
+            mapEmbedUrl: d.TrekMap ?? null,
+            faqGroups,
+            whyUs,
+            tripFacts,
+            difficulty,
+        } as any;
+    }, [dto]);
+
     const [activeItinerary, setActiveItinerary] = useState<number | null>(1);
-    const [activeFaq, setActiveFaq] = useState<number | null>(0);
+    // FAQ UX state: selected category, expanded individual faqs, and expand-all toggle
+    const [activeCategory, setActiveCategory] = useState<string | null>(null);
+    const [openFaqs, setOpenFaqs] = useState<Record<string, boolean>>({});
+    const [expandAll, setExpandAll] = useState(false);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -38,6 +189,15 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [lightboxOpen, lightboxIndex, trek]);
+
+    // initialize FAQ category when trek loads / changes
+    useEffect(() => {
+        if (!trek) return;
+        const keys = Object.keys(trek.faqGroups || {});
+        setActiveCategory((prev) => prev ?? (keys.length > 0 ? keys[0] : null));
+        setOpenFaqs({});
+        setExpandAll(false);
+    }, [trek]);
 
     if (isLoading) {
         return <LoadingSpinner fullPage={true} />;
@@ -58,11 +218,13 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
 
     const nextImage = () => {
         if (!trek) return;
+        if (!trek.gallery || trek.gallery.length === 0) return;
         setLightboxIndex((prev) => (prev + 1) % trek.gallery.length);
     };
 
     const prevImage = () => {
         if (!trek) return;
+        if (!trek.gallery || trek.gallery.length === 0) return;
         setLightboxIndex((prev) => (prev - 1 + trek.gallery.length) % trek.gallery.length);
     };
 
@@ -76,6 +238,9 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
             </div>
         )
     );
+
+    // local typed alias for faq groups to avoid 'unknown' inference
+    const faqGroups = (trek?.faqGroups || {}) as Record<string, Array<{ question: string; answer: string }>>;
 
     return (
         <div className="pt-20 bg-gray-50 dark:bg-gray-800">
@@ -123,6 +288,21 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                 <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">{trek.overview}</p>
                             </div>
 
+                            {/* Highlights (just below Overview) */}
+                            {trek.highlights && trek.highlights.length > 0 && (
+                                <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
+                                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Highlights</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {trek.highlights.map((h: string, idx: number) => (
+                                            <div key={idx} className="flex items-start gap-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7l10 5v7l-10-5-10 5v-7l10-5z" /></svg>
+                                                <p className="text-gray-700 dark:text-gray-300">{h}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Itinerary */}
                             <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
                                 <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Daily Itinerary</h2>
@@ -137,13 +317,64 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                             </button>
                                             <div className={`transition-all duration-500 ease-in-out ${activeItinerary === item.day ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
                                                 <div className="p-6 border-t dark:border-gray-600">
-                                                    {item.image && <img src={item.image} alt={item.title} className="w-full h-auto rounded-lg mb-4" />}
-                                                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                                        {item.altitude && <span className="font-semibold"><strong>Altitude:</strong> {item.altitude}</span>}
-                                                        {item.duration && <span className="font-semibold"><strong>Duration:</strong> {item.duration}</span>}
-                                                        {item.meals && <span className="font-semibold"><strong>Meals:</strong> {item.meals}</span>}
+                                                    {item.image && (
+                                                        <div className="mb-4 overflow-hidden rounded-lg shadow-sm">
+                                                            <img src={item.image} alt={item.title} className="w-full h-64 object-cover rounded-lg" />
+                                                        </div>
+                                                    )}
+
+                                                    
+
+                                                    {item.dailyActivity ? (
+                                                        <div className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                                            {item.dailyActivity.split('\n').map((line: string, i: number) => (
+                                                                <p key={i} className="mb-2">{line}</p>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{item.description}</p>
+                                                    )}
+                                                    <div className="flex flex-wrap items-center gap-6 text-sm text-gray-700 dark:text-gray-300 font-medium mb-4">
+                                                        {/* Altitude */}
+                                                        {item.altitude ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2L2 9l3 8h10l3-8-8-7z" /></svg>
+                                                                <span><strong className="text-gray-800 dark:text-gray-100">Altitude:</strong> {item.altitude}m</span>
+                                                            </div>
+                                                        ) : null}
+
+                                                        {/* Trek Time / Duration */}
+                                                        {item.trekTimeHours !== null && typeof item.trekTimeHours !== 'undefined' ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a11 11 0 1011 11A11.013 11.013 0 0012 1zm1 12.59V7h-2v6l5 3 1-1.6z" /></svg>
+                                                                <span><strong className="text-gray-800 dark:text-gray-100">Duration:</strong> {item.trekTimeHours ? `${item.trekTimeHours} hrs` : item.duration}</span>
+                                                            </div>
+                                                        ) : null}
+
+                                                        {/* Distance */}
+                                                        {item.trekDistanceKM !== null && typeof item.trekDistanceKM !== 'undefined' ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l2-2 4 4 8-8 4 4v6H3z" /></svg>
+                                                                <span><strong className="text-gray-800 dark:text-gray-100">Distance:</strong> {item.trekDistanceKM} km</span>
+                                                            </div>
+                                                        ) : null}
+
+                                                        {/* Meals */}
+                                                        {item.mealsIncluded ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-600" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v12a4 4 0 004 4h4a4 4 0 004-4V2H6z" /></svg>
+                                                                <span><strong className="text-gray-800 dark:text-gray-100">Meals:</strong> {item.mealsIncluded}</span>
+                                                            </div>
+                                                        ) : null}
+
+                                                        {/* Transport */}
+                                                        {item.transportMethod ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2l1-3h10l1 3h2v6h-2a2 2 0 01-2 2h-8a2 2 0 01-2-2H3v-6zM5 9a2 2 0 110-4 2 2 0 010 4z" /></svg>
+                                                                <span><strong className="text-gray-800 dark:text-gray-100">Transport:</strong> {item.transportMethod}</span>
+                                                            </div>
+                                                        ) : null}
                                                     </div>
-                                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{item.description}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -215,23 +446,93 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                 </div>
                             )}
 
-                            {/* FAQs */}
+                            {/* Why Us */}
+                            {trek.whyUs && trek.whyUs.length > 0 && (
+                                <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
+                                    <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">Why Us</h2>
+                                    <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300">
+                                        {trek.whyUs.map((w: any) => (
+                                            <li key={w.id} className="mb-2">{w.text}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* FAQs grouped by category: left category list + right FAQ panel */}
                             <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
                                 <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Frequently Asked Questions</h2>
-                                <div className="space-y-4">
-                                    {trek.faqs.map((faq, index) => (
-                                        <div key={index} className="border dark:border-gray-600 rounded-lg overflow-hidden">
-                                            <button onClick={() => setActiveFaq(activeFaq === index ? null : index)} className="w-full text-left p-4 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 flex justify-between items-center">
-                                                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{faq.question}</h3>
-                                                <span className={`transform transition-transform dark:text-gray-400 ${activeFaq === index ? 'rotate-180' : ''}`}>▼</span>
-                                            </button>
-                                            <div className={`transition-all duration-300 ease-in-out ${activeFaq === index ? 'max-h-screen' : 'max-h-0'} overflow-hidden`}>
-                                                <div className="p-4 border-t dark:border-gray-600">
-                                                    <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
-                                                </div>
-                                            </div>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                                    {/* Left: Categories */}
+                                    <div className="lg:col-span-3">
+                                        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                            <ul className="space-y-2">
+                                                {Object.entries(faqGroups).map(([cat, faqs]) => (
+                                                    <li key={cat}>
+                                                        <button
+                                                            onClick={() => { setActiveCategory(cat); setExpandAll(false); setOpenFaqs({}); }}
+                                                            className={`w-full text-left flex items-center gap-3 py-3 px-3 rounded-md transition-colors ${activeCategory === cat ? 'bg-white shadow-md' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                                        >
+                                                            <span className="flex items-center justify-center w-10 h-10 bg-white dark:bg-gray-700 rounded-md text-blue-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16h6" /></svg>
+                                                            </span>
+                                                            <div className="flex-1">
+                                                                <div className="font-semibold text-sm text-gray-800 dark:text-gray-100">{cat}</div>
+                                                                <div className="text-xs text-gray-500">{faqs.length} question{faqs.length !== 1 ? 's' : ''}</div>
+                                                            </div>
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                    ))}
+                                    </div>
+
+                                    {/* Right: FAQ list for selected category */}
+                                    <div className="lg:col-span-9">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{activeCategory || 'General'}</h3>
+                                            <button
+                                                onClick={() => {
+                                                    const next = !expandAll;
+                                                    setExpandAll(next);
+                                                    if (!next) setOpenFaqs({});
+                                                }}
+                                                className="text-sm text-blue-700 hover:underline"
+                                            >
+                                                {expandAll ? 'Collapse All' : 'Expand All'}
+                                            </button>
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            {(faqGroups && activeCategory && faqGroups[activeCategory] ? faqGroups[activeCategory] : []).map((f: any, i: number) => {
+                                                const key = `${activeCategory}-${i}`;
+                                                const open = expandAll || !!openFaqs[key];
+                                                return (
+                                                    <div key={key} className="border dark:border-gray-600 rounded-lg overflow-hidden">
+                                                        <button
+                                                            onClick={() => {
+                                                                if (expandAll) return;
+                                                                setOpenFaqs(prev => ({ ...prev, [key]: !prev[key] }));
+                                                            }}
+                                                            className={`w-full text-left p-4 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 flex justify-between items-center`}
+                                                        >
+                                                            <div className="text-left">
+                                                                <div className="font-medium text-gray-800 dark:text-gray-100">{f.question}</div>
+                                                            </div>
+                                                            <span className={`transform transition-transform text-blue-700 ${open ? 'rotate-180' : ''}`}>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                                            </span>
+                                                        </button>
+                                                        <div className={`transition-all duration-300 ease-in-out ${open ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
+                                                            <div className="p-4 border-t dark:border-gray-600 text-gray-600 dark:text-gray-300">
+                                                                {f.answer ? f.answer.split('\n').map((ln: string, idx: number) => <p key={idx} className="mb-2">{ln}</p>) : <p>No answer provided.</p>}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
