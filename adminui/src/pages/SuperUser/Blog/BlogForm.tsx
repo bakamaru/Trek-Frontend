@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import ComponentCard from "../../../components/common/ComponentCard";
@@ -6,7 +6,9 @@ import InputField from "../../../components/form/input/InputField";
 import Checkbox from "../../../components/form/input/Checkbox";
 import toaster from "../../../components/toster";
 //import RichTextEditor from "../../../components/form/input/RichTextEditor";
-import { useGetPostByIdQuery, useSavePostMutation } from "../../../redux/trek/blogAPI";
+import { Editor } from '@tinymce/tinymce-react';
+import MultiSelect from "../../../components/form/MultiSelect";
+import { useGetPostCategoriesQuery, useGetPostByIdQuery, useSavePostMutation } from "../../../redux/trek/blogAPI";
 import { Post } from "../../../types/blogTypes";
 
 const BlogForm = () => {
@@ -18,7 +20,7 @@ const BlogForm = () => {
     const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get("id");
-
+    const editorRef = useRef(null);
     const {
         handleSubmit,
         reset,
@@ -45,6 +47,30 @@ const BlogForm = () => {
 
     const [savePost, { isLoading: isSaving }] = useSavePostMutation();
     const { data: detailData, isSuccess } = useGetPostByIdQuery(postId, { skip: !isEditMode || postId === 0 });
+    const { data: categoryData } = useGetPostCategoriesQuery({ page: 1, limit: 100 });
+
+    const categoryOptions = categoryData?.Data?.map((cat: any) => ({
+        value: cat.Name,
+        text: cat.Name
+    })) || [];
+
+    const slugify = (text: string) => {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/--+/g, '-');
+    };
+
+    const titleValue = watch("Title");
+
+    useEffect(() => {
+        if (!isEditMode && titleValue) {
+            setValue("Url", slugify(titleValue), { shouldValidate: true });
+        }
+    }, [titleValue, isEditMode, setValue]);
 
     useEffect(() => {
         if (location.pathname.includes("edit") && id) {
@@ -74,6 +100,11 @@ const BlogForm = () => {
                 RecommendationMetaTags: data.RecommendationMetaTags || "",
                 IsPublic: data.IsPublic ?? true,
                 IsActive: data.IsActive ?? true,
+                // SEO Fields
+                MetaTitle: data.MetaTitle || "",
+                MetaKeyWords: data.MetaKeyWords || "",
+                MetaDescription: data.MetaDescription || "",
+                SeoType: data.SeoType || "Article",
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -95,6 +126,14 @@ const BlogForm = () => {
             formDataToSend.append("recommendationMetaTags", formData.RecommendationMetaTags || "");
             formDataToSend.append("isPublic", formData.IsPublic ? "true" : "false");
             formDataToSend.append("isActive", formData.IsActive ? "true" : "false");
+
+            // SEO Fields
+            formDataToSend.append("metaTitle", formData.MetaTitle || "");
+            formDataToSend.append("metaKeyWords", formData.MetaKeyWords || "");
+            formDataToSend.append("metaDescription", formData.MetaDescription || "");
+            formDataToSend.append("seoType", formData.SeoType || "Article");
+            // Also append URL again as it's part of SEO in the backend model usually, or implicitly handled
+            // formData.Url is already appended
 
             // Add image files if present
             if (thumbnailImageFile) {
@@ -166,25 +205,56 @@ const BlogForm = () => {
                                 errorMsg={errors?.PublishedOn?.message}
                             />
 
-                            {/* <div className="md:col-span-2">
+                            <div className="md:col-span-2">
                                 <Controller
                                     name="Content"
                                     control={control}
                                     rules={{ required: "Content is required" }}
-                                    render={({ field }) => (
-                                        <RichTextEditor
-                                            id="content"
-                                            labelName="Blog Content"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            placeholder="Write your blog content here..."
-                                            error={!!errors?.Content}
-                                            errorMsg={errors?.Content?.message}
-                                            required
-                                        />
+                                    render={({ field, fieldState: { error } }) => (
+                                        <div className="flex flex-col gap-1">
+                                            <Editor
+                                                apiKey='prsn1rfcskorh46nf7vvi1cmntpjwebj1krfdqfweex48c7k'
+                                                onInit={(_evt, editor) => (editorRef.current = editor)}
+                                                value={field.value}
+                                                onEditorChange={(content) => field.onChange(content)}
+                                                onBlur={field.onBlur}
+                                                init={{
+                                                    height: 500,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'advlist',
+                                                        'autolink',
+                                                        'lists',
+                                                        'link',
+                                                        'image',
+                                                        'charmap',
+                                                        'preview',
+                                                        'anchor',
+                                                        'searchreplace',
+                                                        'visualblocks',
+                                                        'code',
+                                                        'fullscreen',
+                                                        'insertdatetime',
+                                                        'media',
+                                                        'table',
+                                                        'code',
+                                                        'help',
+                                                        'wordcount',
+                                                    ],
+                                                    toolbar:
+                                                        'undo redo | blocks | ' +
+                                                        'bold italic forecolor | alignleft aligncenter ' +
+                                                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                                                        'removeformat | help',
+                                                    content_style:
+                                                        'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                                }}
+                                            />
+                                            {error && <span className="text-sm text-red-500">{error.message}</span>}
+                                        </div>
                                     )}
                                 />
-                            </div> */}
+                            </div>
 
                             <div className="md:col-span-2">
                                 <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -230,15 +300,20 @@ const BlogForm = () => {
                                 errorMsg={errors?.Tags?.message}
                             />
 
-                            <InputField
-                                type="text"
-                                id="categories"
-                                labelName="Categories"
-                                placeholder="category1, category2"
-                                {...register("Categories")}
-                                error={!!errors?.Categories}
-                                errorMsg={errors?.Categories?.message}
-                            />
+                            <div className="md:col-span-2">
+                                <Controller
+                                    name="Categories"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <MultiSelect
+                                            label="Categories"
+                                            options={categoryOptions}
+                                            defaultSelected={field.value ? field.value.split(',').filter(Boolean) : []}
+                                            onChange={(selected) => field.onChange(selected.join(','))}
+                                        />
+                                    )}
+                                />
+                            </div>
 
                             <div className="md:col-span-2">
                                 <Checkbox label="Is Video Content" {...register("IsVideoContent")} />
@@ -268,6 +343,44 @@ const BlogForm = () => {
                                     error={!!errors?.RecommendationMetaTags}
                                     errorMsg={errors?.RecommendationMetaTags?.message}
                                 />
+                            </div>
+                        </div>
+                    </ComponentCard>
+
+                    <ComponentCard title="SEO Configuration">
+                        <div className="grid grid-cols-1 gap-4">
+                            <InputField
+                                type="text"
+                                id="metaTitle"
+                                labelName="Meta Title"
+                                placeholder="SEO Title"
+                                {...register("MetaTitle")}
+                                error={!!errors?.MetaTitle}
+                                errorMsg={errors?.MetaTitle?.message}
+                            />
+                            <InputField
+                                type="text"
+                                id="metaKeyWords"
+                                labelName="Meta Keywords"
+                                placeholder="keyword1, keyword2"
+                                {...register("MetaKeyWords")}
+                                error={!!errors?.MetaKeyWords}
+                                errorMsg={errors?.MetaKeyWords?.message}
+                            />
+                            <div className="md:col-span-2">
+                                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    Meta Description
+                                </label>
+                                <textarea
+                                    rows={4}
+                                    placeholder="SEO Description"
+                                    className={`w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${errors?.MetaDescription ? "border-red-500" : ""
+                                        }`}
+                                    {...register("MetaDescription", { required: "Meta Description is required" })}
+                                ></textarea>
+                                {errors?.MetaDescription && (
+                                    <span className="text-sm text-red-500">{errors.MetaDescription.message}</span>
+                                )}
                             </div>
                         </div>
                     </ComponentCard>

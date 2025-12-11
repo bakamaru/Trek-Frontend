@@ -43,7 +43,7 @@ export default function SignInForm() {
         if (Array.isArray(userInfo.role)) {
           if ((userInfo.role as string[]).includes("SuperAdmin")) {
             //navigate("/superadmin/dashboard");
-             navigate("/admin/superadmin/dashboard");
+            navigate("/admin/superadmin/dashboard");
           }
           if ((userInfo.role as string[]).includes("Admin")) {
             navigate("/admin/dashboard");
@@ -52,8 +52,8 @@ export default function SignInForm() {
           }
 
         } else if (userInfo.role === "SuperAdmin") {
-           navigate("/superadmin/dashboard");
-           //navigate("/admin/dashboard");
+          navigate("/superadmin/dashboard");
+          //navigate("/admin/dashboard");
         }
         else if (userInfo.role === "Admin") {
           navigate("/admin/dashboard");
@@ -77,7 +77,16 @@ export default function SignInForm() {
       // );
     }
   };
-
+  if (AuthHelper.isLoggedIn() == true) {
+    // console.log("iuser", AuthHelper.getUserRoles(), AuthHelper.isLoggedIn())
+    if (AuthHelper.getUserRoles().includes("SuperAdmin")) {
+      navigate("/superadmin/dashboard");
+    }
+    else if (AuthHelper.getUserRoles().includes("Admin")) {
+      navigate("/admin/dashboard");
+    }
+    // navigate("/user/dashboard");
+  }
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
@@ -126,7 +135,7 @@ export default function SignInForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={(e:any)=>setIsChecked(e.target.checked)} />
+                    <Checkbox checked={isChecked} onChange={(e: any) => setIsChecked(e.target.checked)} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
                       Remember me
                     </span>

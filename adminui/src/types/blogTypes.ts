@@ -26,26 +26,64 @@ export interface Post extends BaseProps {
     RecommendationMetaTags?: string;
     IsPublic?: boolean;
     RowTotal?: number;
+    // SEO Properties flattened for convenience or part of the object?
+    // Based on C# SavePostViewModel : SEO, the properties are flattened on the ViewModel
+    // but typically separated in types if helpful. However, user showed SavePostViewModel : SEO
+    // which implies inheritance / flattening in the API response/request mostly.
+    // Let's check how the form will send it. SavePostViewModel has all props.
+    // So we add SEO props to Post as well.
+    MetaTitle?: string;
+    MetaKeyWords?: string;
+    MetaDescription?: string;
+    SeoType?: string;
+    LastUrl?: string;
+    PageId?: number;
+    PageName?: string;
+    Image?: string;
+    ProductId?: number;
 }
 
 
 
 // Post save request
 export interface PostSaveRequest {
-    postId?: number;
-    title: string;
-    url: string;
+    postId?: number; // long
+    title: string; // [Required]
+    url: string; // [Required]
     thumbnailImage?: string;
     coverImage?: string;
-    content: string;
+    content: string; // [Required]
     tags?: string;
     categories?: string;
+    postAuthorId?: number;
+    viewCount?: number;
     publishedOn?: string;
+    // rowTotal is [IgnoreAll]
+    // thumbnailImageFile, coverImageFile are [IgnoreAll]
+    // isNew, oldUrl, isVideoContent, videoLink, recommendationMetaTags, isPublic
+    isNew?: boolean;
+    oldUrl?: string;
     isVideoContent?: boolean;
     videoLink?: string;
     recommendationMetaTags?: string;
     isPublic?: boolean;
-    isActive?: boolean;
+
+    // SEO properties from inherited SEO class
+    // SEOId key
+    seoId?: number;
+    metaTitle?: string; // [Required]
+    metaKeyWords?: string;
+    metaDescription?: string; // [Required]
+    seoType?: string; // [Required]
+    // imageFile ignored
+    lastUrl?: string;
+    // url is already there
+    pageId?: number;
+    pageName?: string;
+    image?: string;
+    productId?: number;
+    isActive?: boolean; // defined in SEO
+    isDeleted?: boolean; // defined in SEO
 }
 
 // PostCategory interface matching C# PostCategory DTO

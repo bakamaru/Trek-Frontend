@@ -6,7 +6,7 @@ export default function SignIn() {
   return (
     <>
       <PageMeta
-        title="Login || Yang One"
+        title="Login || Territory Himalaya "
         description="Login to the platform"
       />
       <AuthLayout>
