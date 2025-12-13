@@ -26,7 +26,7 @@ const TourDetail: React.FC<TourDetailProps> = () => {
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
-      const foundTour:any = {};//TOURS_DETAIL_DATA.find(t => t.id === slug);
+      const foundTour: any = {};//TOURS_DETAIL_DATA.find(t => t.id === slug);
       setTour(foundTour || null);
       setLoading(false);
     }, 1000);
@@ -203,7 +203,7 @@ const TourDetail: React.FC<TourDetailProps> = () => {
                   </p>
                   <div className="my-6">
                     <Link to={`/tour/${tour.id}/booking`} className="w-full text-center block bg-blue-700 text-white px-6 py-4 rounded-md font-semibold hover:bg-blue-800 transition-colors duration-300 text-lg">
-                      Book This Tour
+                      Book Now
                     </Link>
                   </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 text-center">Questions? <Link to="/contact" className="text-blue-700 underline">Contact an Expert</Link></p>

@@ -323,7 +323,7 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                                         </div>
                                                     )}
 
-                                                    
+
 
                                                     {item.dailyActivity ? (
                                                         <div className="text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -564,8 +564,8 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                         <span className="text-base font-normal text-gray-500 dark:text-gray-400"> / person</span>
                                     </p>
                                     <div className="my-6">
-                                        <Link to={`/trek/${trek.id}/booking`} className="w-full text-center block bg-blue-700 text-white px-6 py-4 rounded-md font-semibold hover:bg-blue-800 transition-colors duration-300 text-lg">
-                                            Book This Trip
+                                        <Link to={`/trek/${slug}/booking`} className="w-full text-center block bg-blue-700 text-white px-6 py-4 rounded-md font-semibold hover:bg-blue-800 transition-colors duration-300 text-lg">
+                                            Book Now
                                         </Link>
                                     </div>
                                     <p className="text-sm text-gray-500 dark:text-gray-400 text-center">Questions? <Link to="/contact" className="text-blue-700 underline">Contact an Expert</Link></p>

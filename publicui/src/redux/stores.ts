@@ -20,6 +20,8 @@ import { bannerAPI } from "./api/bannerAPI";
 import { destinationAPI } from "./api/destinationAPI";
 import { trekAPI } from "./api/trekAPI";
 import { testimonialAPI } from "./api/testimonialAPI";
+import { miscAPI } from "./api/miscAPI";
+import { bookingAPI } from "./api/bookingAPI";
 
 export const store = configureStore({
   reducer: {
@@ -42,6 +44,8 @@ export const store = configureStore({
     [destinationAPI.reducerPath]: destinationAPI.reducer,
     [trekAPI.reducerPath]: trekAPI.reducer,
     [testimonialAPI.reducerPath]: testimonialAPI.reducer,
+    [miscAPI.reducerPath]: miscAPI.reducer,
+    [bookingAPI.reducerPath]: bookingAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -64,6 +68,8 @@ export const store = configureStore({
       destinationAPI.middleware,
       trekAPI.middleware,
       testimonialAPI.middleware,
+      miscAPI.middleware,
+      bookingAPI.middleware,
     ),
 });
 
