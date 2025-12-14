@@ -10,7 +10,26 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 flex">
-      {/* Left Side: Form */}
+
+      <div className="hidden lg:block relative w-0 flex-1 hero-bg bg-cover bg-center">
+        <div className="absolute inset-0 bg-blue-900/40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent" />
+
+        <div className="absolute bottom-0 left-0 right-0 p-12 text-white">
+          <blockquote className="space-y-2">
+            <p className="text-lg font-medium">
+              "The journey of a thousand miles begins with a single step."
+            </p>
+            <footer className="text-sm font-light text-white/80">
+              &mdash; Lao Tzu
+            </footer>
+          </blockquote>
+        </div>
+
+        <div className="absolute top-0 right-0 p-12 opacity-20">
+          <GridShape />
+        </div>
+      </div>
       <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24 relative bg-white dark:bg-gray-900 z-10 overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -34,27 +53,6 @@ export default function AuthLayout({
         </div>
       </div>
 
-      {/* Right Side: Hero Image */}
-      <div className="hidden lg:block relative w-0 flex-1 hero-bg bg-cover bg-center">
-        <div className="absolute inset-0 bg-blue-900/40 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent" />
-
-        <div className="absolute bottom-0 left-0 right-0 p-12 text-white">
-          <blockquote className="space-y-2">
-            <p className="text-lg font-medium">
-              "The journey of a thousand miles begins with a single step."
-            </p>
-            <footer className="text-sm font-light text-white/80">
-              &mdash; Lao Tzu
-            </footer>
-          </blockquote>
-        </div>
-
-        {/* Optional: Overlay grid shape if desired for branding */}
-        <div className="absolute top-0 right-0 p-12 opacity-20">
-          <GridShape />
-        </div>
-      </div>
     </div>
   );
 }

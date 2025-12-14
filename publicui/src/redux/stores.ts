@@ -22,6 +22,7 @@ import { trekAPI } from "./api/trekAPI";
 import { testimonialAPI } from "./api/testimonialAPI";
 import { miscAPI } from "./api/miscAPI";
 import { bookingAPI } from "./api/bookingAPI";
+import { userProfileCacheMiddleware } from "./middleware/cacheMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -70,6 +71,7 @@ export const store = configureStore({
       testimonialAPI.middleware,
       miscAPI.middleware,
       bookingAPI.middleware,
+      userProfileCacheMiddleware, // Add cache middleware
     ),
 });
 

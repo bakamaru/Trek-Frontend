@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
-import { useLoginMutation } from "../../redux/user/userAPI";
+import { useAppLoginMutation } from "../../redux/user/userAPI";
 import AuthHelper from "../../utils/AuthHelper";
 
 export default function SignInForm() {
@@ -11,7 +11,7 @@ export default function SignInForm() {
   const [isChecked, setIsChecked] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useAppLoginMutation();
   const [formError, setFormError] = useState("");
   const navigate = useNavigate();
 
@@ -28,53 +28,27 @@ export default function SignInForm() {
     setFormError("");
 
     try {
+      // Use appLogin with UserName and Password structure from LoginDto
       const result: any = await login({
-        username: username,
-        password: password,
-        grant_type: "password",
-        client_id: import.meta.env.VITE_API_CLIENTID,
-        client_secret: import.meta.env.VITE_API_SECRET,
-        scope: "openid profile email", // Adjust the scope as needed
+        UserName: username,
+        Password: password,
       }).unwrap();
 
-      if (result) {
-        let userInfo = AuthHelper.SetNewLogin(result.access_token);
+      if (result.Code == 200) {
+        const userInfo = AuthHelper.SetNewLogin(result.Data.User.Token);
 
-        if (Array.isArray(userInfo.role)) {
-          if ((userInfo.role as string[]).includes("SuperAdmin")) {
-            //navigate("/superadmin/dashboard");
-            navigate("/admin/superadmin/dashboard");
-          }
-          if ((userInfo.role as string[]).includes("Admin")) {
-            navigate("/admin/dashboard");
-          } else {
-            navigate("/");
-          }
-
-        } else if (userInfo.role === "SuperAdmin") {
-          navigate("/superadmin/dashboard");
-          //navigate("/admin/dashboard");
-        }
-        else if (userInfo.role === "Admin") {
-          navigate("/admin/dashboard");
-        }
-        else {
-          navigate("/");
-        }
-
-
+        navigate("/");
+      }
+      else {
+        setFormError("Invalid email or password.");
       }
     } catch (error: any) {
       // Handle login error
       console.error("Login failed:", error);
       setFormError(
-        error?.data?.error_description ||
-        "Login failed. Please check your credentials."
+        error?.data?.Message ||
+        "Invalid email or password."
       );
-      // toaster.error(  // remove toast notification for form error
-      //   error?.data?.error_description ||
-      //     "Login failed. Please check your credentials."
-      // );
     }
   };
 
@@ -215,4 +189,3 @@ export default function SignInForm() {
     </div>
   );
 }
-

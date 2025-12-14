@@ -189,17 +189,60 @@ const appRoutes: RouteObject[] = [
   },
 
   {
-    path: "/user/dashboard", element: <PublicLayout />,
+    path: "/user/dashboard",
+    element: <DashboardLayout />,
     children: [
-      { index: true, element: <DashboardLayout ><Dashboard /></DashboardLayout> },
+      { index: true, element: <Dashboard /> },
     ]
   },
-  { path: "/user/dashboard/bookings", element: <DashboardLayout ><MyBookings /> </DashboardLayout> },
-  { path: "/user/dashboard/rewards", element: <DashboardLayout ><MyRewards /></DashboardLayout> },
-  { path: "/user/dashboard/invoices", element: <DashboardLayout ><MyInvoices /></DashboardLayout> },
-  { path: "/user/dashboard/profile", element: <DashboardLayout ><MyProfile /></DashboardLayout> },
-  { path: "/user/dashboard/password", element: <DashboardLayout ><ChangePassword /> </DashboardLayout> },
-  { path: "/user/dashboard/reviews", element: <DashboardLayout ><MyReviews /></DashboardLayout> },
+  {
+    path: "/user/booking",
+    element: <DashboardLayout />,
+    children: [
+      { index: true, element: <MyBookings /> },
+    ]
+  },
+  {
+    path: "/user/reward",
+    element: <DashboardLayout />,
+    children: [
+      { index: true, element: <MyRewards /> },
+    ]
+  },
+  {
+    path: "/user/invoice",
+    element: <DashboardLayout />,
+    children: [
+      { index: true, element: <MyInvoices /> },
+    ]
+  },
+  {
+    path: "/user/profile",
+    element: <DashboardLayout />,
+    children: [
+      { index: true, element: <MyProfile /> },
+    ]
+  },
+  {
+    path: "/user/review",
+    element: <DashboardLayout />,
+    children: [
+      { index: true, element: <MyReviews /> },
+    ]
+  },
+  {
+    path: "/user/password",
+    element: <DashboardLayout />,
+    children: [
+      { index: true, element: <ChangePassword /> },
+    ]
+  },
+  // { path: "/user/dashboard/bookings", element: <DashboardLayout ><MyBookings /> </DashboardLayout> },
+  // { path: "/user/dashboard/rewards", element: <DashboardLayout ><MyRewards /></DashboardLayout> },
+  // { path: "/user/dashboard/invoices", element: <DashboardLayout ><MyInvoices /></DashboardLayout> },
+  // { path: "/user/dashboard/profile", element: <DashboardLayout ><MyProfile /></DashboardLayout> },
+  // { path: "/user/dashboard/password", element: <DashboardLayout ><ChangePassword /> </DashboardLayout> },
+  // { path: "/user/dashboard/reviews", element: <DashboardLayout ><MyReviews /></DashboardLayout> },
 
   {
     path: "/signin",

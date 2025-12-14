@@ -1,21 +1,32 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-
-
-
+import { useGetUserProfileQuery } from '../../redux/user/userAPI';
 
 const Dashboard: React.FC = () => {
-    const USER_BOOKINGS_DATA=[];
-    const USER_PROFILE_DATA:any={};
+    const { data: profileData, isLoading } = useGetUserProfileQuery();
+    const user = profileData?.Data;
+
+    const USER_BOOKINGS_DATA = [];
     const REWARD_POINTS_TOTAL = 0;
     const upcomingTrips = USER_BOOKINGS_DATA.filter(b => b.status === 'Confirmed');
     const nextTrip = upcomingTrips[0];
 
+    // CDN Integration for profile picture
+    const CDN_URL = (import.meta.env.VITE_CDN_PATH || '').replace(/\/+$/, '');
+    const getImageUrl = (path: string | undefined | null) => {
+        if (!path) return '/default-avatar.png'; // Fallback image
+        if (path.startsWith('http')) return path;
+        return `${CDN_URL}${path}`;
+    };
+
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-gray-100">
-                Welcome back, {USER_PROFILE_DATA.name.split(' ')[0]}!
-            </h1>
+            <div className="flex items-center gap-4">
+
+                <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-gray-100">
+                    Welcome back, {isLoading ? 'Loading...' : user ? `${user.FirstName} ${user.LastName}` : 'Guest'}!
+                </h1>
+            </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -30,14 +41,14 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex items-center space-x-4">
                     <div className="bg-blue-100 dark:bg-blue-700/20 p-3 rounded-full">
-                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </div>
                     <div>
                         <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Upcoming Trips</p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-white">{upcomingTrips.length}</p>
                     </div>
                 </div>
-                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex items-center space-x-4">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex items-center space-x-4">
                     <div className="bg-green-100 dark:bg-green-500/20 p-3 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4M17 3v4m-2 2h4m-4 12v4m-2-2h4M12 6a2 2 0 100-4 2 2 0 000 4zm0 14a2 2 0 100-4 2 2 0 000 4z" /></svg>
                     </div>

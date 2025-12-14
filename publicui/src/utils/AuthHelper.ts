@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { ITokenInfo } from "../types";
+import { clearUserProfileCache } from "../redux/middleware/cacheMiddleware";
 
 class AuthHelper {
     static SetNewLogin = (token: any) => {
@@ -9,6 +10,7 @@ class AuthHelper {
     }
     static Logout = () => {
         localStorage.removeItem("token");
+        clearUserProfileCache(); // Clear user profile cache on logout
         window.location.href = "/signin";
     }
     static isLoggedIn(): boolean {
