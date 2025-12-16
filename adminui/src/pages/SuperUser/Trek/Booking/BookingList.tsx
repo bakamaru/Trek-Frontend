@@ -96,27 +96,72 @@ export default function BookingList() {
             key: "bookingId",
             label: "#No",
             render: (item: any) => {
-                return item?.bookingId ? item?.bookingId : "N/A";
+                return item?.BookingId ? item?.BookingId : "N/A";
+            },
+        },
+        {
+            key: "productName",
+            label: "Product",
+            render: (item: any) => {
+                return (
+                    <div className="flex flex-col">
+                        <span className="font-medium text-black dark:text-white">
+                            {item.ProductName || "N/A"}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                            {item.ProductType || "TREK"}
+                        </span>
+                    </div>
+                );
+            },
+        },
+        {
+            key: "travelDate",
+            label: "Travel Date",
+            render: (item: any) => {
+                return item?.TravelDate ? new Date(item.TravelDate).toLocaleDateString() : "N/A";
             },
         },
         {
             key: "contactName",
             label: "Contact Name",
-            render: (item: any) => (
-                <Link
-                    to={`/superadmin/trek/booking/edit?id=${item?.bookingId}`}
-                    className="flex items-center gap-2 group-hover:text-primary pr-2"
-                >
-                    <span className=" break-words">{item.contactName}</span>
-                </Link>
-            ),
+            render: (item: any) => {
+                const name = `${item.FirstName || ""} ${item.LastName || ""}`.trim();
+                const url = `/superadmin/trek/booking/detail?id=${item.BookingId}&producturl=${encodeURIComponent(item.ProductUrl || "")}&producttype=${item.ProductType || ""}`;
+                return (
+                    <Link
+                        to={url}
+                        className="flex items-center gap-2 group-hover:text-primary pr-2"
+                    >
+                        <span className="break-words">{name || "N/A"}</span>
+                    </Link>
+                );
+            },
         },
         {
-            key: "contactEmail",
+            key: "email",
             label: "Email",
             render: (item: any) => (
                 <>
-                    {item.contactEmail || "N/A"}
+                    {item.Email || "N/A"}
+                </>
+            ),
+        },
+        {
+            key: "pax",
+            label: "Pax",
+            render: (item: any) => (
+                <>
+                    {item.TotalTraveler || 0}
+                </>
+            ),
+        },
+        {
+            key: "paidAmount",
+            label: "Paid",
+            render: (item: any) => (
+                <>
+                    {item.PaidAmount || 0}
                 </>
             ),
         },
@@ -124,48 +169,42 @@ export default function BookingList() {
             key: "bookingStatus",
             label: "Status",
             render: (item: any) => (
-                <span className={`px-2 py-1 rounded text-xs font-medium ${item.bookingStatus === 'CONFIRMED' ? 'bg-green-100 text-green-800' :
-                    item.bookingStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                        item.bookingStatus === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                <span className={`px-2 py-1 rounded text-xs font-medium ${item.BookingStatus === 'Confirmed' ? 'bg-green-100 text-green-800' :
+                    item.BookingStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                        item.BookingStatus === 'Cancelled' ? 'bg-red-100 text-red-800' :
                             'bg-gray-100 text-gray-800'
                     }`}>
-                    {item.bookingStatus || "N/A"}
+                    {item.BookingStatus || "N/A"}
                 </span>
-            ),
-        },
-        {
-            key: "totalAmount",
-            label: "Total Amount",
-            render: (item: any) => (
-                <>
-                    {item.totalAmount || "0"}
-                </>
             ),
         },
         {
             key: "actions",
             label: "Action",
-            render: (row: any) => (
-                <div className="flex items-center gap-2">
-                    <button
-                        title="Edit"
-                        onClick={() => {
-                            navigate(`/superadmin/trek/booking/edit?id=${row.bookingId}`);
-                        }}
-                        className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
-                    >
-                        <MdOutlineEdit size={20} />
-                    </button>
-                </div>
-            ),
+            render: (row: any) => {
+                const url = `/superadmin/trek/booking/detail?id=${row.BookingId}&producturl=${encodeURIComponent(row.ProductUrl || "")}&producttype=${row.ProductType || ""}`;
+                return (
+                    <div className="flex items-center gap-2">
+                        <button
+                            title="View Details"
+                            onClick={() => {
+                                navigate(url);
+                            }}
+                            className="border p-2 rounded-md border-gray-300 text-base cursor-pointer hover:bg-gray-50"
+                        >
+                            <MdOutlineEdit size={20} />
+                        </button>
+                    </div>
+                );
+            },
         },
     ];
 
     useEffect(() => {
-        if (data != undefined && data.code == 200) {
-            setBookings(data.data);
-            if (data.data.length > 0) {
-                setRowTotal(data.data[0]?.totalRows || 0);
+        if (data != undefined && data.Code == 200) {
+            setBookings(data.Data);
+            if (data.Data.length > 0) {
+                setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
     }, [data]);

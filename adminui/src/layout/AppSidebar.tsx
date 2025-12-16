@@ -294,25 +294,25 @@ const sunavItems: NavItem[] = [
   //     { name: "Task Builder", path: "/superadmin/agent/taskbuilder", pro: false },
   //   ],
   // },
-  {
-    icon: <ThemeIcon />,
-    name: "Theme",
-    subItems: [{ name: "Manage", path: "/superadmin/theme", pro: false }],
-  },
+  // {
+  //   icon: <ThemeIcon />,
+  //   name: "Theme",
+  //   subItems: [{ name: "Manage", path: "/superadmin/theme", pro: false }],
+  // },
   {
     icon: <ContentIcon />,
     name: "Content Management",
     subItems: [
-      { name: "Page", path: "/superadmin/page", pro: false },
+      //{ name: "Page", path: "/superadmin/page", pro: false },
       { name: "Menu", path: "/superadmin/menu", pro: false },
-      { name: "Template Editor", path: "/superadmin/template/editor", pro: false },
-      { name: "Media Library", path: "/superadmin/media", pro: false },
-      { name: "Html Content", path: "/superadmin/htmlcontent", pro: false },
-      {
-        name: "Html Content Builder",
-        path: "/superadmin/html/builder",
-        pro: false,
-      },
+      // { name: "Template Editor", path: "/superadmin/template/editor", pro: false },
+      // { name: "Media Library", path: "/superadmin/media", pro: false },
+      // { name: "Html Content", path: "/superadmin/htmlcontent", pro: false },
+      // {
+      //   name: "Html Content Builder",
+      //   path: "/superadmin/html/builder",
+      //   pro: false,
+      // },
     ],
   },
   {
@@ -334,11 +334,11 @@ const sunavItems: NavItem[] = [
     icon: <SystemIcon />,
     name: "System",
     subItems: [
-      { name: "Module", path: "/superadmin/module", pro: false },
+      // { name: "Module", path: "/superadmin/module", pro: false },
       { name: "User", path: "/superadmin/user", pro: false },
       { name: "Role", path: "/superadmin/role", pro: false },
-      { name: "Localization", path: "/superadmin/localization", pro: false },
-      { name: "Audit Logs", path: "/superadmin/audit", pro: false },
+      // { name: "Localization", path: "/superadmin/localization", pro: false },
+      //{ name: "Audit Logs", path: "/superadmin/audit", pro: false },
       { name: "Dev Logs", path: "/superadmin/dev/logs", pro: false },
     ],
   }]

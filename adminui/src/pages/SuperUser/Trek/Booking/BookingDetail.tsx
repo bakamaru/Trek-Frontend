@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useGetBookingDetailQuery, useChangeBookingStatusMutation, useLazyPrintBookingConfirmationQuery, useLazyPrintBookingInvoiceQuery } from "../../../../redux/trek/bookingAPI";
+import { useGetTrekDetailByUrlQuery } from "../../../../redux/trek/trekAPI";
 import ComponentCard from "../../../../components/common/ComponentCard";
 import toaster from "../../../../components/toster";
 import BookingStatusBadge from "../../../../components/booking/BookingStatusBadge";
 import PaymentStatusBadge from "../../../../components/booking/PaymentStatusBadge";
-import { MdPrint, MdEmail, MdMoreVert, MdArrowBack } from "react-icons/md";
+import { MdPrint, MdEmail, MdMoreVert, MdArrowBack, MdOutlineEdit } from "react-icons/md";
+
 
 // Import tab components
 import SummaryTab from "../../../../components/booking/tabs/SummaryTab";
 import TravellersTab from "../../../../components/booking/tabs/TravellersTab";
-import HealthTab from "../../../../components/booking/tabs/HealthTab";
 import PaymentsTab from "../../../../components/booking/tabs/PaymentsTab";
+import EmergencyContactsTab from "../../../../components/booking/tabs/EmergencyContactsTab";
 import ItineraryTab from "../../../../components/booking/tabs/ItineraryTab";
 import NotesTab from "../../../../components/booking/tabs/NotesTab";
 import DocumentsTab from "../../../../components/booking/tabs/DocumentsTab";
 import AuditLogTab from "../../../../components/booking/tabs/AuditLogTab";
 
-type TabKey = "summary" | "travellers" | "health" | "payments" | "itinerary" | "notes" | "documents" | "audit";
+type TabKey = "summary" | "travellers" | "emergency" | "payments" | "itinerary" | "notes" | "documents" | "audit";
 
 const tabs: { key: TabKey; label: string }[] = [
     { key: "summary", label: "Summary" },
-    { key: "travellers", label: "Travellers & Contacts" },
-    { key: "health", label: "Health & Insurance" },
+    { key: "travellers", label: "Travellers" },
+    { key: "emergency", label: "Emergency Contacts" },
     { key: "payments", label: "Payments & Invoices" },
     { key: "itinerary", label: "Itinerary / Services" },
     { key: "notes", label: "Notes & Communication" },
@@ -32,7 +34,11 @@ const tabs: { key: TabKey; label: string }[] = [
 
 const BookingDetail: React.FC = () => {
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const id = queryParams.get("id");
+    const productUrl = queryParams.get("producturl");
+    const productType = queryParams.get("producttype");
     const bookingId = parseInt(id || "0", 10);
 
     const [activeTab, setActiveTab] = useState<TabKey>("summary");
@@ -41,6 +47,10 @@ const BookingDetail: React.FC = () => {
 
     const { data: detailData, isLoading, refetch } = useGetBookingDetailQuery(bookingId, {
         skip: bookingId === 0,
+    });
+
+    const { data: trekData } = useGetTrekDetailByUrlQuery(productUrl || "", {
+        skip: !productUrl,
     });
 
     const [changeStatus, { isLoading: isChangingStatus }] = useChangeBookingStatusMutation();
@@ -130,7 +140,16 @@ const BookingDetail: React.FC = () => {
                             </h1>
                             <div className="flex items-center gap-2 mt-1">
                                 <BookingStatusBadge status={booking.BookingStatus} />
-                                <PaymentStatusBadge status={booking.PaymentStatus} />
+                                {/* PaymentStatus might likely be missing or need inference, checking JSON... 'TotalAmount': 0.0, 'ModeOfPayment': ''... no explicit PaymentStatus field in JSON. Using default or inferring? 
+                                    The JSON has "BookingStatus": "Pending".
+                                    Wait, the JSON provided by user does NOT have PaymentStatus. But `BookingDetail` interface in `trekTypes.ts` had it. 
+                                    I will keep it if it might be there, or remove/comment out if verified missing. 
+                                    User JSON: "TotalAmount": 0.0, ... 
+                                    I will try to use it if present, otherwise fallback. 
+                                    The JSON shows "BookingStatus": "Pending" (PascalCase value? No, "Pending" in JSON). 
+                                    I'll stick to displaying what's available. 
+                                */}
+                                {booking.PaymentStatus && <PaymentStatusBadge status={booking.PaymentStatus} />}
                             </div>
                         </div>
                     </div>
@@ -147,31 +166,42 @@ const BookingDetail: React.FC = () => {
                             {showStatusMenu && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                                     <button
-                                        onClick={() => handleStatusChange("PENDING")}
+                                        onClick={() => handleStatusChange("Pending")}
                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         Pending
                                     </button>
                                     <button
-                                        onClick={() => handleStatusChange("CONFIRMED")}
+                                        onClick={() => handleStatusChange("Confirmed")}
                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         Confirmed
                                     </button>
                                     <button
-                                        onClick={() => handleStatusChange("COMPLETED")}
+                                        onClick={() => handleStatusChange("Completed")}
                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         Completed
                                     </button>
                                     <button
-                                        onClick={() => handleStatusChange("CANCELLED")}
+                                        onClick={() => handleStatusChange("Cancelled")}
                                         className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                                     >
                                         Cancel Booking
                                     </button>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Edit Action */}
+                        <div className="relative">
+                            <button
+                                onClick={() => navigate(`/superadmin/trek/booking/edit?id=${bookingId}`)}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                            >
+                                <MdOutlineEdit size={18} />
+                                Edit
+                            </button>
                         </div>
 
                         {/* Print Dropdown */}
@@ -219,23 +249,24 @@ const BookingDetail: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
                     <div>
                         <div className="text-sm text-gray-500">Product</div>
-                        <div className="font-medium text-gray-900">{booking.ProductName || booking.TrekName || "N/A"}</div>
+                        <div className="font-medium text-gray-900">{booking.ProductName || booking.TrekName || booking.SpecialRequest || "N/A"}</div>
                         <div className="text-xs text-gray-500">{booking.ProductType || "TREK"}</div>
                     </div>
                     <div>
                         <div className="text-sm text-gray-500">Customer</div>
-                        <div className="font-medium text-gray-900">{booking.ContactName || "N/A"}</div>
-                        <div className="text-xs text-gray-500">{booking.ContactEmail || ""}</div>
+                        <div className="font-medium text-gray-900">{`${booking.FirstName || ""} ${booking.LastName || ""}`.trim() || booking.ContactName || "N/A"}</div>
+                        <div className="text-xs text-gray-500">{booking.Email || booking.ContactEmail || ""}</div>
+                        <div className="text-xs text-gray-500">{booking.HomePhoneNumber || booking.ContactPhone || ""}</div>
                     </div>
                     <div>
                         <div className="text-sm text-gray-500">Travel Dates</div>
                         <div className="font-medium text-gray-900">
-                            {booking.StartDate && booking.EndDate
-                                ? `${new Date(booking.StartDate).toLocaleDateString()} - ${new Date(booking.EndDate).toLocaleDateString()}`
-                                : "N/A"}
+                            {booking.PreferedStartDate
+                                ? new Date(booking.PreferedStartDate).toLocaleDateString()
+                                : booking.StartDate ? new Date(booking.StartDate).toLocaleDateString() : "N/A"}
                         </div>
                         <div className="text-xs text-gray-500">
-                            {booking.Adults || 0} Adults {booking.Children ? `, ${booking.Children} Children` : ""}
+                            {booking.Adults || booking.Adult || 0} Adults {booking.Children ? `, ${booking.Children} Children` : ""}
                         </div>
                     </div>
                 </div>
@@ -261,11 +292,11 @@ const BookingDetail: React.FC = () => {
                 </div>
 
                 <div className="p-6">
-                    {activeTab === "summary" && <SummaryTab bookingId={bookingId} booking={booking} />}
+                    {activeTab === "summary" && <SummaryTab bookingId={bookingId} booking={booking} trekData={trekData?.Data} />}
                     {activeTab === "travellers" && <TravellersTab bookingId={bookingId} />}
-                    {activeTab === "health" && <HealthTab bookingId={bookingId} />}
+                    {activeTab === "emergency" && <EmergencyContactsTab bookingId={bookingId} />}
                     {activeTab === "payments" && <PaymentsTab bookingId={bookingId} />}
-                    {activeTab === "itinerary" && <ItineraryTab bookingId={bookingId} booking={booking} />}
+                    {activeTab === "itinerary" && <ItineraryTab bookingId={bookingId} booking={booking} trekData={trekData?.Data} />}
                     {activeTab === "notes" && <NotesTab bookingId={bookingId} />}
                     {activeTab === "documents" && <DocumentsTab bookingId={bookingId} />}
                     {activeTab === "audit" && <AuditLogTab bookingId={bookingId} />}

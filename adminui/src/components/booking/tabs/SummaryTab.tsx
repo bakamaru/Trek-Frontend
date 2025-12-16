@@ -3,40 +3,74 @@ import React from "react";
 interface SummaryTabProps {
     bookingId: number;
     booking: any;
+    trekData?: any;
 }
 
-const SummaryTab: React.FC<SummaryTabProps> = ({ bookingId, booking }) => {
+const SummaryTab: React.FC<SummaryTabProps> = ({ bookingId, booking, trekData }) => {
     return (
         <div className="space-y-6">
             {/* Product Information */}
             <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Product Details</h3>
-                <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                    <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-lg p-4 space-y-4">
+                    {/* Trek Image */}
+                    {trekData?.TrekUrl && (
+                        <div className="w-full h-48 rounded-lg overflow-hidden mb-4">
+                            <img
+                                src={trekData.TrekUrl || "https://dummyimage.com/600x400/cccccc/ffffff&text=No+Image"}
+                                alt={trekData.TrekName}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    )}
+
+                    {/* Overview */}
+                    {trekData?.OverviewDescription && (
+                        <div className="mb-4">
+                            <div className="text-sm text-gray-500 mb-1">Overview</div>
+                            <div className="text-sm text-gray-800 line-clamp-3 hover:line-clamp-none transition-all">
+                                {trekData.OverviewDescription}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
                             <div className="text-sm text-gray-500">Product Type</div>
-                            <div className="font-medium">{booking.productType || "TREK"}</div>
+                            <div className="font-medium">{trekData?.ProductType || booking.productType || "TREK"}</div>
                         </div>
                         <div>
                             <div className="text-sm text-gray-500">Product Name</div>
-                            <div className="font-medium">{booking.productName || booking.trekName || "N/A"}</div>
+                            <div className="font-medium">{trekData?.TrekName || booking.productName || booking.trekName || "N/A"}</div>
                         </div>
                         <div>
                             <div className="text-sm text-gray-500">Region</div>
-                            <div className="font-medium">{booking.regionName || "N/A"}</div>
+                            <div className="font-medium">{trekData?.TrekRegionName || trekData?.RegionName || booking.regionName || "N/A"}</div>
                         </div>
                         <div>
                             <div className="text-sm text-gray-500">Difficulty</div>
-                            <div className="font-medium">{booking.activityLevelName || "N/A"}</div>
+                            <div className="font-medium">{trekData?.ActivityLevelName || booking.activityLevelName || "N/A"}</div>
                         </div>
                         <div>
                             <div className="text-sm text-gray-500">Duration</div>
-                            <div className="font-medium">{booking.durationDays || 0} days</div>
+                            <div className="font-medium">{trekData?.DurationDays || booking.durationDays || 0} days</div>
                         </div>
                         <div>
-                            <div className="text-sm text-gray-500">Departure Date</div>
+                            <div className="text-sm text-gray-500">Max Altitude</div>
                             <div className="font-medium">
-                                {booking.departureDate ? new Date(booking.departureDate).toLocaleDateString() : "N/A"}
+                                {trekData?.MaxAltitudeMeters ? `${trekData.MaxAltitudeMeters}m / ${trekData.MaxAltitudeFeet}ft` : "N/A"}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-sm text-gray-500">Start / End</div>
+                            <div className="font-medium text-xs">
+                                {trekData?.StartingPoint || "N/A"} <br /> to {trekData?.EndingPoint || "N/A"}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-sm text-gray-500">Reference Price</div>
+                            <div className="font-medium">
+                                {trekData?.PriceInUSD ? `USD ${trekData.PriceInUSD}` : "N/A"}
                             </div>
                         </div>
                     </div>

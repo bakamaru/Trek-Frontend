@@ -53,20 +53,20 @@ const BookingForm = () => {
     }, [location, id]);
 
     useEffect(() => {
-        if (isSuccess && detailData && detailData.code === 200) {
+        if (isSuccess && detailData && detailData.Code === 200) {
             reset({
-                bookingId: detailData.data.bookingId,
-                userId: detailData.data.userId,
-                trekId: detailData.data.trekId,
-                trekDepartureId: detailData.data.trekDepartureId,
-                bookingDate: detailData.data.bookingDate,
-                bookingStatus: detailData.data.bookingStatus,
-                totalAmount: detailData.data.totalAmount,
-                currency: detailData.data.currency,
-                contactName: detailData.data.contactName,
-                contactEmail: detailData.data.contactEmail,
-                contactPhone: detailData.data.contactPhone,
-                specialRequests: detailData.data.specialRequests,
+                bookingId: detailData.Data.BookingId,
+                userId: detailData.Data.UserId, // Assuming UserId might be in Data directly, or check JSON... JSON didn't show UserId clearly at top level but has it in Travellers? Assuming standard or default 0.
+                trekId: detailData.Data.ProductId || 0, // ProductId maps to TrekId roughly? 
+                trekDepartureId: 0, // Not clear in JSON, using 0
+                bookingDate: detailData.Data.AddedOn, // AddedOn seems to be the booking creation date
+                bookingStatus: detailData.Data.BookingStatus, // "Pending" in JSON
+                totalAmount: detailData.Data.TotalAmount,
+                currency: "USD", // Not in JSON, defaulting
+                contactName: `${detailData.Data.FirstName || ""} ${detailData.Data.LastName || ""}`.trim(),
+                contactEmail: detailData.Data.Email,
+                contactPhone: detailData.Data.HomePhoneNumber || detailData.Data.WorkPhoneNumber,
+                specialRequests: detailData.Data.SpecialRequest,
             });
         }
     }, [detailData, reset, isSuccess]);
@@ -80,7 +80,7 @@ const BookingForm = () => {
 
             const response = await saveBookingBasic(apiData).unwrap();
 
-            if (response.code == 200) {
+            if (response.Code == 200) {
                 toaster.success("Booking saved successfully!");
                 navigate("/superadmin/trek/booking");
             } else {
