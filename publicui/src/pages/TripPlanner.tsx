@@ -1,6 +1,8 @@
 
 import React, { useState, useContext } from 'react';
 import { Trek, TourDetail, SightseeingSpot, CustomTrip } from '../types/types';
+import { motion } from 'framer-motion';
+import SEO from '../components/SEO';
 
 type TravelStyle = 'adventure' | 'relaxation' | 'culture';
 type Budget = 'budget' | 'mid-range' | 'luxury';
@@ -51,7 +53,7 @@ const TripPlanner: React.FC = () => {
         const [minBudget, maxBudget] = budgetMap[budget];
 
         const allActivities: (Trek | TourDetail)[] = [...[], ...[]];
-        
+
         const possibleActivities = allActivities.filter(activity => {
             const durationInDays = parseInt(activity.duration.split(' ')[0]);
             const matchesDuration = durationInDays <= duration;
@@ -66,10 +68,10 @@ const TripPlanner: React.FC = () => {
         }
 
         const mainActivity = possibleActivities[Math.floor(Math.random() * possibleActivities.length)];
-        
+
         const remainingDays = duration - parseInt(mainActivity.duration.split(' ')[0]);
         let remainingBudget = (maxBudget - mainActivity.price) * 0.5; // Allocate portion of remaining budget for sightseeing
-        
+
         // FIX: Handle location for both Trek and TourDetail types. A trek does not have a location property.
         let location = '';
         if ('location' in mainActivity) { // It's a TourDetail
@@ -77,17 +79,17 @@ const TripPlanner: React.FC = () => {
         } else if ('difficulty' in mainActivity) { // It's a Trek, assume starting city is Kathmandu for sightseeing
             location = 'Kathmandu';
         }
-        
+
         let sightseeing: SightseeingSpot[] = [];
         if (remainingDays > 0 && location) {
-            const possibleSpots =[];
+            const possibleSpots = [];
             // SIGHTSEEING_SPOTS_DATA.filter(spot => 
             //     spot.location.includes(location) &&
             //     interests.some(i => spot.tags.includes(i))
             // ).sort(() => 0.5 - Math.random());
-            
-            for(const spot of possibleSpots) {
-                if(remainingBudget >= spot.estimatedCost) {
+
+            for (const spot of possibleSpots) {
+                if (remainingBudget >= spot.estimatedCost) {
                     sightseeing.push(spot);
                     remainingBudget -= spot.estimatedCost;
                 }
@@ -101,7 +103,7 @@ const TripPlanner: React.FC = () => {
 
     const handleBookNow = () => {
         if (!plan) return;
-        
+
         const overview = `Your personalized ${preferences.duration}-day trip. Main activity: ${plan.mainActivity.title}. Includes sightseeing: ${plan.sightseeing.map(s => s.name).join(', ') || 'None'}.`;
 
         const customTrip: CustomTrip = {
@@ -122,20 +124,20 @@ const TripPlanner: React.FC = () => {
     }
 
     const renderStep = () => {
-        switch(step) {
+        switch (step) {
             case 1: // Style & Budget
                 return (
                     <div>
                         <h2 className="text-2xl font-bold mb-4">What's your travel style?</h2>
                         <div className="grid grid-cols-3 gap-4 mb-8">
                             {(['adventure', 'relaxation', 'culture'] as TravelStyle[]).map(s => (
-                                <button key={s} onClick={() => setPreferences(p => ({...p, style: s}))} className={`p-4 border rounded-lg text-lg capitalize transition ${preferences.style === s ? 'bg-blue-700 text-white border-blue-700' : 'dark:border-gray-600 hover:border-blue-600'}`}>{s}</button>
+                                <button key={s} onClick={() => setPreferences(p => ({ ...p, style: s }))} className={`p-4 border rounded-lg text-lg capitalize transition ${preferences.style === s ? 'bg-blue-700 text-white border-blue-700' : 'dark:border-gray-600 hover:border-blue-600'}`}>{s}</button>
                             ))}
                         </div>
                         <h2 className="text-2xl font-bold mb-4">What's your budget?</h2>
                         <div className="grid grid-cols-3 gap-4">
-                             {(['budget', 'mid-range', 'luxury'] as Budget[]).map(b => (
-                                <button key={b} onClick={() => setPreferences(p => ({...p, budget: b}))} className={`p-4 border rounded-lg text-lg capitalize transition ${preferences.budget === b ? 'bg-blue-700 text-white border-blue-700' : 'dark:border-gray-600 hover:border-blue-600'}`}>{b}</button>
+                            {(['budget', 'mid-range', 'luxury'] as Budget[]).map(b => (
+                                <button key={b} onClick={() => setPreferences(p => ({ ...p, budget: b }))} className={`p-4 border rounded-lg text-lg capitalize transition ${preferences.budget === b ? 'bg-blue-700 text-white border-blue-700' : 'dark:border-gray-600 hover:border-blue-600'}`}>{b}</button>
                             ))}
                         </div>
                     </div>
@@ -145,10 +147,10 @@ const TripPlanner: React.FC = () => {
                     <div>
                         <h2 className="text-2xl font-bold mb-4">How long is your trip?</h2>
                         <div className="flex items-center gap-4 mb-8">
-                            <input type="range" min="3" max="30" value={preferences.duration} onChange={e => setPreferences(p => ({...p, duration: parseInt(e.target.value)}))} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
+                            <input type="range" min="3" max="30" value={preferences.duration} onChange={e => setPreferences(p => ({ ...p, duration: parseInt(e.target.value) }))} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" />
                             <span className="font-bold text-lg w-24 text-center">{preferences.duration} days</span>
                         </div>
-                         <h2 className="text-2xl font-bold mb-4">What are your interests?</h2>
+                        <h2 className="text-2xl font-bold mb-4">What are your interests?</h2>
                         <div className="flex flex-wrap gap-4">
                             {interestOptions.map(interest => (
                                 <button key={interest} onClick={() => handleInterestToggle(interest)} className={`px-4 py-2 border rounded-full text-md capitalize transition ${preferences.interests.includes(interest) ? 'bg-blue-700 text-white border-blue-700' : 'dark:border-gray-600 hover:border-blue-600'}`}>{interest}</button>
@@ -159,19 +161,19 @@ const TripPlanner: React.FC = () => {
             default: return null;
         }
     };
-    
+
     if (plan) {
         return (
-             <section className="py-20">
+            <section className="py-20">
                 <div className="container mx-auto px-4 max-w-4xl">
                     <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl text-center">
                         <h1 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-2">Your Personalized Trip Plan</h1>
                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">Based on your preferences, here is our recommendation!</p>
-                        
+
                         <div className="text-left border-t dark:border-gray-700 pt-6">
                             <h3 className="text-2xl font-bold mb-4 text-blue-700">Main Activity</h3>
                             <div className="flex gap-6 items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <img src={plan.mainActivity.image} alt={plan.mainActivity.title} className="w-48 h-32 object-cover rounded-md"/>
+                                <img src={plan.mainActivity.image} alt={plan.mainActivity.title} className="w-48 h-32 object-cover rounded-md" />
                                 <div>
                                     <h4 className="text-xl font-bold">{plan.mainActivity.title}</h4>
                                     {/* FIX: Conditionally display location for Trek (no location property) or TourDetail */}
@@ -182,20 +184,20 @@ const TripPlanner: React.FC = () => {
 
                             {plan.sightseeing.length > 0 && (
                                 <>
-                                <h3 className="text-2xl font-bold mt-8 mb-4 text-blue-700">Suggested Sightseeing</h3>
-                                <div className="space-y-4">
-                                    {plan.sightseeing.map(spot => (
-                                        <div key={spot.name} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <h4 className="text-lg font-bold">{spot.name}</h4>
-                                                    <p className="text-sm text-gray-600 dark:text-gray-300">{spot.description}</p>
+                                    <h3 className="text-2xl font-bold mt-8 mb-4 text-blue-700">Suggested Sightseeing</h3>
+                                    <div className="space-y-4">
+                                        {plan.sightseeing.map(spot => (
+                                            <div key={spot.name} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                                <div className="flex justify-between items-center">
+                                                    <div>
+                                                        <h4 className="text-lg font-bold">{spot.name}</h4>
+                                                        <p className="text-sm text-gray-600 dark:text-gray-300">{spot.description}</p>
+                                                    </div>
+                                                    <p className="font-bold text-md">${spot.estimatedCost}</p>
                                                 </div>
-                                                <p className="font-bold text-md">${spot.estimatedCost}</p>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
                                 </>
                             )}
 
@@ -210,7 +212,7 @@ const TripPlanner: React.FC = () => {
                             <button onClick={() => setPlan(null)} className="px-8 py-3 rounded-md font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 transition-colors duration-300">
                                 Start Over
                             </button>
-                             <button onClick={handleBookNow} className="px-8 py-3 rounded-md font-semibold bg-blue-700 text-white hover:bg-blue-800 transition-colors duration-300">
+                            <button onClick={handleBookNow} className="px-8 py-3 rounded-md font-semibold bg-blue-700 text-white hover:bg-blue-800 transition-colors duration-300">
                                 Book This Trip
                             </button>
                         </div>
@@ -222,13 +224,40 @@ const TripPlanner: React.FC = () => {
 
 
     return (
-        <div className="pt-20">
-            <section className="bg-gray-100 dark:bg-gray-800 py-20 text-center">
-                <div className="container mx-auto px-4">
-                <h1 className="text-5xl font-extrabold text-gray-800 dark:text-gray-100">Build Your Perfect Trip</h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400 mt-4 max-w-3xl mx-auto">Tell us your preferences, and we'll craft a personalized itinerary just for you.</p>
+        <>
+            <SEO
+                title="Trip Planner - Territory Himalayas | Custom Itineraries"
+                description="Plan your perfect trip to the Himalayas with our custom itinerary builder. Choose your preferences and let us craft a unique adventure for you."
+            />
+            {/* Hero Section */}
+            <div className="relative h-[50vh] min-h-[400px] flex items-center justify-center bg-gray-900 overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+                        alt="Himalayan Mountains"
+                        className="w-full h-full object-cover opacity-50"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
                 </div>
-            </section>
+
+                <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-4xl md:text-6xl font-extrabold text-white mb-4"
+                    >
+                        Build Your Perfect Trip
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-lg md:text-xl text-gray-200"
+                    >
+                        Tell us your preferences, and we'll craft a personalized itinerary just for you.
+                    </motion.p>
+                </div>
+            </div>
             <section className="py-20">
                 <div className="container mx-auto px-4 max-w-2xl">
                     <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl">
@@ -238,7 +267,7 @@ const TripPlanner: React.FC = () => {
                             </div>
                             <p className="text-center text-sm mt-2 text-gray-500 dark:text-gray-400">Step {step} of 2</p>
                         </div>
-                        
+
                         {renderStep()}
 
                         <div className="flex justify-between mt-10">
@@ -258,7 +287,7 @@ const TripPlanner: React.FC = () => {
                     </div>
                 </div>
             </section>
-        </div>
+        </>
     );
 };
 

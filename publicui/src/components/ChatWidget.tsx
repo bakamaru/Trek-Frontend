@@ -15,9 +15,9 @@ const ChatWidget: React.FC = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const systemInstruction = useMemo(() => {
-        const trekSummary =[] ;//TREKS_DATA.map(trek => `- ${trek.title} (${trek.duration}, $${trek.price}, Difficulty: ${trek.difficulty})`).join('\n');
-        const tourSummary =[];// TOURS_DATA.map(tour => `- ${tour.title} (${tour.duration}, $${tour.price}, Location: ${tour.location})`).join('\n');
-        const destinationSummary =[];// DESTINATIONS_DATA.map(dest => dest.name).join(', ');
+        const trekSummary = [];//TREKS_DATA.map(trek => `- ${trek.title} (${trek.duration}, $${trek.price}, Difficulty: ${trek.difficulty})`).join('\n');
+        const tourSummary = [];// TOURS_DATA.map(tour => `- ${tour.title} (${tour.duration}, $${tour.price}, Location: ${tour.location})`).join('\n');
+        const destinationSummary = [];// DESTINATIONS_DATA.map(dest => dest.name).join(', ');
 
         return `You are a friendly and knowledgeable travel assistant for Territory Himalayas, a premier travel agency.
 Your goal is to help users find the perfect trip based ONLY on the information provided to you.
@@ -102,7 +102,7 @@ Start the conversation by greeting the user and asking how you can help them pla
 
     const openWhatsApp = () => {
         // Replace with actual number
-        window.open('https://wa.me/1234567890', '_blank');
+        window.open('https://wa.me/9779762419453', '_blank');
         setShowOptions(false);
     };
 
@@ -112,7 +112,7 @@ Start the conversation by greeting the user and asking how you can help them pla
             <div className={`fixed bottom-28 right-8 flex flex-col items-end space-y-4 transition-all duration-300 z-50 ${showOptions && !isChatOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
 
                 {/* AI Assistant Option */}
-                <div className="flex items-center space-x-3 group">
+                {/* <div className="flex items-center space-x-3 group">
                     <span className="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm px-3 py-1.5 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Talk to AI Assistant
                     </span>
@@ -123,7 +123,7 @@ Start the conversation by greeting the user and asking how you can help them pla
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                     </button>
-                </div>
+                </div> */}
 
                 {/* WhatsApp Option */}
                 <div className="flex items-center space-x-3 group">
@@ -173,8 +173,8 @@ Start the conversation by greeting the user and asking how you can help them pla
                         {messages.map((msg, index) => (
                             <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[85%] px-4 py-2 rounded-lg text-sm ${msg.sender === 'user'
-                                        ? 'bg-blue-700 text-white rounded-br-none'
-                                        : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm border border-gray-100 dark:border-gray-600'
+                                    ? 'bg-blue-700 text-white rounded-br-none'
+                                    : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none shadow-sm border border-gray-100 dark:border-gray-600'
                                     }`}>
                                     {msg.text}
                                 </div>

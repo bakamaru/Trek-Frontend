@@ -23,37 +23,29 @@ const MyInvoices: React.FC = () => {
                         <tr>
                             <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300">Invoice ID</th>
                             <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300">Date</th>
-                             <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300">Trip</th>
+                            <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300">Trip</th>
                             <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300 text-right">Amount</th>
                             <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300 text-center">Status</th>
                             <th className="p-3 font-semibold text-sm text-gray-600 dark:text-gray-300 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {USER_INVOICES_DATA.length > 0 ? (
-                            USER_INVOICES_DATA.map(invoice => (
-                                <tr key={invoice.id} className="border-b dark:border-gray-700">
-                                    <td className="p-3 text-gray-800 dark:text-gray-200 font-medium">{invoice.id}</td>
-                                    <td className="p-3 text-gray-600 dark:text-gray-400">{invoice.date}</td>
-                                    <td className="p-3 text-gray-600 dark:text-gray-400">{invoice.tripName}</td>
-                                    <td className="p-3 text-gray-800 dark:text-gray-200 text-right">${invoice.amount.toLocaleString()}</td>
-                                    <td className="p-3 text-center">
-                                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusChipClass(invoice.status)}`}>
-                                            {invoice.status}
-                                        </span>
-                                    </td>
-                                    <td className="p-3 text-right">
-                                        <button className="text-blue-700 font-semibold hover:underline">Download</button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
+                        {/* Mocking empty data for now */}
+                        {true ? (
                             <tr>
                                 <td colSpan={6} className="text-center text-gray-500 dark:text-gray-400 py-8">
                                     You have no invoices.
                                 </td>
                             </tr>
-                        )} */}
+                        ) : (
+                            // This block is preserved for when we have data
+                            [].map((invoice: any) => (
+                                <tr key={invoice.id} className="border-b dark:border-gray-700">
+                                    <td className="p-3 text-gray-800 dark:text-gray-200 font-medium">{invoice.id}</td>
+                                    {/* ... rest of columns */}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>

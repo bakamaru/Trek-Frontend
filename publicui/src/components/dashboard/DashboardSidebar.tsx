@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useGetUserProfileQuery } from '../../redux/user/userAPI';
-
+import helper from '../../utils/AuthHelper';
 const DashboardSidebar: React.FC = () => {
     const location = useLocation();
     const { data: profileData, isLoading } = useGetUserProfileQuery();
@@ -12,7 +12,7 @@ const DashboardSidebar: React.FC = () => {
     const getImageUrl = (path: string | undefined | null) => {
         if (!path) return 'https://ui-avatars.com/api/?name=User&background=random'; // Fallback image
         if (path.startsWith('http')) return path;
-        return `${CDN_URL}${path}`;
+        return `${CDN_URL}${path}?w=150&h=150&mode=crop`;
     };
 
     const navItems = [
@@ -58,7 +58,11 @@ const DashboardSidebar: React.FC = () => {
                             </Link>
                         );
                     })}
-                    <a href="#" onClick={(e) => { e.preventDefault(); /* Handle logout */ }} className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+                    <a href="#" onClick={(e) => {
+                        e.preventDefault();
+                        helper.Logout();
+                        window.location.href = "/signin";
+                    }} className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <span className="mr-3"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" /></svg></span>
                         Logout
                     </a>

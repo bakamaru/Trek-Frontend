@@ -37,7 +37,7 @@ const Header: React.FC = () => {
     skip: !isLoggedIn,
   });
 
-  const userProfile = apiProfileResponse?.Data || tokenProfile;
+  const userProfile = apiProfileResponse?.Data;
 
   // Sort menu items by MenuOrder
   const sortedMenuItems: ApiMenuItem[] = useMemo(() => {
@@ -106,19 +106,25 @@ const Header: React.FC = () => {
 
   // Helper to get initials
   const getInitials = () => {
-    const first = userProfile?.FirstName || userProfile?.firstname || "";
-    const last = userProfile?.LastName || userProfile?.surname || "";
+    const first = userProfile?.FirstName;
+    const last = userProfile?.LastName;
     // Ensure we account for empty strings to avoid showing nothing if only one name exists
     if (!first && !last) return "U";
     return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
   };
 
-  const displayName = userProfile?.FirstName
-    ? `${userProfile.FirstName} ${userProfile.LastName || ''}`
-    : (userProfile?.name || "User");
+  const displayName = `${userProfile?.FirstName} ${userProfile?.LastName}`;
 
-  const profilePicture = userProfile?.ProfilePicture || userProfile?.picture;
-
+  // Get profile picture and prepend CDN base URL if it's a relative path
+  const rawProfilePicture = userProfile?.ProfilePicture;
+  const CDN_URL = (import.meta.env.VITE_CDN_PATH || '').replace(/\/+$/, '');
+  const getProfilePictureUrl = (path: string | undefined | null) => {
+    if (!path)
+      return 'https://ui-avatars.com/api/?name=User&background=random'; // Fallback image
+    if (path.startsWith('http'))
+      return path;
+    return `${CDN_URL}${path}?w=150&h=150&mode=crop`;
+  };
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isSticky ? 'bg-white shadow-md dark:bg-gray-800' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4">
@@ -140,10 +146,10 @@ const Header: React.FC = () => {
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-2 focus:outline-none"
                 >
-                  {profilePicture ? (
+                  {rawProfilePicture ? (
                     <img
-                      src={profilePicture}
-                      alt="User"
+                      src={getProfilePictureUrl(rawProfilePicture)}
+                      alt={getInitials()}
                       className="w-10 h-10 rounded-full border-2 border-transparent hover:border-blue-700 transition object-cover"
                     />
                   ) : (
@@ -182,7 +188,7 @@ const Header: React.FC = () => {
                       Dashboard
                     </Link>
                     <Link
-                      to="/user/dashboard/profile"
+                      to="/user/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
                       onClick={() => setIsUserMenuOpen(false)}
                     >

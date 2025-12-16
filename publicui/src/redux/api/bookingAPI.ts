@@ -8,18 +8,26 @@ import {
     BookingHealthInfoSaveRequest,
     BookingEmergencyContactSaveRequest,
     PaginationParams,
+    ApiResponse,
 } from "../../types/trekTypes";
 
 // DTOs provided by user
+// DTOs provided by user
 export interface BookingDetailDto {
+    PaidAmount: number;
+    ProductImage: any;
+    ProductName: string;
     BookingId: number;
     ProductType: string;
     ProductId: number;
+
     Adult: number;
     Children: number;
+
     PreferedStartDate?: string;
     ArrivalDate?: string;
     DepartureDate?: string;
+
     FirstName: string;
     MiddleName: string;
     LastName: string;
@@ -29,25 +37,48 @@ export interface BookingDetailDto {
     PassportNumber: string;
     IssuedDate?: string;
     ExpiryDate?: string;
+
     HomePhoneNumber: string;
     WorkPhoneNumber: string;
     Email: string;
+
     FlightName: string;
     FlightNumber: string;
     AirportPickUp: boolean;
     SpecialRequest: string;
+
     ModeOfPayment: string;
     PaymentReference: string;
     TotalAmount: number;
+
     BookingStatus: string;
     CancelReason: string;
+
     AddedOn: string;
+
     Travellers: BookingTravellerDto[];
-    HealthInfos: any[]; // BookingHealthInfoDto not provided, using any
+    HealthInfos: BookingHealthInfoDto[];
     EmergencyContact: BookingEmergencyContactDto;
 }
 
+export interface BookingHealthInfoDto {
+    // Assuming structure based on usage or general expectations as it wasn't fully detailed in the snippet but referenced
+    // User snippet showed: public List<BookingHealthInfoDto> HealthInfos { get; set; }
+    // I will try to infer or keep it mostly generic if not provided, but actually I should add the definition if missing.
+    // Based on BookingHealthInfoSaveRequest:
+    BookingHealthInfoId: number;
+    BookingTravellerId: number;
+    MedicalConditions: string;
+    Allergies: string;
+    FitnessLevel: string;
+    InsuranceProvider: string;
+    InsurancePolicyNo: string;
+    EmergencyNotes: string;
+}
+
 export interface BookingEmergencyContactDto {
+    EmergencyContactId: number;
+    BookingId: number;
     FirstName: string;
     MiddleName: string;
     LastName: string;
@@ -125,6 +156,29 @@ export interface BookingPaymentGatewayLogDto {
     RawResponse: string;
 }
 
+export interface MyBookingItemDto {
+    RowTotal: number;
+    ProductName: string;
+    ProductUrl: string;
+    ProductType: string;
+    BookingId: number;
+    TravelDate?: string;
+    TotalTraveler: number;
+    BookingStatus: string;
+    ProductImage: string;
+    PaidAmount: number;
+    PendingAmount: number;
+    Email: string;
+    FirstName: string;
+    LastName: string;
+    PaymentStatus: string;
+    AddedOn: string;
+}
+
+export interface MyBookingListResponse {
+    Data: MyBookingItemDto[];
+}
+
 export interface UserBookingOpenRequest {
     Product: ProductSummaryDto;
     LeadCustomer: LeadCustomerDto;
@@ -167,6 +221,14 @@ export const bookingAPI = createApi({
     baseQuery: baseQueryWithAuth,
     tagTypes: ["Booking"],
     endpoints: (builder) => ({
+        getUserBooking: builder.query<MyBookingListResponse, PaginationParams>({
+            query: (params) => ({
+                url: "/api/v1/booking/user",
+                method: "GET",
+                params,
+            }),
+            providesTags: ["Booking"],
+        }),
         getAllBooking: builder.query<any, PaginationParams>({
             query: (params) => ({
                 url: "/api/v1/booking/all",
@@ -175,7 +237,7 @@ export const bookingAPI = createApi({
             }),
             providesTags: ["Booking"],
         }),
-        getBookingDetail: builder.query<BookingDetailDto, number>({
+        getBookingDetail: builder.query<ApiResponse<BookingDetailDto>, number>({
             query: (id) => ({
                 url: `/api/v1/booking/detail/${id}`,
                 method: "GET",
@@ -363,6 +425,7 @@ export const bookingAPI = createApi({
 });
 
 export const {
+    useGetUserBookingQuery,
     useGetAllBookingQuery,
     useGetBookingDetailQuery,
     useOpenUserBookingMutation,

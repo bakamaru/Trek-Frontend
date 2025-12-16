@@ -4,6 +4,9 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import BlogCard from '../components/blog/BlogCard';
 import { useGetLatestPostsQuery } from '../redux/api/blogAPI';
 import { Post } from '../types/blogTypes';
+import { motion } from 'framer-motion';
+
+import SEO from '../components/SEO';
 
 const BlogList: React.FC = () => {
     const [page, setPage] = useState(1);
@@ -43,13 +46,40 @@ const BlogList: React.FC = () => {
     };
 
     return (
-        <div className="pt-20">
-            <section className="bg-gray-100 dark:bg-gray-800 py-20 text-center">
-                <div className="container mx-auto px-4">
-                    <h1 className="text-5xl font-extrabold text-gray-800 dark:text-gray-100">Our Blog</h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-400 mt-4 max-w-3xl mx-auto">Travel stories, tips, and inspiration from the Territory Himalayas team.</p>
+        <>
+            <SEO
+                title="Travel Blog - Territory Himalayas | Trekking Tips & Stories"
+                description="Read our latest travel stories, trekking tips, and guides for exploring the Himalayas. Stay inspired for your next adventure."
+            />
+            {/* Hero Section */}
+            <div className="relative h-[50vh] min-h-[400px] flex items-center justify-center bg-gray-900 overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+                        alt="Himalayan Mountains"
+                        className="w-full h-full object-cover opacity-50"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
                 </div>
-            </section>
+
+                <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-4xl md:text-6xl font-extrabold text-white mb-4"
+                    >
+                        Our Blog
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-lg md:text-xl text-gray-200"
+                    >
+                        Travel stories, tips, and inspiration from the Territory Himalayas team.
+                    </motion.p>
+                </div>
+            </div>
 
             <section className="py-20">
                 <div className="container mx-auto px-4">
@@ -91,7 +121,7 @@ const BlogList: React.FC = () => {
                     )}
                 </div>
             </section>
-        </div>
+        </>
     );
 };
 

@@ -35,6 +35,7 @@ export interface AccessibilitySaveRequest {
     name?: string;
     description?: string;
     isActive?: boolean;
+    accessibilityLevelId?: number; // Added to match DTO if needed later or remove if strict
 }
 
 export interface ActivityLevelSaveRequest {
@@ -355,15 +356,129 @@ export interface ApiResponse<T> {
     Errors: string[];
 }
 
-export interface TrekWhyUsSaveRequest {
-    trekWhyUsId?: number;
-    description?: string;
-    displayOrder?: number;
+export interface TrekImageDto {
+    TrekImageId: number;
+    TrekId: number;
+    ImagePath: string;
+    IsLandscape: boolean;
+    IsBannerType: boolean;
+    IsVertical: boolean;
 }
 
-// Common params
-export interface PaginationParams {
-    offset?: number;
-    limit?: number;
-    query?: string;
+export interface ItineraryDto {
+    ItineraryId: number;
+    TrekId: number;
+    DayNumber: number;
+    DayTitle: string;
+    StartLocation: string;
+    OvernightLocation: string;
+    TrekTimeHours: number;
+    TrekDistanceKM: number;
+    TransportMethod: string;
+    AccommodationType: string;
+    MealsIncluded: string;
+    DailyActivityDetails: string;
+}
+
+export interface TrekInclusionExclusionDto {
+    TrekInclusionExclusionId: number;
+    TrekId: number;
+    Description: string;
+    IsIncluded: boolean;
+    IsOptional: boolean;
+    OptionalCostDetails: string;
+}
+
+export interface TrekHighLightDto {
+    TrekHighLightId: number;
+    TrekId: number;
+    Description: string;
+    DisplayOrder: number;
+}
+
+export interface TrekWhyUsDto {
+    TrekWhyUsId: number;
+    TrekId: number;
+    Description: string;
+    DisplayOrder: number;
+}
+
+export interface TrekRecommendedSessionDto {
+    TrekRecommendedSessionId: number;
+    SessionName: string;
+}
+
+export interface TrekFAQDto {
+    TrekFAQId: number;
+    TrekId: number;
+    Category: string;
+    Question: string;
+    Solution: string;
+    Priority: number;
+}
+
+export interface TrekReviewDto {
+    TrekReviewId: number;
+    TrekId: number;
+    Star: number;
+    Review: string;
+    ReviewedByName: string;
+    // Date not in JSON example but implied by previous interface, keeping simplified if unsure or removing if mismatch. 
+    // JSON had "IsApproved": true. 
+    IsApproved: boolean;
+}
+
+export interface TrekDepartureDto {
+    TrekDepartureId: number;
+    StartDate: string;
+    EndDate: string;
+    SeatsTotal: number;
+    SeatsSold: number;
+    BasePrice: number;
+    CurrencyCode: string; // Not in JSON example but inferred or keeping generic
+}
+
+export interface TrekGuideDto {
+    TrekGuideId: number;
+    GuideName: string;
+    IsRecommended: boolean;
+}
+
+export interface TrekDetailDto {
+    TrekId: number;
+    TrekCategoryId: number;
+    TrekRegionId: number;
+    TrekCategoryName: string;
+    TrekRegionName: string;
+    Name: string;
+    Url: string;
+    Description: string;
+    ActivityTypeId: number;
+    ActivityLevelId: number;
+    DurationDays: number;
+    PriceInUSD: number;
+    PriceInNrs: number;
+    MaxAltitudeMeters: number;
+    MaxAltitudeFeet: number;
+    StartingPoint: string;
+    EndingPoint: string;
+    OverviewDescription: string;
+    BaseAccommodationType: string;
+    StartCityId: number;
+    EndCityId: number;
+    DefaultCurrencyId: number;
+    TrekMap: string;
+    IsVerified: boolean;
+    IsSystem: boolean;
+    IsActive: boolean;
+    Gallery: TrekImageDto[];
+    Itineraries: ItineraryDto[];
+    InclusionsExclusions: TrekInclusionExclusionDto[];
+    Highlights: TrekHighLightDto[];
+    WhyUs: TrekWhyUsDto[];
+    RecommendedSessions: TrekRecommendedSessionDto[];
+    Faqs: TrekFAQDto[];
+    Reviews: TrekReviewDto[];
+    Departures: TrekDepartureDto[];
+    Guides: TrekGuideDto[];
 }
