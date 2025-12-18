@@ -26,3 +26,7 @@ package-lock.json
 yarn.lock
 tsconfig.tsbuildinfo
 tsconfig.node.tsbuildinfo
+/publicui/package-lock.json
+/publicui/*.tsbuildinfo
+/adminui/*.tsbuildinfo
+/adminui/package-lock.json
