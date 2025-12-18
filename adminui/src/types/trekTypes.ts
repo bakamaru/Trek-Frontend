@@ -220,7 +220,7 @@ export interface ItinerarySaveRequest {
     overnightLocation?: string;
     startLocationId?: number;
     endLocationId?: number;
-    trekTimeHours?: number;
+    trekTimeHours?: string;
     trekDistanceKM?: number;
     transportMethod?: string;
     accommodationType?: string;
@@ -273,7 +273,22 @@ export interface TrekBasicSaveRequest {
     isVerified?: boolean;
     isSystem?: boolean;
     isActive?: boolean;
+    destinationId?: number;
+    isPopular?: boolean;
+    isTrending?: boolean;
 }
+
+export interface BookingDashboardSummaryDto {
+    TodayBookings: number;
+    TodayAmount: number;
+    ThisMonthBookings: number;
+    ThisMonthAmount: number;
+    TotalBookings: number;
+    TotalAmount: number;
+    PendingPaymentsCount: number;
+    PendingPaymentsAmount: number;
+}
+
 
 export interface TrekDepartureSaveRequest {
     trekDepartureId?: number;

@@ -1,43 +1,74 @@
-import GridShape from "../../components/common/GridShape";
-import { Link } from "react-router";
+import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 import PageMeta from "../../components/common/PageMeta";
 
 export default function NotFound() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <>
       <PageMeta
-        title="React.js 404 Dashboard | TailAdmin - React.js Admin Dashboard Template"
-        description="This is React.js 404 Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="404 - Lost on the Trail | Territory Himalay"
+        description="The page you are looking for seems to have wandered off the map."
       />
-      <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">
-        <GridShape />
-        <div className="mx-auto w-full max-w-[242px] text-center sm:max-w-[472px]">
-          <h1 className="mb-8 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl">
-            ERROR
+      <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gray-900 text-white font-sans">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('#')",
+            filter: "brightness(0.4)"
+          }}
+        />
+
+        {/* Content Container */}
+        <div className={`relative z-10 mx-auto w-full max-w-screen-md px-6 text-center transition-all duration-1000 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+
+          {/* Brand Label */}
+          <div className="mb-6 tracking-[0.2em] text-sm font-medium uppercase text-gray-300">
+            Territory Himalaya
+          </div>
+
+          {/* Large 404 Text */}
+          <h1 className="mb-4 text-9xl font-black tracking-tighter text-white opacity-90 sm:text-[12rem] bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50"
+            style={{ WebkitTextStroke: '2px transparent' }}>
+            404
           </h1>
 
-          <img src="/images/error/404.svg" alt="404" className="dark:hidden" />
-          <img
-            src="/images/error/404-dark.svg"
-            alt="404"
-            className="hidden dark:block"
-          />
+          {/* Message */}
+          <h2 className="mb-6 text-2xl font-bold leading-tight text-white sm:text-4xl">
+            You seem to be lost on the trail.
+          </h2>
 
-          <p className="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
-            We can’t seem to find the page you are looking for!
+          <p className="mb-10 text-lg text-gray-300 sm:w-2/3 mx-auto">
+            The path you followed has ended or shifted. Before the cold sets in, let's get you back to safety.
           </p>
 
+          {/* CTA Button */}
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-white px-8 py-4 font-bold text-gray-900 transition-all duration-300 hover:bg-gray-100 hover:ring-4 hover:ring-white/20 active:scale-95"
           >
-            Back to Home Page
+            <span className="mr-2">Return to Base Camp</span>
+            <svg
+              className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </Link>
         </div>
-        {/* <!-- Footer --> */}
-        <p className="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
-          &copy; {new Date().getFullYear()} - TailAdmin
-        </p>
+
+        {/* Footer */}
+        <div className={`absolute bottom-8 left-0 w-full text-center text-sm text-gray-500 transition-opacity duration-1000 delay-500 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+          &copy; {new Date().getFullYear()} Territory Himalaya. All rights reserved.
+        </div>
       </div>
     </>
   );

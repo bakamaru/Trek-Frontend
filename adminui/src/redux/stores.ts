@@ -28,6 +28,12 @@ import { trekCategoryAPI } from "./trek/trekCategoryAPI";
 import { trekRegionAPI } from "./trek/trekRegionAPI";
 import { blogAPI } from "./trek/blogAPI";
 import { bannerAPI } from "./trek/bannerAPI";
+import { destinationAPI } from "./trek/destinationAPI";
+import { settingAPI } from "./setting/settingAPI";
+import { mediaLibraryAPI } from "./setting/medialibraryAPI";
+import { localizationAPI } from "./setting/localizationAPI";
+import { permissionAPI } from "./setting/permissionAPI";
+import { moduleAPI } from "./setting/moduleAPI";
 
 
 export const store = configureStore({
@@ -60,6 +66,13 @@ export const store = configureStore({
     [trekRegionAPI.reducerPath]: trekRegionAPI.reducer,
     [blogAPI.reducerPath]: blogAPI.reducer,
     [bannerAPI.reducerPath]: bannerAPI.reducer,
+    [destinationAPI.reducerPath]: destinationAPI.reducer,
+    [settingAPI.reducerPath]: settingAPI.reducer,
+    [mediaLibraryAPI.reducerPath]: mediaLibraryAPI.reducer,
+    [localizationAPI.reducerPath]: localizationAPI.reducer,
+    [moduleAPI.reducerPath]: moduleAPI.reducer,
+    [permissionAPI.reducerPath]: permissionAPI.reducer,
+
 
 
   },
@@ -93,6 +106,12 @@ export const store = configureStore({
       trekRegionAPI.middleware,
       blogAPI.middleware,
       bannerAPI.middleware,
+      destinationAPI.middleware,
+      settingAPI.middleware,
+      mediaLibraryAPI.middleware,
+      localizationAPI.middleware,
+      moduleAPI.middleware,
+      permissionAPI.middleware,
     ),
 });
 

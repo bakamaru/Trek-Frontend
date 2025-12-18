@@ -55,7 +55,13 @@ import BlogSettingForm from "../pages/SuperUser/Blog/BlogSettingForm";
 import BannerList from "../pages/SuperUser/Banner/BannerList";
 import BannerForm from "../pages/SuperUser/Banner/BannerForm";
 import BannerSlideEditor from "../pages/SuperUser/Banner/BannerSlideEditor";
-
+import CSP from "../pages/SuperUser/Setting/CSP";
+import API from "../pages/SuperUser/Setting/API";
+import Basic from "../pages/SuperUser/Setting/Basic";
+import File from "../pages/SuperUser/Setting/File";
+import Web from "../pages/SuperUser/Setting/Web";
+import Localization from "../pages/SuperUser/Sys/Localization";
+import LocalizationForm from "../pages/SuperUser/Sys/LocalizationForm";
 
 const appRoutes: RouteObject[] = [
   {
@@ -85,6 +91,16 @@ const superUserRoutes: RouteObject = {
   children: [
     { path: "dashboard", element: <Dashboard /> },
     { path: "menu", element: <MenuManagement /> },
+    { path: "setting/csp", element: <CSP /> },
+    { path: "setting/api", element: <API /> },
+    { path: "setting/basic", element: <Basic /> },
+    { path: "setting/file", element: <File /> },
+    { path: "setting/web", element: <Web /> },
+    //{ path: "setting/optimization", element: <Optimization /> },
+
+    { path: "sys/localization", element: <Localization /> },
+    { path: "sys/localization/new", element: <LocalizationForm /> },
+    { path: "sys/localization/edit/:id", element: <LocalizationForm /> },
 
     { path: "blog", element: <BlogList /> },
     { path: "blog/new", element: <BlogForm /> },
@@ -191,7 +207,11 @@ const adminRoutes: RouteObject = {
     { path: "aiassistant/new", element: <AIAssistantForm /> },
     { path: "aiassistant/edit", element: <AIAssistantForm /> },
     { path: "aiassistant/setting", element: <AIAssistantSetting /> },
-    { path: "agent/taskbuilder", element: <TaskBuilder /> },
+    { path: "agent/taskbuilder", element: <TaskBuilder /> }, { path: "banner/slides", element: <BannerSlideEditor /> },
+
+
+
+
   ],
 };
 

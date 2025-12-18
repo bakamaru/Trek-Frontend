@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ItinerarySaveRequest } from "../../../types/trekTypes";
+import { TrekBasicSaveRequest, ItinerarySaveRequest } from "../../../types/trekTypes";
 import { useSaveTrekItinerariesMutation } from "../../../redux/trek/trekAPI";
 import toaster from "../../toster";
+import { Editor } from "@tinymce/tinymce-react";
+import MultiSelect from "../../form/MultiSelect";
+import { useRef } from "react";
 
 interface ItineraryTabProps {
     trekId: number;
@@ -12,6 +15,32 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ trekId, detailData }) => {
     const [itineraries, setItineraries] = useState<ItinerarySaveRequest[]>([]);
     const [expandedDay, setExpandedDay] = useState<number | null>(null);
     const [saveItineraries, { isLoading: isSaving }] = useSaveTrekItinerariesMutation();
+    const editorRef = useRef<any>(null);
+
+    const transportOptions = [
+        { value: "Tourist Bus", text: "Tourist Bus" },
+        { value: "Private Vehicle", text: "Private Vehicle" },
+        { value: "Walking", text: "Walking" },
+        { value: "Cable Car", text: "Cable Car" },
+        { value: "Plane", text: "Plane" },
+        { value: "Other", text: "Other" },
+    ];
+
+    const accommodationOptions = [
+        { value: "Tea House", text: "Tea House" },
+        { value: "Lodge", text: "Lodge" },
+        { value: "Hotel", text: "Hotel" },
+        { value: "Villa", text: "Villa" },
+        { value: "Camp", text: "Camp" },
+        { value: "Home Stay", text: "Home Stay" },
+    ];
+
+    const mealOptions = [
+        { value: "B", text: "Breakfast (B)" },
+        { value: "L", text: "Lunch (L)" },
+        { value: "D", text: "Dinner (D)" },
+        { value: "S", text: "Snacks (S)" },
+    ];
 
     useEffect(() => {
         if (detailData && detailData.Code === 200) {
@@ -48,7 +77,7 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ trekId, detailData }) => {
                 overnightLocation: "",
                 startLocationId: 0,
                 endLocationId: 0,
-                trekTimeHours: 0,
+                trekTimeHours: "",
                 trekDistanceKM: 0,
                 transportMethod: "",
                 accommodationType: "",
@@ -193,10 +222,11 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ trekId, detailData }) => {
                                         <div>
                                             <label className="block text-xs font-medium text-gray-700">Trek Time (Hours)</label>
                                             <input
-                                                type="number"
-                                                value={day.trekTimeHours || 0}
-                                                onChange={(e) => handleDayChange(index, "trekTimeHours", parseFloat(e.target.value))}
+                                                type="text"
+                                                value={day.trekTimeHours || ""}
+                                                onChange={(e) => handleDayChange(index, "trekTimeHours", e.target.value)}
                                                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                                                placeholder="e.g. 5 to 6 hours"
                                             />
                                         </div>
 
@@ -214,43 +244,60 @@ const ItineraryTab: React.FC<ItineraryTabProps> = ({ trekId, detailData }) => {
                                     <div className="grid grid-cols-3 gap-3">
                                         <div>
                                             <label className="block text-xs font-medium text-gray-700">Transport Method</label>
-                                            <input
-                                                type="text"
+                                            <select
                                                 value={day.transportMethod || ""}
                                                 onChange={(e) => handleDayChange(index, "transportMethod", e.target.value)}
                                                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                                            >
+                                                <option value="">Select Transport</option>
+                                                {transportOptions.map((opt) => (
+                                                    <option key={opt.value} value={opt.value}>{opt.text}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <MultiSelect
+                                                label="Accommodation"
+                                                options={accommodationOptions}
+                                                defaultSelected={day.accommodationType ? day.accommodationType.split(',').map(s => s.trim()) : []}
+                                                onChange={(selected) => handleDayChange(index, "accommodationType", selected.join(','))}
                                             />
                                         </div>
 
                                         <div>
-                                            <label className="block text-xs font-medium text-gray-700">Accommodation</label>
-                                            <input
-                                                type="text"
-                                                value={day.accommodationType || ""}
-                                                onChange={(e) => handleDayChange(index, "accommodationType", e.target.value)}
-                                                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-xs font-medium text-gray-700">Meals Included</label>
-                                            <input
-                                                type="text"
-                                                value={day.mealsIncluded || ""}
-                                                onChange={(e) => handleDayChange(index, "mealsIncluded", e.target.value)}
-                                                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                                                placeholder="e.g., B, L, D"
+                                            <MultiSelect
+                                                label="Meals Included"
+                                                options={mealOptions}
+                                                defaultSelected={day.mealsIncluded ? day.mealsIncluded.split(',').map(s => s.trim()) : []}
+                                                onChange={(selected) => handleDayChange(index, "mealsIncluded", selected.join(','))}
                                             />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-medium text-gray-700">Daily Activity Details</label>
-                                        <textarea
-                                            rows={3}
+                                        <label className="block text-xs font-medium text-gray-700 mb-2">Daily Activity Details</label>
+                                        <Editor
+                                            apiKey="prsn1rfcskorh46nf7vvi1cmntpjwebj1krfdqfweex48c7k"
+                                            onInit={(_evt, editor) => (editorRef.current = editor)}
                                             value={day.dailyActivityDetails || ""}
-                                            onChange={(e) => handleDayChange(index, "dailyActivityDetails", e.target.value)}
-                                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                                            onEditorChange={(content) => handleDayChange(index, "dailyActivityDetails", content)}
+                                            init={{
+                                                height: 300,
+                                                menubar: false,
+                                                plugins: [
+                                                    "advlist", "autolink", "lists", "link", "image", "charmap", "preview",
+                                                    "anchor", "searchreplace", "visualblocks", "code", "fullscreen",
+                                                    "insertdatetime", "media", "table", "help", "wordcount"
+                                                ],
+                                                toolbar:
+                                                    "undo redo | blocks | " +
+                                                    "bold italic forecolor | alignleft aligncenter " +
+                                                    "alignright alignjustify | bullist numlist outdent indent | " +
+                                                    "removeformat | help",
+                                                content_style:
+                                                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                                            }}
                                         />
                                     </div>
 

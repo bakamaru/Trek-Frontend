@@ -3,12 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { TrekBasicSaveRequest } from "../../../../types/trekTypes";
 import { useGetTrekDetailQuery, useSaveTrekBasicMutation } from "../../../../redux/trek/trekAPI";
-import { useGetAllCurrencyActiveQuery } from "../../../../redux/trek/currencyAPI";
-import { useGetAllActivityTypeActiveQuery } from "../../../../redux/trek/activityTypeAPI";
-import { useGetAllActivityLevelActiveQuery } from "../../../../redux/trek/activityLevelAPI";
-import { useGetAllTrekRegionActiveQuery } from "../../../../redux/trek/trekRegionAPI";
-import { useGetAllTrekCategoryActiveQuery } from "../../../../redux/trek/trekCategoryAPI";
-import { useGetAllCityActiveQuery } from "../../../../redux/trek/cityAPI";
+import { useGetAllCurrencyActiveQuery, useSaveCurrencyMutation } from "../../../../redux/trek/currencyAPI";
+import { useGetAllActivityTypeActiveQuery, useSaveActivityTypeMutation } from "../../../../redux/trek/activityTypeAPI";
+import { useGetAllActivityLevelActiveQuery, useSaveActivityLevelMutation } from "../../../../redux/trek/activityLevelAPI";
+import { useGetAllTrekRegionActiveQuery, useSaveTrekRegionMutation } from "../../../../redux/trek/trekRegionAPI";
+import { useGetAllTrekCategoryActiveQuery, useSaveTrekCategoryMutation } from "../../../../redux/trek/trekCategoryAPI";
+import { useGetAllCityActiveQuery, useSaveCityMutation } from "../../../../redux/trek/cityAPI";
+import { useGetDestinationsActiveQuery, useSaveDestinationMutation } from "../../../../redux/trek/destinationAPI";
 import toaster from "../../../../components/toster";
 import ComponentCard from "../../../../components/common/ComponentCard";
 import BasicInfoTab from "../../../../components/trek/tabs/BasicInfoTab";
@@ -71,8 +72,16 @@ const TrekFormPage: React.FC = () => {
     const { data: activeRegions } = useGetAllTrekRegionActiveQuery({});
     const { data: activeCategories } = useGetAllTrekCategoryActiveQuery({});
     const { data: activeCities } = useGetAllCityActiveQuery({});
+    const { data: activeDestinations } = useGetDestinationsActiveQuery({});
 
     const [saveTrekBasic, { isLoading: isSaving }] = useSaveTrekBasicMutation();
+    const [saveCity] = useSaveCityMutation();
+    const [saveTrekCategory] = useSaveTrekCategoryMutation();
+    const [saveTrekRegion] = useSaveTrekRegionMutation();
+    const [saveActivityType] = useSaveActivityTypeMutation();
+    const [saveActivityLevel] = useSaveActivityLevelMutation();
+    const [saveCurrency] = useSaveCurrencyMutation();
+    const [saveDestination] = useSaveDestinationMutation();
 
     // Form setup
     const methods = useForm<TrekBasicSaveRequest>({
@@ -98,6 +107,9 @@ const TrekFormPage: React.FC = () => {
             defaultCurrencyId: 0,
             trekMap: "",
             isActive: true,
+            destinationId: 0,
+            isPopular: false,
+            isTrending: false,
         },
     });
 
@@ -139,6 +151,9 @@ const TrekFormPage: React.FC = () => {
                 defaultCurrencyId: trek.DefaultCurrencyId || 0,
                 trekMap: trek.TrekMap || "",
                 isActive: trek.IsActive ?? true,
+                destinationId: trek.DestinationId || 0,
+                isPopular: trek.IsPopular ?? false,
+                isTrending: trek.IsTrending ?? false,
             });
         }
     }, [detailData, reset]);
@@ -172,6 +187,162 @@ const TrekFormPage: React.FC = () => {
 
     const handleCancel = () => {
         navigate("/superadmin/trek/trek");
+    };
+
+    const handleCityCreation = async (val: string) => {
+        try {
+            const result = await saveCity({
+                name: val,
+                countryId: 149,
+                stateProvince: "Bagmati",
+                isActive: true
+            }).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("City created successfully");
+                return result.Data?.CityId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create city");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating city");
+            return null;
+        }
+    };
+
+    const handleCategoryCreation = async (val: string) => {
+        try {
+            const result = await saveTrekCategory({
+                trekCategoryId: 0,
+                name: val,
+                description: "",
+                isActive: true
+            }).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("Category created successfully");
+                return result.Data?.TrekCategoryId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create category");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating category");
+            return null;
+        }
+    };
+
+    const handleRegionCreation = async (val: string) => {
+        try {
+            const result = await saveTrekRegion({
+                trekRegionId: 0,
+                name: val,
+                description: "",
+                isActive: true
+            }).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("Region created successfully");
+                return result.Data?.TrekRegionId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create region");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating region");
+            return null;
+        }
+    };
+
+    const handleActivityTypeCreation = async (val: string) => {
+        try {
+            const result = await saveActivityType({
+                activityTypeId: 0,
+                name: val,
+                description: "",
+                isActive: true
+            }).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("Activity Type created successfully");
+                return result.Data?.ActivityTypeId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create activity type");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating activity type");
+            return null;
+        }
+    };
+
+    const handleActivityLevelCreation = async (val: string) => {
+        try {
+            const result = await saveActivityLevel({
+                activityLevelId: 0,
+                name: val,
+                description: "",
+                isActive: true
+            }).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("Activity Level created successfully");
+                return result.Data?.ActivityLevelId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create activity level");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating activity level");
+            return null;
+        }
+    };
+
+    const handleCurrencyCreation = async (val: string) => {
+        try {
+            const result = await saveCurrency({
+                currencyId: 0,
+                name: val,
+                code: val.substring(0, 3).toUpperCase(),
+                symbol: "",
+                isActive: true
+            }).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("Currency created successfully");
+                return result.Data?.CurrencyId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create currency");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating currency");
+            return null;
+        }
+    };
+
+    const handleDestinationCreation = async (val: string) => {
+        try {
+            const formData = new FormData();
+            formData.append("destinationId", "0");
+            formData.append("name", val);
+            formData.append("countryId", "149");
+            formData.append("isActive", "true");
+
+            const result = await saveDestination(formData).unwrap();
+
+            if (result.Code === 200) {
+                toaster.success("Destination created successfully");
+                return result.Data?.DestinationId || result.Data;
+            } else {
+                toaster.error(result.Message || "Failed to create destination");
+                return null;
+            }
+        } catch (error: any) {
+            toaster.error(error?.data?.Message || "Error creating destination");
+            return null;
+        }
     };
 
     const isNewTrek = trekId === 0;
@@ -223,6 +394,14 @@ const TrekFormPage: React.FC = () => {
                                                 activeActivityLevels={activeActivityLevels}
                                                 activeCities={activeCities}
                                                 activeCurrencies={activeCurrencies}
+                                                activeDestinations={activeDestinations}
+                                                onCategoryCreate={handleCategoryCreation}
+                                                onRegionCreate={handleRegionCreation}
+                                                onActivityTypeCreate={handleActivityTypeCreation}
+                                                onActivityLevelCreate={handleActivityLevelCreation}
+                                                onCityCreate={handleCityCreation}
+                                                onCurrencyCreate={handleCurrencyCreation}
+                                                onDestinationCreate={handleDestinationCreation}
                                             />
                                         )}
                                         {activeTab === "gallery" && <GalleryTab trekId={trekId} detailData={detailData} />}

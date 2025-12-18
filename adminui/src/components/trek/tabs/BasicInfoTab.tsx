@@ -1,6 +1,12 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import React, { useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { useLocation } from "react-router";
+
 import { TrekBasicSaveRequest } from "../../../types/trekTypes";
+import { Editor } from "@tinymce/tinymce-react";
+import { useRef } from "react";
+import MultiSelect from "../../form/MultiSelect";
+import SelectCreatable from "../../ui/SelectCreateable";
 
 interface BasicInfoTabProps {
     activeCategories: any;
@@ -9,6 +15,14 @@ interface BasicInfoTabProps {
     activeActivityLevels: any;
     activeCities: any;
     activeCurrencies: any;
+    activeDestinations?: any;
+    onCategoryCreate?: (name: string) => Promise<number | null>;
+    onRegionCreate?: (name: string) => Promise<number | null>;
+    onActivityTypeCreate?: (name: string) => Promise<number | null>;
+    onActivityLevelCreate?: (name: string) => Promise<number | null>;
+    onCityCreate?: (name: string) => Promise<number | null>;
+    onCurrencyCreate?: (name: string) => Promise<number | null>;
+    onDestinationCreate?: (name: string) => Promise<number | null>;
 }
 
 const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
@@ -18,11 +32,142 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
     activeActivityLevels,
     activeCities,
     activeCurrencies,
+    activeDestinations,
+    onCategoryCreate,
+    onRegionCreate,
+    onActivityTypeCreate,
+    onActivityLevelCreate,
+    onCityCreate,
+    onCurrencyCreate,
+    onDestinationCreate,
 }) => {
     const {
         register,
+        control,
         formState: { errors },
+        watch,
+        setValue,
     } = useFormContext<TrekBasicSaveRequest>();
+
+    const location = useLocation();
+    const isEditMode = location.pathname.includes("edit");
+
+    const slugify = (text: string) => {
+        if (!text) return "";
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/--+/g, '-');
+    };
+
+    const trekName = watch("name");
+
+    useEffect(() => {
+        if (trekName) {
+            setValue("url", slugify(trekName), { shouldValidate: true });
+        }
+    }, [trekName, setValue]);
+
+    const editorRef = useRef<any>(null);
+
+    const accommodationOptions = [
+        { value: "Tea House", text: "Tea House" },
+        { value: "Lodge", text: "Lodge" },
+        { value: "Hotel", text: "Hotel" },
+        { value: "Villa", text: "Villa" },
+        { value: "Camp", text: "Camp" },
+        { value: "Home Stay", text: "Home Stay" },
+    ];
+
+    // Options Transformation
+    const categoryOptions = activeCategories?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.TrekCategoryId,
+    })) || [];
+
+    const regionOptions = activeRegions?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.TrekRegionId,
+    })) || [];
+
+    const activityTypeOptions = activeActivityTypes?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.ActivityTypeId,
+    })) || [];
+
+    const activityLevelOptions = activeActivityLevels?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.ActivityLevelId,
+    })) || [];
+
+    const cityOptions = activeCities?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.CityId,
+    })) || [];
+
+    const currencyOptions = activeCurrencies?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.CurrencyId,
+    })) || [];
+
+    const destinationOptions = activeDestinations?.Data?.map((item: any) => ({
+        label: item.Name,
+        value: item.DestinationId,
+    })) || [];
+
+    // Placeholder Creation Handlers
+    const handleCategoryCreation = async (val: string) => {
+        if (onCategoryCreate) {
+            return await onCategoryCreate(val);
+        }
+        console.log("Create Category:", val);
+        return null;
+    };
+    const handleRegionCreation = async (val: string) => {
+        if (onRegionCreate) {
+            return await onRegionCreate(val);
+        }
+        console.log("Create Region:", val);
+        return null;
+    };
+    const handleActivityTypeCreation = async (val: string) => {
+        if (onActivityTypeCreate) {
+            return await onActivityTypeCreate(val);
+        }
+        console.log("Create Activity Type:", val);
+        return null;
+    };
+    const handleActivityLevelCreation = async (val: string) => {
+        if (onActivityLevelCreate) {
+            return await onActivityLevelCreate(val);
+        }
+        console.log("Create Activity Level:", val);
+        return null;
+    };
+    const handleCityCreation = async (val: string) => {
+        if (onCityCreate) {
+            return await onCityCreate(val);
+        }
+        console.log("Create City:", val);
+        return null;
+    };
+    const handleCurrencyCreation = async (val: string) => {
+        if (onCurrencyCreate) {
+            return await onCurrencyCreate(val);
+        }
+        console.log("Create Currency:", val);
+        return null;
+    };
+    const handleDestinationCreation = async (val: string) => {
+        if (onDestinationCreate) {
+            return await onDestinationCreate(val);
+        }
+        console.log("Create Destination:", val);
+        return null;
+    };
 
     return (
         <div className="space-y-6">
@@ -70,76 +215,108 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
 
                 {/* Category, Region, Activity Type, Activity Level */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {/* Trek Category */}
                     <div>
-                        <label htmlFor="trekCategoryId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Trek Category
-                        </label>
-                        <select
-                            id="trekCategoryId"
-                            {...register("trekCategoryId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select Category</option>
-                            {activeCategories?.Data?.map((item: any) => (
-                                <option key={item.TrekCategoryId} value={item.TrekCategoryId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
+                        <Controller
+                            control={control}
+                            name="trekCategoryId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Trek Category"
+                                    options={categoryOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleCategoryCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Category"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        categoryOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.trekCategoryId?.message}
+                                />
+                            )}
+                        />
                     </div>
 
+                    {/* Trek Region */}
                     <div>
-                        <label htmlFor="trekRegionId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Trek Region
-                        </label>
-                        <select
-                            id="trekRegionId"
-                            {...register("trekRegionId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select Region</option>
-                            {activeRegions?.Data?.map((item: any) => (
-                                <option key={item.TrekRegionId} value={item.TrekRegionId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
+                        <Controller
+                            control={control}
+                            name="trekRegionId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Trek Region"
+                                    options={regionOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleRegionCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Region"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        regionOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.trekRegionId?.message}
+                                />
+                            )}
+                        />
                     </div>
 
+                    {/* Activity Type */}
                     <div>
-                        <label htmlFor="activityTypeId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Activity Type
-                        </label>
-                        <select
-                            id="activityTypeId"
-                            {...register("activityTypeId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select Activity Type</option>
-                            {activeActivityTypes?.Data?.map((item: any) => (
-                                <option key={item.ActivityTypeId} value={item.ActivityTypeId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
+                        <Controller
+                            control={control}
+                            name="activityTypeId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Activity Type"
+                                    options={activityTypeOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleActivityTypeCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Activity Type"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        activityTypeOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.activityTypeId?.message}
+                                />
+                            )}
+                        />
                     </div>
 
+                    {/* Activity Level */}
                     <div>
-                        <label htmlFor="activityLevelId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Activity Level
-                        </label>
-                        <select
-                            id="activityLevelId"
-                            {...register("activityLevelId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select Activity Level</option>
-                            {activeActivityLevels?.Data?.map((item: any) => (
-                                <option key={item.ActivityLevelId} value={item.ActivityLevelId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
+                        <Controller
+                            control={control}
+                            name="activityLevelId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Activity Level"
+                                    options={activityLevelOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleActivityLevelCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Activity Level"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        activityLevelOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.activityLevelId?.message}
+                                />
+                            )}
+                        />
                     </div>
                 </div>
 
@@ -213,6 +390,170 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
                     </div>
                 </div>
 
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {/* Destination */}
+                    <div>
+                        <Controller
+                            control={control}
+                            name="destinationId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Destination"
+                                    options={destinationOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleDestinationCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Destination"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        destinationOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.destinationId?.message}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div>
+
+                        <Controller
+                            name="baseAccommodationType"
+                            control={control}
+                            render={({ field }) => (
+                                <MultiSelect
+                                    label="Accommodation Type"
+                                    options={accommodationOptions}
+                                    defaultSelected={field.value ? field.value.split(',').map(s => s.trim()) : []}
+                                    onChange={(selected) => field.onChange(selected.join(','))}
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
+
+
+
+                {/* Overview Description */}
+                <div>
+                    <label htmlFor="overviewDescription" className="block text-xs font-medium text-gray-700 uppercase mb-2">
+                        Overview Description
+                    </label>
+                    <Controller
+                        name="overviewDescription"
+                        control={control}
+                        render={({ field }) => (
+                            <Editor
+                                apiKey="prsn1rfcskorh46nf7vvi1cmntpjwebj1krfdqfweex48c7k"
+                                onInit={(_evt, editor) => (editorRef.current = editor)}
+                                value={field.value}
+                                onEditorChange={(content) => field.onChange(content)}
+                                onBlur={field.onBlur}
+                                init={{
+                                    height: 300,
+                                    menubar: false,
+                                    plugins: [
+                                        "advlist", "autolink", "lists", "link", "image", "charmap", "preview",
+                                        "anchor", "searchreplace", "visualblocks", "code", "fullscreen",
+                                        "insertdatetime", "media", "table", "help", "wordcount"
+                                    ],
+                                    toolbar:
+                                        "undo redo | blocks | " +
+                                        "bold italic forecolor | alignleft aligncenter " +
+                                        "alignright alignjustify | bullist numlist outdent indent | " +
+                                        "removeformat | help",
+                                    content_style:
+                                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                                }}
+                            />
+                        )}
+                    />
+                </div>
+
+                {/* Accommodation Type */}
+
+
+                {/* City IDs */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {/* Start City */}
+                    <div>
+                        <Controller
+                            control={control}
+                            name="startCityId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Start City"
+                                    options={cityOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleCityCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Start City"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        cityOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.startCityId?.message}
+                                />
+                            )}
+                        />
+                    </div>
+
+                    {/* End City */}
+                    <div>
+                        <Controller
+                            control={control}
+                            name="endCityId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="End City"
+                                    options={cityOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleCityCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select End City"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        cityOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.endCityId?.message}
+                                />
+                            )}
+                        />
+                    </div>
+
+                    {/* Default Currency */}
+                    <div>
+                        <Controller
+                            control={control}
+                            name="defaultCurrencyId"
+                            render={({ field }) => (
+                                <SelectCreatable
+                                    labelText="Default Currency"
+                                    options={currencyOptions}
+                                    onCreateOption={async (val) => {
+                                        const id = await handleCurrencyCreation(val);
+                                        if (id) field.onChange(id);
+                                    }}
+                                    placeholder="Select Currency"
+                                    onChange={(option) => field.onChange(option?.value)}
+                                    value={
+                                        currencyOptions.find(
+                                            (opt: any) => opt.value === field.value
+                                        ) || null
+                                    }
+                                    error={errors.defaultCurrencyId?.message}
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
                 {/* Starting & Ending Points */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
@@ -241,92 +582,6 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
                         />
                     </div>
                 </div>
-
-                {/* Overview Description */}
-                <div>
-                    <label htmlFor="overviewDescription" className="block text-xs font-medium text-gray-700 uppercase">
-                        Overview Description
-                    </label>
-                    <textarea
-                        id="overviewDescription"
-                        rows={4}
-                        {...register("overviewDescription")}
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        placeholder="Brief overview of the trek..."
-                    />
-                </div>
-
-                {/* Accommodation Type */}
-                <div>
-                    <label htmlFor="baseAccommodationType" className="block text-xs font-medium text-gray-700 uppercase">
-                        Base Accommodation Type
-                    </label>
-                    <input
-                        type="text"
-                        id="baseAccommodationType"
-                        {...register("baseAccommodationType")}
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        placeholder="e.g., Teahouse, Lodge"
-                    />
-                </div>
-
-                {/* City IDs */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div>
-                        <label htmlFor="startCityId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Start City
-                        </label>
-                        <select
-                            id="startCityId"
-                            {...register("startCityId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select Start City</option>
-                            {activeCities?.Data?.map((item: any) => (
-                                <option key={item.CityId} value={item.CityId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="endCityId" className="block text-xs font-medium text-gray-700 uppercase">
-                            End City
-                        </label>
-                        <select
-                            id="endCityId"
-                            {...register("endCityId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select End City</option>
-                            {activeCities?.Data?.map((item: any) => (
-                                <option key={item.CityId} value={item.CityId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="defaultCurrencyId" className="block text-xs font-medium text-gray-700 uppercase">
-                            Default Currency
-                        </label>
-                        <select
-                            id="defaultCurrencyId"
-                            {...register("defaultCurrencyId", { valueAsNumber: true })}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-                        >
-                            <option value={0}>Select Currency</option>
-                            {activeCurrencies?.Data?.map((item: any) => (
-                                <option key={item.CurrencyId} value={item.CurrencyId}>
-                                    {item.Name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-
                 {/* Is Active */}
                 <div className="flex items-center">
                     <input
@@ -338,6 +593,33 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
                     <label htmlFor="isActive" className="ml-2 text-sm text-gray-700">
                         Active
                     </label>
+                </div>
+
+                {/* Popular & Trending */}
+                <div className="flex gap-6">
+                    <div className="flex items-center">
+                        <input
+                            type="checkbox"
+                            id="isPopular"
+                            {...register("isPopular")}
+                            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                        />
+                        <label htmlFor="isPopular" className="ml-2 text-sm text-gray-700">
+                            Is Popular
+                        </label>
+                    </div>
+
+                    <div className="flex items-center">
+                        <input
+                            type="checkbox"
+                            id="isTrending"
+                            {...register("isTrending")}
+                            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                        />
+                        <label htmlFor="isTrending" className="ml-2 text-sm text-gray-700">
+                            Is Trending
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
