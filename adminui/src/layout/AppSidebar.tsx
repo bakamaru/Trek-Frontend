@@ -307,9 +307,10 @@ const sunavItems: NavItem[] = [
       { name: "Menu", path: "/superadmin/menu", pro: false },
       // { name: "Template Editor", path: "/superadmin/template/editor", pro: false },
       { name: "Media Library", path: "/superadmin/media", pro: false },
-      { name: "Html Content Builder", path: "/superadmin/htmlcontentbuilder", pro: false },
+      { name: "Html Builder", path: "/superadmin/htmlbuilder", pro: false },
+      { name: "Html Component Builder", path: "/superadmin/componentbuilder", pro: false },
       // {
-      //   name: "Html Content Builder",
+      //   name: "Html Content Builder
       //   path: "/superadmin/html/builder",
       //   pro: false,
       // },

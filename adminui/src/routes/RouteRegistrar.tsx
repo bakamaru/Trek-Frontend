@@ -62,6 +62,10 @@ import File from "../pages/SuperUser/Setting/File";
 import Web from "../pages/SuperUser/Setting/Web";
 import Localization from "../pages/SuperUser/Sys/Localization";
 import LocalizationForm from "../pages/SuperUser/Sys/LocalizationForm";
+import BuilderPage from "../pages/SuperUser/HtmlBuilder/BuilderPage";
+import MediaLibraryPage from "../pages/SuperUser/MediaLibrary/MediaLibraryPage";
+import ComponentBuilderList from "../pages/SuperUser/HtmlBuilder/ComponentBuilderList";
+import ComponentBuilder from "../pages/SuperUser/HtmlBuilder/ComponentBuilder";
 
 const appRoutes: RouteObject[] = [
   {
@@ -96,6 +100,12 @@ const superUserRoutes: RouteObject = {
     { path: "setting/basic", element: <Basic /> },
     { path: "setting/file", element: <File /> },
     { path: "setting/web", element: <Web /> },
+    { path: "htmlbuilder", element: <BuilderPage /> },
+    { path: "componentbuilder", element: <ComponentBuilderList /> },
+    { path: "componentbuilder/new", element: <ComponentBuilder /> },
+    { path: "componentbuilder/edit", element: <ComponentBuilder /> },
+    { path: "media", element: <MediaLibraryPage /> },
+
     //{ path: "setting/optimization", element: <Optimization /> },
 
     { path: "sys/localization", element: <Localization /> },

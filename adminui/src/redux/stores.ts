@@ -34,6 +34,7 @@ import { mediaLibraryAPI } from "./setting/medialibraryAPI";
 import { localizationAPI } from "./setting/localizationAPI";
 import { permissionAPI } from "./setting/permissionAPI";
 import { moduleAPI } from "./setting/moduleAPI";
+import { htmlBuilderAPI } from "./htmlbuilder/htmlBuilderAPI";
 
 
 export const store = configureStore({
@@ -72,6 +73,7 @@ export const store = configureStore({
     [localizationAPI.reducerPath]: localizationAPI.reducer,
     [moduleAPI.reducerPath]: moduleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
+    [htmlBuilderAPI.reducerPath]: htmlBuilderAPI.reducer,
 
 
 
@@ -112,6 +114,7 @@ export const store = configureStore({
       localizationAPI.middleware,
       moduleAPI.middleware,
       permissionAPI.middleware,
+      htmlBuilderAPI.middleware,
     ),
 });
 
