@@ -35,6 +35,7 @@ import { localizationAPI } from "./setting/localizationAPI";
 import { permissionAPI } from "./setting/permissionAPI";
 import { moduleAPI } from "./setting/moduleAPI";
 import { htmlBuilderAPI } from "./htmlbuilder/htmlBuilderAPI";
+import { openIddictAdminAPI } from "./setting/clientAPI";
 
 
 export const store = configureStore({
@@ -74,6 +75,7 @@ export const store = configureStore({
     [moduleAPI.reducerPath]: moduleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
     [htmlBuilderAPI.reducerPath]: htmlBuilderAPI.reducer,
+    [openIddictAdminAPI.reducerPath]: openIddictAdminAPI.reducer,
 
 
 
@@ -115,6 +117,7 @@ export const store = configureStore({
       moduleAPI.middleware,
       permissionAPI.middleware,
       htmlBuilderAPI.middleware,
+      openIddictAdminAPI.middleware,
     ),
 });
 

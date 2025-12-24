@@ -97,11 +97,10 @@ const TagsInput = ({
             onKeyDown={handleKeyDown}
             onFocus={() => setShowSuggestions(true)}
             placeholder={placeholder}
-            className={`w-full px-4 py-2 border rounded-md disabled:bg-slate-200 disabled:text-slate-500 group-hover:border-gray-500 ${
-              error
+            className={`w-full px-4 py-2 border rounded-md disabled:bg-slate-200 disabled:text-slate-500 group-hover:border-gray-500 ${error
                 ? "border-red-500 focus:ring-red-500"
                 : "border-gray-300 focus:outline-primary"
-            }`}
+              }`}
           />
         </div>
 
@@ -148,13 +147,14 @@ const TagsInput = ({
         {value?.map((tag, index) => (
           <div
             key={index}
-            className={`flex items-center rounded-full p-2 border text-sm transition-colors bg-secondary-dark text-white border-secondary-dark`}
+            className={`flex items-center rounded-full px-3 py-1 border text-sm transition-colors bg-brand-500 text-white border-brand-500`}
           >
-            <span className="px-2">{tag}</span>
+            <span className="px-1">{tag}</span>
             <button
               type="button"
               onClick={() => removeTag(tag)}
               aria-label={`Remove ${tag}`}
+              className="ml-2 hover:text-red-200 transition-colors"
             >
               <IoClose size={18} className="text-white" />
             </button>

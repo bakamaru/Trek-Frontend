@@ -206,112 +206,112 @@ const adminnavItems: NavItem[] = [
   ;
 
 const sunavItems: NavItem[] = [
-  { icon: <GridIcon />, name: "Dashboard", path: "/superadmin/dashboard" },
+  { icon: <GridIcon />, name: "Dashboard", path: "/admin/dashboard" },
   {
     icon: <BoxCubeIcon />,
     name: "Banner",
     subItems: [
-      { name: "Banner", path: "/superadmin/banner", pro: false }
+      { name: "Banner", path: "/admin/banner", pro: false }
     ],
   },
   {
     icon: <BoxCubeIcon />,
     name: "Blog",
     subItems: [
-      { name: "Posts", path: "/superadmin/blog", pro: false },
-      { name: "Category", path: "/superadmin/blog/category", pro: false },
-      { name: "Setting", path: "/superadmin/blog/setting", pro: false },
+      { name: "Posts", path: "/admin/blog", pro: false },
+      { name: "Category", path: "/admin/blog/category", pro: false },
+      { name: "Setting", path: "/admin/blog/setting", pro: false },
     ],
   },
   {
     icon: <BoxCubeIcon />,
     name: "Hotel",
     subItems: [
-      { name: "Hotel", path: "/superadmin/hotel", pro: false },
-      { name: "Accessibility", path: "/superadmin/trek/accessibility", pro: false },
+      { name: "Hotel", path: "/admin/hotel", pro: false },
+      { name: "Accessibility", path: "/admin/trek/accessibility", pro: false },
     ],
   },
   {
     icon: <BoxCubeIcon />,
     name: "Trek",
     subItems: [
-      { name: "Category", path: "/superadmin/trek/category", pro: false },
-      { name: "Region", path: "/superadmin/trek/region", pro: false },
+      { name: "Category", path: "/admin/trek/category", pro: false },
+      { name: "Region", path: "/admin/trek/region", pro: false },
 
-      { name: "Activity Level", path: "/superadmin/trek/activitylevel", pro: false },
-      { name: "Activity Type", path: "/superadmin/trek/activitytype", pro: false },
-      { name: "Equipment", path: "/superadmin/trek/equipment", pro: false },
-      { name: "Equipment Category", path: "/superadmin/trek/equipmentcategory", pro: false },
-      { name: "Permit", path: "/superadmin/trek/permit", pro: false },
-      { name: "In-Ex Service", path: "/superadmin/trek/inexservice", pro: false },
-      { name: "Trek", path: "/superadmin/trek/trek", pro: false },
+      { name: "Activity Level", path: "/admin/trek/activitylevel", pro: false },
+      { name: "Activity Type", path: "/admin/trek/activitytype", pro: false },
+      { name: "Equipment", path: "/admin/trek/equipment", pro: false },
+      { name: "Equipment Category", path: "/admin/trek/equipmentcategory", pro: false },
+      { name: "Permit", path: "/admin/trek/permit", pro: false },
+      { name: "In-Ex Service", path: "/admin/trek/inexservice", pro: false },
+      { name: "Trek", path: "/admin/trek/trek", pro: false },
     ],
   },
   {
     icon: <CalenderIcon />,
     name: "Booking",
     subItems: [
-      { name: "Bookings", path: "/superadmin/trek/booking", pro: false },
+      { name: "Bookings", path: "/admin/trek/booking", pro: false },
     ],
   },
   {
     icon: <ListIcon />,
     name: "Other",
     subItems: [
-      { name: "Tour Type", path: "/superadmin/trek/tourtype", pro: false },
-      { name: "City", path: "/superadmin/trek/city", pro: false },
-      { name: "Currency", path: "/superadmin/trek/currency", pro: false },
+      { name: "Tour Type", path: "/admin/trek/tourtype", pro: false },
+      { name: "City", path: "/admin/trek/city", pro: false },
+      { name: "Currency", path: "/admin/trek/currency", pro: false },
     ],
   },
   // {
   //   icon: <AIAssistantIcon />,
   //   name: "AI Assistant",
   //   subItems: [
-  //     { name: "LLM Provider", path: "/superadmin/llmprovider", pro: false },
-  //     { name: "System Prompt", path: "/superadmin/systemprompt", pro: false },
-  //     { name: "Moderation", path: "/superadmin/moderation", pro: false },
-  //     { name: "Assistant", path: "/superadmin/aiassistant", pro: false },
-  //     { name: "Collection", path: "/superadmin/collection", pro: false },
-  //     { name: "Category", path: "/superadmin/category", pro: false },
-  //     { name: "Usage Summary", path: "/superadmin/usagesummary", pro: false },
-  //     { name: "Assistant Theme", path: "/superadmin/assistant/theme", pro: false },
+  //     { name: "LLM Provider", path: "/admin/llmprovider", pro: false },
+  //     { name: "System Prompt", path: "/admin/systemprompt", pro: false },
+  //     { name: "Moderation", path: "/admin/moderation", pro: false },
+  //     { name: "Assistant", path: "/admin/aiassistant", pro: false },
+  //     { name: "Collection", path: "/admin/collection", pro: false },
+  //     { name: "Category", path: "/admin/category", pro: false },
+  //     { name: "Usage Summary", path: "/admin/usagesummary", pro: false },
+  //     { name: "Assistant Theme", path: "/admin/assistant/theme", pro: false },
   //   ],
   // },
   // {
   //   icon: <SupportIcon />,
   //   name: "Support",
   //   subItems: [
-  //     { name: "Tickets", path: "/superadmin/supprot/ticket", pro: false },
-  //     { name: "Support Team", path: "/superadmin/support/team", pro: false },
-  //     { name: "Settings", path: "/superadmin/support/setting", pro: false },
+  //     { name: "Tickets", path: "/admin/supprot/ticket", pro: false },
+  //     { name: "Support Team", path: "/admin/support/team", pro: false },
+  //     { name: "Settings", path: "/admin/support/setting", pro: false },
   //   ],
   // },
   // {
   //   icon: <AgentIcon />,
   //   name: "Agent",
   //   subItems: [
-  //     { name: "Agent Tasks", path: "/superadmin/agent/task", pro: false },
-  //     { name: "Task Builder", path: "/superadmin/agent/taskbuilder", pro: false },
+  //     { name: "Agent Tasks", path: "/admin/agent/task", pro: false },
+  //     { name: "Task Builder", path: "/admin/agent/taskbuilder", pro: false },
   //   ],
   // },
   // {
   //   icon: <ThemeIcon />,
   //   name: "Theme",
-  //   subItems: [{ name: "Manage", path: "/superadmin/theme", pro: false }],
+  //   subItems: [{ name: "Manage", path: "/admin/theme", pro: false }],
   // },
   {
     icon: <ContentIcon />,
     name: "Content Management",
     subItems: [
-      //{ name: "Page", path: "/superadmin/page", pro: false },
-      { name: "Menu", path: "/superadmin/menu", pro: false },
-      // { name: "Template Editor", path: "/superadmin/template/editor", pro: false },
-      { name: "Media Library", path: "/superadmin/media", pro: false },
-      { name: "Html Builder", path: "/superadmin/htmlbuilder", pro: false },
-      { name: "Html Component Builder", path: "/superadmin/componentbuilder", pro: false },
+      //{ name: "Page", path: "/admin/page", pro: false },
+      { name: "Menu", path: "/admin/menu", pro: false },
+      // { name: "Template Editor", path: "/admin/template/editor", pro: false },
+      { name: "Media Library", path: "/admin/media", pro: false },
+      { name: "Html Builder", path: "/admin/htmlbuilder", pro: false },
+      { name: "Html Component Builder", path: "/admin/componentbuilder", pro: false },
       // {
       //   name: "Html Content Builder
-      //   path: "/superadmin/html/builder",
+      //   path: "/admin/html/builder",
       //   pro: false,
       // },
     ],
@@ -320,25 +320,25 @@ const sunavItems: NavItem[] = [
     icon: <SettingsIcon />,
     name: "Settings",
     subItems: [
-      { name: "Basic", path: "/superadmin/setting/basic", pro: false },
-      { name: "Content Security Policy", path: "/superadmin/setting/csp", pro: false },
-      { name: "API Config", path: "/superadmin/setting/api", pro: false },
-      { name: "Optimization", path: "/superadmin/setting/optimization", pro: false },
-      { name: "File", path: "/superadmin/setting/file", pro: false },
-      { name: "Web Setting", path: "/superadmin/setting/web", pro: false },
-      { name: "Caching", path: "/superadmin/setting/caching", pro: false },
+      { name: "Basic", path: "/admin/setting/basic", pro: false },
+      { name: "Content Security Policy", path: "/admin/setting/csp", pro: false },
+      { name: "API Config", path: "/admin/setting/api", pro: false },
+      { name: "Optimization", path: "/admin/setting/optimization", pro: false },
+      { name: "File", path: "/admin/setting/file", pro: false },
+      { name: "Web Setting", path: "/admin/setting/web", pro: false },
+      { name: "Caching", path: "/admin/setting/caching", pro: false },
     ],
   },
   {
     icon: <SystemIcon />,
     name: "System",
     subItems: [
-      // { name: "Module", path: "/superadmin/module", pro: false },
-      { name: "User", path: "/superadmin/sys/user", pro: false },
-      { name: "Role", path: "/superadmin/sys/role", pro: false },
-      { name: "Localization", path: "/superadmin/sys/localization", pro: false },
-      { name: "Modules", path: "/superadmin/sys/module", pro: false },
-      { name: "Dev Logs", path: "/superadmin/sys/logs", pro: false },
+      // { name: "Module", path: "/admin/module", pro: false },
+      { name: "User", path: "/admin/sys/user", pro: false },
+      { name: "Role", path: "/admin/sys/role", pro: false },
+      { name: "Localization", path: "/admin/sys/localization", pro: false },
+      { name: "Modules", path: "/admin/sys/module", pro: false },
+      { name: "Dev Logs", path: "/admin/sys/logs", pro: false },
     ],
   }]
   ;
@@ -551,7 +551,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
+      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-[calc(100vh-4rem)] lg:h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
         ${isExpanded || isMobileOpen
           ? "w-[290px]"
           : isHovered
@@ -595,7 +595,7 @@ const AppSidebar: React.FC = () => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar flex-1">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>

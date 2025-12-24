@@ -40,11 +40,113 @@ export const userAPI = createApi({
                 }
             }),
         }),
+        getRoles: builder.query<any, any>({
+            query: (params) => ({
+                url: "/api/v1/role/all",
+                params,
+            }),
+        }),
+        addRole: builder.mutation<any, any>({
+            query: (body) => ({
+                url: "/api/v1/role/save",
+                method: "POST",
+                body: body,
+            }),
+        }),
+        updateRole: builder.mutation<any, any>({
+            query: (body) => ({
+                url: `/api/v1/role/save`,
+                method: "POST",
+                body: body,
+            }),
+        }),
+        deleteRole: builder.mutation<any, number>({
+            query: (body) => ({
+                url: `/api/v1/role/delete`,
+                method: "POST",
+                body: { Id: body },
+            }),
+        }),
+
+        getUsers: builder.query<any, any>({
+            query: (params) => ({
+                url: "/api/v1/user/management/all",
+                params,
+            }),
+        }),
+        addUser: builder.mutation<any, any>({
+            query: (body) => ({
+                url: "/api/v1/user/management/save",
+                method: "POST",
+                body,
+            }),
+        }),
+        updateUser: builder.mutation<any, any>({
+            query: (body) => ({
+                url: `/api/v1/user/management/save`,
+                method: "POST",
+                body,
+            }),
+        }),
+        deleteUser: builder.mutation<any, number>({
+            query: (body) => ({
+                url: `/api/v1/user/management/delete`,
+                method: "POST",
+                body,
+            }),
+        }),
+        resetPassword: builder.mutation<any, any>({
+            query: (body) => ({
+                url: `/api/v1/user/management/resetpassword`,
+                method: "POST",
+                body,
+            }),
+        }),
+        getLoginHistory: builder.query<any, number>({
+            query: (userId) => ({
+                url: `/api/v1/user/management/login-history/${userId}`,
+            }),
+        }),
+        getOrganizations: builder.query<any, any>({
+            query: (params) => ({
+                url: "/api/v1/organization/all",
+                params,
+            }),
+        }),
+        getUserById: builder.query<any, number>({
+            query: (id) => ({
+                url: `/api/v1/user/management/${id}`,
+            }),
+            //providesTags: (result, error, id) => [{ type: "Users", id }],
+        }),
+
+        getRoleById: builder.query<any, number>({
+            query: (id) => ({
+                url: `/api/v1/role/${id}`,
+            }),
+            //providesTags: (result, error, id) => [{ type: "Roles", id }],
+        }),
+
     }),
 });
 
 export const {
     useGetUserProfileQuery,
     useLazyGetUserProfileQuery,
-    useLoginMutation
+    useLoginMutation,
+    useGetRolesQuery,
+    useLazyGetRolesQuery,
+    useAddRoleMutation,
+    useUpdateRoleMutation,
+    useDeleteRoleMutation,
+    useGetRoleByIdQuery,
+    useGetUsersQuery,
+    useLazyGetUsersQuery,
+    useAddUserMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation,
+    useResetPasswordMutation,
+    useGetLoginHistoryQuery,
+    useLazyGetLoginHistoryQuery,
+    useGetUserByIdQuery,
 } = userAPI;

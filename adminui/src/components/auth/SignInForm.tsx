@@ -43,7 +43,7 @@ export default function SignInForm() {
         if (Array.isArray(userInfo.role)) {
           if ((userInfo.role as string[]).includes("SuperAdmin")) {
             //navigate("/superadmin/dashboard");
-            navigate("/admin/superadmin/dashboard");
+            navigate("/admin/dashboard");
           }
           if ((userInfo.role as string[]).includes("Admin")) {
             navigate("/admin/dashboard");
@@ -52,7 +52,7 @@ export default function SignInForm() {
           }
 
         } else if (userInfo.role === "SuperAdmin") {
-          navigate("/superadmin/dashboard");
+          navigate("/admin/dashboard");
           //navigate("/admin/dashboard");
         }
         else if (userInfo.role === "Admin") {
@@ -80,7 +80,7 @@ export default function SignInForm() {
   if (AuthHelper.isLoggedIn() == true) {
     // console.log("iuser", AuthHelper.getUserRoles(), AuthHelper.isLoggedIn())
     if (AuthHelper.getUserRoles().includes("SuperAdmin")) {
-      navigate("/superadmin/dashboard");
+      navigate("/admin/dashboard");
     }
     else if (AuthHelper.getUserRoles().includes("Admin")) {
       navigate("/admin/dashboard");

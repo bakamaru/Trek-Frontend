@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchTemplates } from '../api';
-import { BlockInstance, ComponentTemplate } from '../../../types/builderTypes';
+import { useGetActiveHtmlComponentsQuery } from '../../../redux/htmlbuilder/htmlBuilderAPI';
+import { BlockInstance, ComponentTemplate, HtmlComponentDetailDto, ComponentSettingDef, ComponentContentDef } from '../../../types/builderTypes';
 import PropertiesPanel from '../PropertiesPanel';
 import CanvasBlock from '../CanvasBlock';
 import IconPicker from '../IconPicker';
@@ -11,7 +11,6 @@ import * as LucideIcons from 'lucide-react';
 
 const HtmlBuilder: React.FC = () => {
   const [templates, setTemplates] = useState<ComponentTemplate[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [blocks, setBlocks] = useState<BlockInstance[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -30,13 +29,53 @@ const HtmlBuilder: React.FC = () => {
 
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Load Templates (Including any new ones created in ComponentBuilder)
+  // Fetch HTML Components from API
+  const { data: apiData, isLoading, isError } = useGetActiveHtmlComponentsQuery({ offset: 1, limit: 1000, query: '' });
+
+  // Transform API response to ComponentTemplate format
   useEffect(() => {
-    fetchTemplates().then((data) => {
-      setTemplates(data);
-      setIsLoading(false);
-    });
-  }, []);
+    if (apiData?.Data) {
+      const transformedTemplates = apiData.Data.map((item: HtmlComponentDetailDto) => {
+        // Parse Config (contains settings and apiConfig) and ContentStructure from JSON strings
+        let settings: ComponentSettingDef[] = [];
+        let contentStructure: ComponentContentDef[] = [];
+        let apiConfig = undefined;
+
+        try {
+          if (item.Config) {
+            const configObj = JSON.parse(item.Config);
+            // Config contains { settings: [...], apiConfig: {...} }
+            settings = configObj.settings || [];
+            apiConfig = configObj.apiConfig;
+          }
+        } catch (e) {
+          console.error(`Failed to parse Config for ${item.Name}:`, e);
+        }
+
+        try {
+          if (item.ContentStructure) {
+            contentStructure = JSON.parse(item.ContentStructure);
+          }
+        } catch (e) {
+          console.error(`Failed to parse ContentStructure for ${item.Name}:`, e);
+        }
+
+        const template: ComponentTemplate = {
+          name: item.Name,
+          displayName: item.DisplayName,
+          icon: item.Icon || 'Box',
+          settings,
+          contentStructure,
+          htmlTemplate: item.HtmlTemplate,
+          apiConfig,
+        };
+
+        return template;
+      });
+
+      setTemplates(transformedTemplates);
+    }
+  }, [apiData]);
 
   // --- Actions ---
 

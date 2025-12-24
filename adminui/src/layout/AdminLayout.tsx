@@ -36,11 +36,11 @@ const LayoutContent: React.FC = () => {
     const isSuperAdminRoute = location.pathname.startsWith("/superuser");
     const isAdminRoute = location.pathname.startsWith("/admin");
 
-    if (isSuperAdminRoute && !isUserSuperUser) {
-      navigate("/not-authorized");
-    } else if (isAdminRoute && !isAdminUser) {
-      navigate("/not-authorized");
-    }
+    // if (isSuperAdminRoute && !isUserSuperUser) {
+    //   navigate("/not-authorized");
+    // } else if (isAdminRoute && !isAdminUser) {
+    //   navigate("/not-authorized");
+    // }
   }, [location, navigate]);
 
   return (

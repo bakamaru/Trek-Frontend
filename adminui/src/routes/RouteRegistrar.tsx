@@ -2,70 +2,84 @@ import { RouteObject } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
 import Dashboard from "../pages/Dashboard/Home";
 import NotFound from "../pages/OtherPage/NotFound";
-import LLMProvider from "../pages/SuperUser/AIAssistant/LLMProvider";
-import NewLLMProvider from "../pages/SuperUser/AIAssistant/NewLLMProvider";
+import LLMProvider from "../pages/Admin/AIAssistant/LLMProvider";
+import NewLLMProvider from "../pages/Admin/AIAssistant/NewLLMProvider";
 import SignIn from "../pages/AuthPages/SignIn";
-import AIAssistant from "../pages/SuperUser/AIAssistant/AIAssistant";
-import AIAssistantForm from "../pages/SuperUser/AIAssistant/AIAssistantForm";
-import TaskBuilder from "../pages/SuperUser/BrowserAgentTask/TaskBuilder";
-import AIAssistantSetting from "../pages/SuperUser/AIAssistant/AIAssistantSetting";
-import Category from "../pages/SuperUser/AIAssistant/Category";
-import CategoryForm from "../pages/SuperUser/AIAssistant/CategoryForm";
-import SysPrompt from "../pages/SuperUser/AIAssistant/SysPrompt";
-import SysPromptForm from "../pages/SuperUser/AIAssistant/SysPromptForm";
-import Moderation from "../pages/SuperUser/AIAssistant/Moderation";
-import Theme from "../pages/SuperUser/AIAssistant/Theme";
-import ThemeForm from "../pages/SuperUser/AIAssistant/ThemeForm";
-import AIAssistantPromt from "../pages/SuperUser/AIAssistant/AIAssistantPromt";
-import AccessibilityList from "../pages/SuperUser/Trek/Accessibility/AccessibilityList";
-import AccessibilityForm from "../pages/SuperUser/Trek/Accessibility/AccessibilityForm";
-import ActivityLevelList from "../pages/SuperUser/Trek/ActivityLevel/ActivityLevelList";
-import ActivityLevelForm from "../pages/SuperUser/Trek/ActivityLevel/ActivityLevelForm";
-import ActivityTypeList from "../pages/SuperUser/Trek/ActivityType/ActivityTypeList";
-import ActivityTypeForm from "../pages/SuperUser/Trek/ActivityType/ActivityTypeForm";
-import CityList from "../pages/SuperUser/Trek/City/CityList";
-import CityForm from "../pages/SuperUser/Trek/City/CityForm";
-import CurrencyList from "../pages/SuperUser/Trek/Currency/CurrencyList";
-import CurrencyForm from "../pages/SuperUser/Trek/Currency/CurrencyForm";
-import EquipmentList from "../pages/SuperUser/Trek/Equipment/EquipmentList";
-import EquipmentForm from "../pages/SuperUser/Trek/Equipment/EquipmentForm";
-import EquipmentCategoryList from "../pages/SuperUser/Trek/EquipmentCategory/EquipmentCategoryList";
-import EquipmentCategoryForm from "../pages/SuperUser/Trek/EquipmentCategory/EquipmentCategoryForm";
-import InExServiceList from "../pages/SuperUser/Trek/InExService/InExServiceList";
-import InExServiceForm from "../pages/SuperUser/Trek/InExService/InExServiceForm";
-import PermitList from "../pages/SuperUser/Trek/Permit/PermitList";
-import PermitForm from "../pages/SuperUser/Trek/Permit/PermitForm";
-import TourTypeList from "../pages/SuperUser/Trek/TourType/TourTypeList";
-import TourTypeForm from "../pages/SuperUser/Trek/TourType/TourTypeForm";
-import BookingList from "../pages/SuperUser/Trek/Booking/BookingList";
-import BookingForm from "../pages/SuperUser/Trek/Booking/BookingForm";
-import BookingDetail from "../pages/SuperUser/Trek/Booking/BookingDetail";
-import TrekRegionForm from "../pages/SuperUser/Trek/Region/TrekRegionForm";
-import TrekRegionList from "../pages/SuperUser/Trek/Region/TrekRegionList";
-import TrekCategoryList from "../pages/SuperUser/Trek/Category/TrekCategoryList";
-import TrekCategoryForm from "../pages/SuperUser/Trek/Category/TrekCategoryForm";
-import AdminTrekManagement from "../pages/SuperUser/Trek/Trek/AdminTrekManagement";
-import TrekFormPage from "../pages/SuperUser/Trek/Trek/TrekFormPage";
-import MenuManagement from "../pages/SuperUser/Menu/MenuManagement";
-import BlogList from "../pages/SuperUser/Blog/BlogList";
-import BlogForm from "../pages/SuperUser/Blog/BlogForm";
-import PostCategoryList from "../pages/SuperUser/Blog/PostCategoryList";
-import PostCategoryForm from "../pages/SuperUser/Blog/PostCategoryForm";
-import BlogSettingForm from "../pages/SuperUser/Blog/BlogSettingForm";
-import BannerList from "../pages/SuperUser/Banner/BannerList";
-import BannerForm from "../pages/SuperUser/Banner/BannerForm";
-import BannerSlideEditor from "../pages/SuperUser/Banner/BannerSlideEditor";
-import CSP from "../pages/SuperUser/Setting/CSP";
-import API from "../pages/SuperUser/Setting/API";
-import Basic from "../pages/SuperUser/Setting/Basic";
-import File from "../pages/SuperUser/Setting/File";
-import Web from "../pages/SuperUser/Setting/Web";
-import Localization from "../pages/SuperUser/Sys/Localization";
-import LocalizationForm from "../pages/SuperUser/Sys/LocalizationForm";
-import BuilderPage from "../pages/SuperUser/HtmlBuilder/BuilderPage";
-import MediaLibraryPage from "../pages/SuperUser/MediaLibrary/MediaLibraryPage";
-import ComponentBuilderList from "../pages/SuperUser/HtmlBuilder/ComponentBuilderList";
-import ComponentBuilder from "../pages/SuperUser/HtmlBuilder/ComponentBuilder";
+import AIAssistant from "../pages/Admin/AIAssistant/AIAssistant";
+import AIAssistantForm from "../pages/Admin/AIAssistant/AIAssistantForm";
+import TaskBuilder from "../pages/Admin/BrowserAgentTask/TaskBuilder";
+import AIAssistantSetting from "../pages/Admin/AIAssistant/AIAssistantSetting";
+import Category from "../pages/Admin/AIAssistant/Category";
+import CategoryForm from "../pages/Admin/AIAssistant/CategoryForm";
+import SysPrompt from "../pages/Admin/AIAssistant/SysPrompt";
+import SysPromptForm from "../pages/Admin/AIAssistant/SysPromptForm";
+import Moderation from "../pages/Admin/AIAssistant/Moderation";
+import Theme from "../pages/Admin/AIAssistant/Theme";
+import ThemeForm from "../pages/Admin/AIAssistant/ThemeForm";
+import AIAssistantPromt from "../pages/Admin/AIAssistant/AIAssistantPromt";
+import AccessibilityList from "../pages/Admin/Trek/Accessibility/AccessibilityList";
+import AccessibilityForm from "../pages/Admin/Trek/Accessibility/AccessibilityForm";
+import ActivityLevelList from "../pages/Admin/Trek/ActivityLevel/ActivityLevelList";
+import ActivityLevelForm from "../pages/Admin/Trek/ActivityLevel/ActivityLevelForm";
+import ActivityTypeList from "../pages/Admin/Trek/ActivityType/ActivityTypeList";
+import ActivityTypeForm from "../pages/Admin/Trek/ActivityType/ActivityTypeForm";
+import CityList from "../pages/Admin/Trek/City/CityList";
+import CityForm from "../pages/Admin/Trek/City/CityForm";
+import CurrencyList from "../pages/Admin/Trek/Currency/CurrencyList";
+import CurrencyForm from "../pages/Admin/Trek/Currency/CurrencyForm";
+import EquipmentList from "../pages/Admin/Trek/Equipment/EquipmentList";
+import EquipmentForm from "../pages/Admin/Trek/Equipment/EquipmentForm";
+import EquipmentCategoryList from "../pages/Admin/Trek/EquipmentCategory/EquipmentCategoryList";
+import EquipmentCategoryForm from "../pages/Admin/Trek/EquipmentCategory/EquipmentCategoryForm";
+import InExServiceList from "../pages/Admin/Trek/InExService/InExServiceList";
+import InExServiceForm from "../pages/Admin/Trek/InExService/InExServiceForm";
+import PermitList from "../pages/Admin/Trek/Permit/PermitList";
+import PermitForm from "../pages/Admin/Trek/Permit/PermitForm";
+import TourTypeList from "../pages/Admin/Trek/TourType/TourTypeList";
+import TourTypeForm from "../pages/Admin/Trek/TourType/TourTypeForm";
+import BookingList from "../pages/Admin/Trek/Booking/BookingList";
+import BookingForm from "../pages/Admin/Trek/Booking/BookingForm";
+import BookingDetail from "../pages/Admin/Trek/Booking/BookingDetail";
+import TrekRegionForm from "../pages/Admin/Trek/Region/TrekRegionForm";
+import TrekRegionList from "../pages/Admin/Trek/Region/TrekRegionList";
+import TrekCategoryList from "../pages/Admin/Trek/Category/TrekCategoryList";
+import TrekCategoryForm from "../pages/Admin/Trek/Category/TrekCategoryForm";
+import AdminTrekManagement from "../pages/Admin/Trek/Trek/AdminTrekManagement";
+import TrekFormPage from "../pages/Admin/Trek/Trek/TrekFormPage";
+import MenuManagement from "../pages/Admin/Menu/MenuManagement";
+import BlogList from "../pages/Admin/Blog/BlogList";
+import BlogForm from "../pages/Admin/Blog/BlogForm";
+import PostCategoryList from "../pages/Admin/Blog/PostCategoryList";
+import PostCategoryForm from "../pages/Admin/Blog/PostCategoryForm";
+import BlogSettingForm from "../pages/Admin/Blog/BlogSettingForm";
+import BannerList from "../pages/Admin/Banner/BannerList";
+import BannerForm from "../pages/Admin/Banner/BannerForm";
+import BannerSlideEditor from "../pages/Admin/Banner/BannerSlideEditor";
+import CSP from "../pages/Admin/Setting/CSP";
+import API from "../pages/Admin/Setting/API";
+import Basic from "../pages/Admin/Setting/Basic";
+import File from "../pages/Admin/Setting/File";
+import Web from "../pages/Admin/Setting/Web";
+import Localization from "../pages/Admin/Sys/Localization";
+import LocalizationForm from "../pages/Admin/Sys/LocalizationForm";
+import BuilderPage from "../pages/Admin/HtmlBuilder/BuilderPage";
+import MediaLibraryPage from "../pages/Admin/MediaLibrary/MediaLibraryPage";
+import ComponentBuilderList from "../pages/Admin/HtmlBuilder/ComponentBuilderList";
+import ComponentBuilder from "../pages/Admin/HtmlBuilder/ComponentBuilder";
+import UserManagement from "../pages/Admin/User/UserManagement";
+import FormUser from "../pages/Admin/User/FormUser";
+import RoleManagement from "../pages/Admin/Role/RoleManagement";
+import FormRole from "../pages/Admin/Role/FormRole";
+import ClientList from "../pages/Admin/Client/ClientList";
+import ClientForm from "../pages/Admin/Client/ClientForm";
+import GrantList from "../pages/Admin/Client/GrantList";
+import GrantForm from "../pages/Admin/Client/GrantForm";
+import ApiResourceList from "../pages/Admin/Client/ApiResourceList";
+import ApiResourceForm from "../pages/Admin/Client/ApiResourceForm";
+import ApiScopeList from "../pages/Admin/Client/ApiScopeList";
+import ApiScopeForm from "../pages/Admin/Client/ApiScopeForm";
+import IdentityResourceList from "../pages/Admin/Client/IdentityResourceList";
+import IdentityResourceForm from "../pages/Admin/Client/IdentityResourceForm";
 
 const appRoutes: RouteObject[] = [
   {
@@ -90,7 +104,7 @@ const notFound: RouteObject = {
 };
 
 const superUserRoutes: RouteObject = {
-  path: "/superadmin",
+  path: "/admin",
   element: <AdminLayout />,
   children: [
     { path: "dashboard", element: <Dashboard /> },
@@ -105,6 +119,36 @@ const superUserRoutes: RouteObject = {
     { path: "componentbuilder/new", element: <ComponentBuilder /> },
     { path: "componentbuilder/edit", element: <ComponentBuilder /> },
     { path: "media", element: <MediaLibraryPage /> },
+    { path: "user", element: <UserManagement /> },
+    { path: "user/new", element: <FormUser /> },
+    { path: "user/edit", element: <FormUser /> },
+    { path: "role", element: <RoleManagement /> },
+    { path: "role/new", element: <FormRole /> },
+    { path: "role/edit", element: <FormRole /> },
+
+    { path: "client", element: <ClientList /> },
+    { path: "client/new", element: <ClientForm /> },
+    { path: "client/edit/:id", element: <ClientForm /> },
+
+    // OpenIddict - Grants
+    { path: "openiddict/grant", element: <GrantList /> },
+    { path: "openiddict/grant/new", element: <GrantForm /> },
+    { path: "openiddict/grant/edit", element: <GrantForm /> },
+
+    // OpenIddict - API Resources
+    { path: "openiddict/apiresource", element: <ApiResourceList /> },
+    { path: "openiddict/apiresource/new", element: <ApiResourceForm /> },
+    { path: "openiddict/apiresource/edit", element: <ApiResourceForm /> },
+
+    // OpenIddict - API Scopes
+    { path: "openiddict/apiscope", element: <ApiScopeList /> },
+    { path: "openiddict/apiscope/new", element: <ApiScopeForm /> },
+    { path: "openiddict/apiscope/edit", element: <ApiScopeForm /> },
+
+    // OpenIddict - Identity Resources
+    { path: "openiddict/identityresource", element: <IdentityResourceList /> },
+    { path: "openiddict/identityresource/new", element: <IdentityResourceForm /> },
+    { path: "openiddict/identityresource/edit", element: <IdentityResourceForm /> },
 
     //{ path: "setting/optimization", element: <Optimization /> },
 
@@ -208,22 +252,7 @@ const superUserRoutes: RouteObject = {
 
   ],
 };
-const adminRoutes: RouteObject = {
-  path: "/admin",
-  element: <AdminLayout />,
-  children: [
-    { path: "dashboard", element: <Dashboard /> },
-    { path: "aiassistant", element: <AIAssistant /> },
-    { path: "aiassistant/new", element: <AIAssistantForm /> },
-    { path: "aiassistant/edit", element: <AIAssistantForm /> },
-    { path: "aiassistant/setting", element: <AIAssistantSetting /> },
-    { path: "agent/taskbuilder", element: <TaskBuilder /> }, { path: "banner/slides", element: <BannerSlideEditor /> },
 
-
-
-
-  ],
-};
 
 const registerdRoutes: RouteObject[] = [
   ...appRoutes,

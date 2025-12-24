@@ -142,7 +142,21 @@ const CanvasBlock: React.FC<CanvasBlockProps> = ({
 
       {/* Actual Component Render */}
       <div className="pointer-events-none select-none">
-        {htmlTemplate ? (
+        {block.templateName === '__PLAIN_HTML__' ? (
+          <div
+            className="builder-component"
+            style={{ display: 'contents' }}
+            data-template-name={block.templateName}
+            data-id={block.id}
+            data-settings={JSON.stringify(block.settings)}
+            data-content={JSON.stringify(block.content)}
+          >
+            <div
+              className="p-4"
+              dangerouslySetInnerHTML={{ __html: block.content.html || '' }}
+            />
+          </div>
+        ) : htmlTemplate ? (
           <div
             className="builder-component"
             style={{ display: 'contents' }}

@@ -10,6 +10,8 @@ import { Editor } from '@tinymce/tinymce-react';
 import MultiSelect from "../../../components/form/MultiSelect";
 import { useGetPostCategoriesQuery, useGetPostByIdQuery, useSavePostMutation } from "../../../redux/trek/blogAPI";
 import { Post } from "../../../types/blogTypes";
+import ModalHtmlBuilder from "../../../components/htmlbuilder/Builder/ModalHtmlBuilder";
+import { FileCode } from "lucide-react";
 
 const BlogForm = () => {
     const navigate = useNavigate();
@@ -18,6 +20,7 @@ const BlogForm = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
     const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+    const [isHtmlBuilderOpen, setIsHtmlBuilderOpen] = useState(false);
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get("id");
     const editorRef = useRef(null);
@@ -168,6 +171,15 @@ const BlogForm = () => {
         }
     };
 
+    const handleHtmlBuilderDone = (html: string) => {
+        setValue("Content", html, { shouldValidate: true });
+        setIsHtmlBuilderOpen(false);
+    };
+
+    const handleOpenHtmlBuilder = () => {
+        setIsHtmlBuilderOpen(true);
+    };
+
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -206,6 +218,18 @@ const BlogForm = () => {
                             />
 
                             <div className="md:col-span-2">
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-sm font-medium text-gray-900 dark:text-gray-300">
+                                        Content
+                                    </label>
+                                    <button
+                                        type="button"
+                                        onClick={handleOpenHtmlBuilder}
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium shadow-sm"
+                                    >
+                                        <FileCode size={16} /> Edit in HTML Builder
+                                    </button>
+                                </div>
                                 <Controller
                                     name="Content"
                                     control={control}
@@ -410,6 +434,14 @@ const BlogForm = () => {
                     </button>
                 </div>
             </form>
+
+            {/* HTML Builder Modal */}
+            <ModalHtmlBuilder
+                isOpen={isHtmlBuilderOpen}
+                initialContent={watch("Content") || ""}
+                onDone={handleHtmlBuilderDone}
+                onClose={() => setIsHtmlBuilderOpen(false)}
+            />
         </>
     );
 };
