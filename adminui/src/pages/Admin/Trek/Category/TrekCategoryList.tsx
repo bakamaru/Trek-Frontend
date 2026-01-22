@@ -106,7 +106,7 @@ export default function TrekCategoryList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/category/edit?id=${item?.TrekCategoryId}`}
+                    to={`/admin/trek/category/edit?id=${item?.TrekCategoryId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -137,7 +137,7 @@ export default function TrekCategoryList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/category/edit?id=${row.TrekCategoryId}`);
+                            navigate(`/admin/trek/category/edit?id=${row.TrekCategoryId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -202,7 +202,7 @@ export default function TrekCategoryList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/category/new");
+                                        navigate("/admin/trek/category/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

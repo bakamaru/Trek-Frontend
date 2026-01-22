@@ -75,7 +75,7 @@ const ThemeForm = () => {
             const Response: any = await SaveTheme(FormData).unwrap();
             if (Response.Code === 200) {
                 toaster.success(`Theme ${IsEditMode ? "updated" : "created"} successfully!`);
-                Navigate("/superadmin/assistant/theme");
+                Navigate("/admin/assistant/theme");
             } else {
                 toaster.error("Failed to save theme.");
             }

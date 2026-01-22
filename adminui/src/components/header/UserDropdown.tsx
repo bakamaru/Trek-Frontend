@@ -8,7 +8,7 @@ import { ITokenInfo } from "../../types";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-const userDetail:ITokenInfo=AuthHelper.getUserProfile();
+  const userDetail: ITokenInfo = AuthHelper.getUserProfile();
   function toggleDropdown() {
     setIsOpen(!isOpen);
   }
@@ -23,14 +23,13 @@ const userDetail:ITokenInfo=AuthHelper.getUserProfile();
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img width={50} src={userDetail?.picture||"/images/user/user.png"} alt={userDetail?.firstname} />
+          <img width={50} src={userDetail?.picture || "/images/user/user.png"} alt={userDetail?.firstname} />
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">{Array.isArray(userDetail?.role) ? userDetail?.role?.join(' ') : userDetail?.role}</span>
         <svg
-          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+            }`}
           width="18"
           height="20"
           viewBox="0 0 18 20"
@@ -54,10 +53,10 @@ const userDetail:ITokenInfo=AuthHelper.getUserProfile();
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-          {userDetail?.firstname }  {userDetail.surname }
+            {userDetail?.firstname}  {userDetail?.surname}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-          {userDetail?.email}
+            {userDetail?.email}
           </span>
         </div>
 

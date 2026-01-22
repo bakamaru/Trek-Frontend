@@ -15,6 +15,22 @@ export const userAPI = createApi({
     reducerPath: "userAPI",
     baseQuery: fetchBaseQuery({ baseUrl: BaseEndpoints.base }),
     endpoints: (builder) => ({
+        token: builder.mutation<ITokenResponse, { CLIENT_ID: string, REDIRECT_URI: string, code: string, codeVerifier: string }>({
+            query: ({ CLIENT_ID, REDIRECT_URI, code, codeVerifier }) => ({
+                url: "/connect/token",
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    grant_type: 'authorization_code',
+                    client_id: CLIENT_ID,
+                    redirect_uri: REDIRECT_URI,
+                    code: code,
+                    code_verifier: codeVerifier,
+                }),
+            }),
+        }),
         login: builder.mutation<ITokenResponse, LoginRequest>({
             query: (credentials) => ({
                 url: "/connect/token",
@@ -131,6 +147,7 @@ export const userAPI = createApi({
 });
 
 export const {
+    useTokenMutation,
     useGetUserProfileQuery,
     useLazyGetUserProfileQuery,
     useLoginMutation,

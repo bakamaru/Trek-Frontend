@@ -76,7 +76,7 @@ const NewLLMProvider = () => {
         setProviderId(response.Data);
         toaster.success("LLM Provider has been save successfully!")
         //toast.success(`Provider ${formData.LLMProviderId ? 'Updated' : 'Created'} Successfully!`);
-        navigate('/superadmin/llmprovider');
+        navigate('/admin/llmprovider');
       } else {
         toaster.error("Failed to save LLM Provider.");
       }
@@ -100,7 +100,7 @@ const NewLLMProvider = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-3 gap-4">         
+        <div className="grid grid-cols-3 gap-4">
           <ComponentCard title={`${providerId ? "Edit" : "New"} LLM Provider`}>
             <InputField
               type="text"
@@ -250,7 +250,7 @@ const NewLLMProvider = () => {
                   label="UseDefault"
 
                   {...register(`LLMMs.${index}.UseDefault`, {
-                   
+
                     validate: () => {
                       const allModels = getValues("LLMMs");
                       const isAtLeastOneChecked = allModels.some(model => model.UseDefault);

@@ -106,7 +106,7 @@ export default function ActivityLevelList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/activitylevel/edit?id=${item?.ActivityLevelId}`}
+                    to={`/admin/trek/activitylevel/edit?id=${item?.ActivityLevelId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -137,7 +137,7 @@ export default function ActivityLevelList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/activitylevel/edit?id=${row.ActivityLevelId}`);
+                            navigate(`/admin/trek/activitylevel/edit?id=${row.ActivityLevelId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -202,7 +202,7 @@ export default function ActivityLevelList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/activitylevel/new");
+                                        navigate("/admin/trek/activitylevel/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

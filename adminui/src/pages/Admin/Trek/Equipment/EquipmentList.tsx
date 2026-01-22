@@ -106,7 +106,7 @@ export default function EquipmentList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/equipment/edit?id=${item?.EquipmentId}`}
+                    to={`/admin/trek/equipment/edit?id=${item?.EquipmentId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -137,7 +137,7 @@ export default function EquipmentList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/equipment/edit?id=${row.EquipmentId}`);
+                            navigate(`/admin/trek/equipment/edit?id=${row.EquipmentId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -202,7 +202,7 @@ export default function EquipmentList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/equipment/new");
+                                        navigate("/admin/trek/equipment/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

@@ -71,7 +71,7 @@ const EquipmentForm = () => {
 
             if (response.Code == 200) {
                 toaster.success("Equipment saved successfully!");
-                navigate("/superadmin/trek/equipment");
+                navigate("/admin/trek/equipment");
             } else {
                 toaster.error("Failed to save equipment.");
             }
@@ -107,9 +107,9 @@ const EquipmentForm = () => {
                         <Select
                             labelName="Category"
                             placeholder="Select Category"
-                            options={categoryData?.data?.map((cat: any) => ({
-                                label: cat.name,
-                                value: cat.equipmentCategoryId,
+                            options={categoryData?.Data?.map((cat: any) => ({
+                                label: cat.Name,
+                                value: cat.EquipmentCategoryId,
                             })) || []}
                             {...register("equipmentCategoryId", { valueAsNumber: true, required: "Category is required" })}
                             error={!!errors?.equipmentCategoryId}
@@ -123,7 +123,7 @@ const EquipmentForm = () => {
                 <div className="mt-3 flex justify-end gap-3">
                     <button
                         type="button"
-                        onClick={() => navigate("/superadmin/trek/equipment")}
+                        onClick={() => navigate("/admin/trek/equipment")}
                         className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
                     >
                         Cancel

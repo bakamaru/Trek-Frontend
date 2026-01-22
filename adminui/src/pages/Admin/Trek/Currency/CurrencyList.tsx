@@ -106,7 +106,7 @@ export default function CurrencyList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/currency/edit?id=${item?.CurrencyId}`}
+                    to={`/admin/trek/currency/edit?id=${item?.CurrencyId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -146,7 +146,7 @@ export default function CurrencyList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/currency/edit?id=${row.CurrencyId}`);
+                            navigate(`/admin/trek/currency/edit?id=${row.CurrencyId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -211,7 +211,7 @@ export default function CurrencyList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/currency/new");
+                                        navigate("/admin/trek/currency/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

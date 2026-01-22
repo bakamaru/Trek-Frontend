@@ -90,9 +90,15 @@ const AdminTrekManagement: React.FC = () => {
     });
 
     // Fetch trek list
-    const { data: listData, isLoading: isListLoading, refetch: refetchList } = useGetAllTrekQuery({ query: searchText, limit, offset, ...filterData });
+    const { data: listData, isLoading: isListLoading, isFetching, refetch: refetchList } = useGetAllTrekQuery({ query: searchText, limit, offset, ...filterData });
 
     const [deleteTrek] = useDeleteTrekMutation();
+
+    useEffect(() => {
+        if (isFetching) {
+            setTrekList([]);
+        }
+    }, [isFetching]);
 
     useEffect(() => {
         if (listData && listData.Code === 200) {
@@ -186,7 +192,7 @@ const AdminTrekManagement: React.FC = () => {
                     <button
                         title="Edit trek"
                         onClick={() => {
-                            navigate(`/superadmin/trek/trek/edit?id=${row.TrekId}`);
+                            navigate(`/admin/trek/trek/edit?id=${row.TrekId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -223,7 +229,7 @@ const AdminTrekManagement: React.FC = () => {
                             <div className="relative">
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/superadmin/trek/trek/new")}
+                                    onClick={() => navigate("/admin/trek/trek/new")}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >
                                     Add New
@@ -232,11 +238,11 @@ const AdminTrekManagement: React.FC = () => {
                         </div>
                         <DataGrid
                             columns={columns}
-                            isLoading={isListLoading}
+                            isLoading={isListLoading || isFetching}
                             data={trekList || []}
                             text={`Total Treks (${rowTotal})`}
                             currentPage={offset}
-                            totalPage={(rowTotal / limit) || 1}
+                            totalPage={Math.ceil(rowTotal / limit) || 1}
                             isLine={true}
                             onPageChange={handlePagination}
                             isShadow

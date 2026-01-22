@@ -13,7 +13,7 @@ const ComponentBuilderPage = () => {
     });
 
     const handleBack = () => {
-        navigate("/superadmin/componentbuilder");
+        navigate("/admin/componentbuilder");
     };
 
     if (id && isLoading) {

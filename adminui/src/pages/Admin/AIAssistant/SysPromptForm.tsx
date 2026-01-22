@@ -74,7 +74,7 @@ const SysPromptForm = () => {
             const response: any = await saveSystemPrompt(formData).unwrap();
             if (response.Code == 200) {
                 toaster.success(`System Prompt ${isEditMode ? "updated" : "created"} successfully!`);
-                navigate("/superadmin/systemprompt");
+                navigate("/admin/systemprompt");
             }
             if (response.Code == 600) {
                 toaster.warning(`System prompt code is already in use.`);

@@ -106,7 +106,7 @@ export default function EquipmentCategoryList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/equipmentcategory/edit?id=${item?.EquipmentCategoryId}`}
+                    to={`/admin/trek/equipmentcategory/edit?id=${item?.EquipmentCategoryId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -146,7 +146,7 @@ export default function EquipmentCategoryList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/equipmentcategory/edit?id=${row.EquipmentCategoryId}`);
+                            navigate(`/admin/trek/equipmentcategory/edit?id=${row.EquipmentCategoryId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -211,7 +211,7 @@ export default function EquipmentCategoryList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/equipmentcategory/new");
+                                        navigate("/admin/trek/equipmentcategory/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

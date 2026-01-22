@@ -90,7 +90,7 @@ const AIAssistantForm = () => {
         AssistantTone: assistantData?.Data?.AssistantTone,
         AIAssistantThemeId: assistantData?.Data?.AIAssistantThemeId,
       });
-      setImageUrl(BaseEndpoints.base+  assistantData?.Data?.ImageUrl || null); // Set existing image URL for preview
+      setImageUrl(BaseEndpoints.base + assistantData?.Data?.ImageUrl || null); // Set existing image URL for preview
     }
   }, [assistantData, reset, isSuccess]);
 
@@ -117,7 +117,7 @@ const AIAssistantForm = () => {
       if (response.Code == 200) {
         setAIAssistantId(response.Data);
         toaster.success("Assistant saved successfully!");
-        navigate("/superadmin/aiassistant");
+        navigate("/admin/aiassistant");
       } else {
         toaster.error("Failed to save assistant.");
       }

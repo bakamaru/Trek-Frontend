@@ -98,14 +98,14 @@ export default function SysPrompt() {
     {
       key: "SystemPromptId",
       label: "#No",
-      render: (item:any) => (item?.SystemPromptId ? item?.SystemPromptId : "N/A"),
+      render: (item: any) => (item?.SystemPromptId ? item?.SystemPromptId : "N/A"),
     },
     {
       key: "name",
       label: "Name",
       render: (item: any) => (
         <Link
-          to={`/superadmin/systemprompt/edit?id=${item?.SystemPromptId}`}
+          to={`/admin/systemprompt/edit?id=${item?.SystemPromptId}`}
           className="flex items-center gap-2 group-hover:text-primary pr-2"
         >
           <span className=" break-words">{item.Name}</span>
@@ -132,7 +132,7 @@ export default function SysPrompt() {
             onClick={() => {
               const newParams = new URLSearchParams();
               newParams.set("id", row.SystemPromptId?.toString() || "");
-              navigate(`/superadmin/systemprompt/edit?${newParams.toString()}`);
+              navigate(`/admin/systemprompt/edit?${newParams.toString()}`);
             }}
             className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
           >
@@ -171,7 +171,7 @@ export default function SysPrompt() {
   useEffect(() => {
     if (data && data.Code === 200) {
       setSystemPrompts(data.Data);
-       setRowTotal(data.Data[0]?.RowTotal || 0);
+      setRowTotal(data.Data[0]?.RowTotal || 0);
     }
   }, [data]);
 
@@ -195,7 +195,7 @@ export default function SysPrompt() {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate("/superadmin/systemprompt/new");
+                    navigate("/admin/systemprompt/new");
                   }}
                   className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                 >

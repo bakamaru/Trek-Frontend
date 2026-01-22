@@ -36,6 +36,8 @@ import { permissionAPI } from "./setting/permissionAPI";
 import { moduleAPI } from "./setting/moduleAPI";
 import { htmlBuilderAPI } from "./htmlbuilder/htmlBuilderAPI";
 import { openIddictAdminAPI } from "./setting/clientAPI";
+import { seoAPI } from "./seo/seoAPI";
+import { miscAPI } from "./other/miscAPI";
 
 
 export const store = configureStore({
@@ -76,6 +78,8 @@ export const store = configureStore({
     [permissionAPI.reducerPath]: permissionAPI.reducer,
     [htmlBuilderAPI.reducerPath]: htmlBuilderAPI.reducer,
     [openIddictAdminAPI.reducerPath]: openIddictAdminAPI.reducer,
+    [seoAPI.reducerPath]: seoAPI.reducer,
+    [miscAPI.reducerPath]: miscAPI.reducer,
 
 
 
@@ -118,6 +122,8 @@ export const store = configureStore({
       permissionAPI.middleware,
       htmlBuilderAPI.middleware,
       openIddictAdminAPI.middleware,
+      seoAPI.middleware,
+      miscAPI.middleware,
     ),
 });
 

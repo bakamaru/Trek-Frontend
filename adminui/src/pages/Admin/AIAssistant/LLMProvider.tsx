@@ -106,7 +106,7 @@ export default function LLMProvider() {
       label: "Name",
       render: (item: any) => (
         <Link
-          to={`/superadmin/llmprovider/detail/${item?.LLMProviderId}`}
+          to={`/admin/llmprovider/detail/${item?.LLMProviderId}`}
           className="flex items-center gap-2 group-hover:text-primary pr-2"
         >
           <span className=" break-words">{item.Name}</span>
@@ -136,7 +136,7 @@ export default function LLMProvider() {
               //   pathname: "/admin/llmprovider/edit",
               //   search: `?${newParams.toString()}`,
               // });
-              window.location.href = `/superadmin/llmprovider/edit?${newParams.toString()}`;
+              window.location.href = `/admin/llmprovider/edit?${newParams.toString()}`;
 
             }}
             className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
@@ -200,9 +200,9 @@ export default function LLMProvider() {
               />
               <div className="relative" >
                 <button type="button"
-                onClick={()=>{
-                  navigate("/superadmin/llmprovider/new")
-                }}
+                  onClick={() => {
+                    navigate("/admin/llmprovider/new")
+                  }}
                   className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                 >Add New</button>
 

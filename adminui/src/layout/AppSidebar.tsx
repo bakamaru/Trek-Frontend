@@ -237,6 +237,7 @@ const sunavItems: NavItem[] = [
     subItems: [
       { name: "Category", path: "/admin/trek/category", pro: false },
       { name: "Region", path: "/admin/trek/region", pro: false },
+      { name: "Destination", path: "/admin/destination", pro: false },
 
       { name: "Activity Level", path: "/admin/trek/activitylevel", pro: false },
       { name: "Activity Type", path: "/admin/trek/activitytype", pro: false },
@@ -304,6 +305,7 @@ const sunavItems: NavItem[] = [
     name: "Content Management",
     subItems: [
       //{ name: "Page", path: "/admin/page", pro: false },
+      { name: "SEO Management", path: "/admin/seo", pro: false, new: true },
       { name: "Menu", path: "/admin/menu", pro: false },
       // { name: "Template Editor", path: "/admin/template/editor", pro: false },
       { name: "Media Library", path: "/admin/media", pro: false },
@@ -333,12 +335,12 @@ const sunavItems: NavItem[] = [
     icon: <SystemIcon />,
     name: "System",
     subItems: [
-      // { name: "Module", path: "/admin/module", pro: false },
-      { name: "User", path: "/admin/sys/user", pro: false },
-      { name: "Role", path: "/admin/sys/role", pro: false },
-      { name: "Localization", path: "/admin/sys/localization", pro: false },
-      { name: "Modules", path: "/admin/sys/module", pro: false },
-      { name: "Dev Logs", path: "/admin/sys/logs", pro: false },
+      { name: "Client", path: "/admin/client", pro: false },
+      { name: "User", path: "/admin/user", pro: false },
+      { name: "Role", path: "/admin/role", pro: false },
+      { name: "Localization", path: "/admin/localization", pro: false },
+      { name: "Modules", path: "/admin/module", pro: false },
+      { name: "Dev Logs", path: "/admin/logs", pro: false },
     ],
   }]
   ;

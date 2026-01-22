@@ -42,7 +42,7 @@ export default function SignInForm() {
 
         if (Array.isArray(userInfo.role)) {
           if ((userInfo.role as string[]).includes("SuperAdmin")) {
-            //navigate("/superadmin/dashboard");
+            //navigate("/admin/dashboard");
             navigate("/admin/dashboard");
           }
           if ((userInfo.role as string[]).includes("Admin")) {

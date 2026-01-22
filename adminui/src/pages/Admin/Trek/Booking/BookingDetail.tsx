@@ -129,7 +129,7 @@ const BookingDetail: React.FC = () => {
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={() => navigate("/superadmin/trek/booking")}
+                            onClick={() => navigate("/admin/trek/booking")}
                             className="p-2 hover:bg-gray-100 rounded-lg"
                         >
                             <MdArrowBack size={24} />
@@ -196,7 +196,7 @@ const BookingDetail: React.FC = () => {
                         {/* Edit Action */}
                         <div className="relative">
                             <button
-                                onClick={() => navigate(`/superadmin/trek/booking/edit?id=${bookingId}`)}
+                                onClick={() => navigate(`/admin/trek/booking/edit?id=${bookingId}`)}
                                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
                             >
                                 <MdOutlineEdit size={18} />

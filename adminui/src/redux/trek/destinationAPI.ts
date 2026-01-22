@@ -23,6 +23,7 @@ export interface Destination {
     CoverImage?: string;
     ThumbnailImage?: string;
     IsTopDestination?: boolean;
+    IsActive?: boolean;
 }
 
 const DEFAULT_OFFSET = 1;

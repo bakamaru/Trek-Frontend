@@ -107,7 +107,7 @@ export default function Category() {
       label: "Name",
       render: (item: any) => (
         <Link
-          to={`/superadmin/category/edit?id=${item?.KnowledgeBaseCategoryId}`}
+          to={`/admin/category/edit?id=${item?.KnowledgeBaseCategoryId}`}
           className="flex items-center gap-2 group-hover:text-primary pr-2"
         >
           <span className=" break-words">{item.Name}</span>
@@ -129,7 +129,7 @@ export default function Category() {
             onClick={() => {
               const newParams = new URLSearchParams();
               newParams.set("id", row.KnowledgeBaseCategoryId.toString());
-              navigate(`/superadmin/category/edit?${newParams.toString()}`);
+              navigate(`/admin/category/edit?${newParams.toString()}`);
             }}
             className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
           >
@@ -192,7 +192,7 @@ export default function Category() {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate("/superadmin/category/new");
+                    navigate("/admin/category/new");
                   }}
                   className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                 >

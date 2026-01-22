@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { ITokenInfo } from "../types";
+import OAuth2Service from "../services/OAuth2Service";
 
 class AuthHelper {
     static SetNewLogin = (token: any) => {
@@ -10,6 +11,7 @@ class AuthHelper {
     static Logout = () => {
         localStorage.removeItem("token");
         window.location.href = "/signin";
+        //OAuth2Service.logout(true); // Redirect to IdentityServer logout
     }
     static isLoggedIn(): boolean {
         const token: any = localStorage.getItem("token");

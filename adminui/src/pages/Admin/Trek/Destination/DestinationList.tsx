@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from "react-router";
 import DataGrid from "../../../../components/dataGrid/dataGrid";
 import { Controller } from "react-hook-form";
@@ -8,13 +9,13 @@ import { FilterProps } from "../../../../types";
 import ComponentCard from "../../../../components/common/ComponentCard";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import toaster from "../../../../components/toster";
-import { useDeleteTrekRegionMutation, useGetAllTrekRegionQuery } from "../../../../redux/trek/trekRegionAPI";
+import { useDeleteDestinationMutation, useGetDestinationsQuery, Destination } from "../../../../redux/trek/destinationAPI";
 
 interface IFilter {
     Name: any;
 }
 
-const FilterTrekRegion = ({
+const FilterDestination = ({
     control,
     handleSubmit,
     onFilterSubmit,
@@ -63,10 +64,10 @@ const FilterTrekRegion = ({
     );
 };
 
-export default function TrekRegionList() {
+export default function DestinationList() {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
-    const [trekRegions, setTrekRegions] = useState([]);
+    const [destinations, setDestinations] = useState<Destination[]>([]);
     const [rowTotal, setRowTotal] = useState(0);
 
     const {
@@ -90,54 +91,85 @@ export default function TrekRegionList() {
         enableFilterList: true,
     });
 
-    const { data, isLoading, refetch } = useGetAllTrekRegionQuery({ query: searchText, limit, offset, ...filterData });
-    const [deleteTrekRegion] = useDeleteTrekRegionMutation();
+    const { data, isLoading, refetch } = useGetDestinationsQuery({ offset, limit, query: searchText });
+    const [deleteDestination] = useDeleteDestinationMutation();
+
+    const handleDelete = async (id: number) => {
+        if (confirm("Are you sure you want to delete this destination?")) {
+            try {
+                const res = await deleteDestination(id).unwrap();
+                if (res.Code === 200) {
+                    toaster.success("Destination deleted successfully");
+                    refetch();
+                } else {
+                    toaster.error(res.Message || "Failed to delete destination");
+                }
+            } catch (error: any) {
+                toaster.error(error?.data?.Message || "An error occurred");
+            }
+        }
+    };
 
     const columns = [
         {
-            key: "trekRegionId",
+            key: "destinationId",
             label: "#No",
-            render: (item: any) => {
-                return item?.TrekRegionId ? item?.TrekRegionId : "N/A";
+            render: (item: Destination) => {
+                return item?.DestinationId ? item?.DestinationId : "N/A";
             },
         },
         {
             key: "name",
             label: "Name",
-            render: (item: any) => (
+            render: (item: Destination) => (
                 <Link
-                    to={`/admin/trek/region/edit?id=${item?.TrekRegionId}`}
+                    to={`/admin/destination/edit?id=${item?.DestinationId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
-                    <span className=" break-words">{item.Name}</span>
+                    <span className="break-words">{item.Name}</span>
                 </Link>
             ),
         },
+
         {
-            key: "description",
-            label: "Description",
-            render: (item: any) => (
-                <>
-                    {item.Description || "N/A"}
-                </>
-            ),
+            key: "isTopDestination",
+            label: "Is Top Destination",
+            render: (item: Destination) => {
+                return item?.IsTopDestination ? (
+                    <span className="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">
+                        Yes
+                    </span>
+                ) : (
+                    <span className="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-900 dark:text-gray-300">
+                        No
+                    </span>
+                );
+            },
         },
         {
-            key: "isActive",
+            key: "IsActive",
             label: "Is Active",
-            render: (item: any) => {
-                return item?.IsActive ? "Yes" : "No";
+            render: (item: Destination) => {
+                return item?.IsActive ? (
+                    <span className="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">
+                        Yes
+                    </span>
+                ) : (
+                    <span className="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-900 dark:text-gray-300">
+                        No
+                    </span>
+                );
             },
         },
         {
             key: "actions",
             label: "Action",
-            render: (row: any) => (
+            render: (row: Destination) => (
                 <div className="flex items-center gap-2">
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/admin/trek/region/edit?id=${row.TrekRegionId}`);
+                            navigate(`/admin/destination/edit?id=${row.DestinationId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -145,12 +177,8 @@ export default function TrekRegionList() {
                     </button>
                     <button
                         title="Delete"
-                        onClick={() => {
-                            if (confirm("Are you sure?")) {
-                                handleDelete(row.TrekRegionId);
-                            }
-                        }}
-                        className="border p-2 rounded-md border-gray-300 text-red-500 cursor-pointer"
+                        onClick={() => handleDelete(row.DestinationId)}
+                        className="border p-2 rounded-md border-gray-300 text-base cursor-pointer text-red-500 hover:text-red-700"
                     >
                         <MdDeleteOutline size={20} />
                     </button>
@@ -159,24 +187,12 @@ export default function TrekRegionList() {
         },
     ];
 
-    const handleDelete = async (id: number) => {
-        try {
-            var response: any = await deleteTrekRegion(id).unwrap();
-            if (response.Code == 200) {
-                toaster.success("Trek Region deleted successfully!");
-                refetch();
-            } else {
-                toaster.error("Failed to delete trek region!");
-            }
-        } catch (error) {
-            toaster.error("An error occurred while deleting the trek region.");
-        }
-    };
-
     useEffect(() => {
         if (data != undefined && data.Code == 200) {
-            setTrekRegions(data.Data);
+            setDestinations(data.Data);
             if (data.Data.length > 0) {
+                // Assuming API returns row total in first item or separately. 
+                // Based on PostCategoryList, it seems to be in the first item of Data array if structure is consistent.
                 setRowTotal(data.Data[0]?.RowTotal || 0);
             }
         }
@@ -185,10 +201,10 @@ export default function TrekRegionList() {
     return (
         <>
             <div className="space-y-6">
-                <ComponentCard title="Trek Regions">
+                <ComponentCard title="Destinations">
                     <>
                         <div className="flex flex-col gap-5 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                            <FilterTrekRegion
+                            <FilterDestination
                                 control={control}
                                 handleSubmit={handleSubmit}
                                 onFilterSubmit={onFilterSubmit}
@@ -202,7 +218,7 @@ export default function TrekRegionList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/admin/trek/region/new");
+                                        navigate("/admin/destination/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >
@@ -213,7 +229,7 @@ export default function TrekRegionList() {
                         <DataGrid
                             columns={columns}
                             isLoading={isLoading}
-                            data={trekRegions || []}
+                            data={destinations || []}
                             text={`Total Records (${rowTotal})`}
                             currentPage={offset}
                             totalPage={(rowTotal / limit) || 1}

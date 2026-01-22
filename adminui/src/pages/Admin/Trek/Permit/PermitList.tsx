@@ -106,7 +106,7 @@ export default function PermitList() {
             label: "Permit Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/permit/edit?id=${item?.PermitId}`}
+                    to={`/admin/trek/permit/edit?id=${item?.PermitId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.PermitName}</span>
@@ -137,7 +137,7 @@ export default function PermitList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/permit/edit?id=${row.PermitId}`);
+                            navigate(`/admin/trek/permit/edit?id=${row.PermitId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -202,7 +202,7 @@ export default function PermitList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/permit/new");
+                                        navigate("/admin/trek/permit/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

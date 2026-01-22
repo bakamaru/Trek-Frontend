@@ -106,7 +106,7 @@ export default function AccessibilityList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/accessibility/edit?id=${item?.AccessibilityId}`}
+                    to={`/admin/trek/accessibility/edit?id=${item?.AccessibilityId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -137,7 +137,7 @@ export default function AccessibilityList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/accessibility/edit?id=${row.AccessibilityId}`);
+                            navigate(`/admin/trek/accessibility/edit?id=${row.AccessibilityId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -208,7 +208,7 @@ export default function AccessibilityList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/accessibility/new");
+                                        navigate("/admin/trek/accessibility/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

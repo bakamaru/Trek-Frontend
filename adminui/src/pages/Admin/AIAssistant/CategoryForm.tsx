@@ -70,7 +70,7 @@ const CategoryForm = () => {
             const response: any = await saveCategory(formData).unwrap();
             if (response.Code === 200) {
                 toaster.success(`Category ${isEditMode ? "updated" : "created"} successfully!`);
-                navigate("/superadmin/category");
+                navigate("/admin/category");
             } else {
                 toaster.error("Failed to save category.");
             }

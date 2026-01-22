@@ -106,7 +106,7 @@
 //             label: "Name",
 //             render: (item: any) => (
 //                 <Link
-//                     to={`/superadmin/trek/trek/edit?id=${item?.TrekId}`}
+//                     to={`/admin/trek/trek/edit?id=${item?.TrekId}`}
 //                     className="flex items-center gap-2 group-hover:text-primary pr-2"
 //                 >
 //                     <span className=" break-words">{item.Name}</span>
@@ -146,7 +146,7 @@
 //                     <button
 //                         title="Edit"
 //                         onClick={() => {
-//                             navigate(`/superadmin/trek/trek/edit?id=${row.TrekId}`);
+//                             navigate(`/admin/trek/trek/edit?id=${row.TrekId}`);
 //                         }}
 //                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
 //                     >
@@ -211,7 +211,7 @@
 //                                 <button
 //                                     type="button"
 //                                     onClick={() => {
-//                                         navigate("/superadmin/trek/trek/new");
+//                                         navigate("/admin/trek/trek/new");
 //                                     }}
 //                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
 //                                 >

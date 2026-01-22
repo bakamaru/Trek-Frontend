@@ -65,7 +65,7 @@ const BannerForm = () => {
 
             if (response.Code == 200) {
                 toaster.success("Banner saved successfully!");
-                navigate("/superadmin/banner");
+                navigate("/admin/banner");
             } else {
                 toaster.error(response.Message || "Failed to save banner.");
             }
@@ -107,7 +107,7 @@ const BannerForm = () => {
                 <div className="mt-3 flex justify-end gap-3">
                     <button
                         type="button"
-                        onClick={() => navigate("/superadmin/banner")}
+                        onClick={() => navigate("/admin/banner")}
                         className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
                     >
                         Cancel
@@ -122,7 +122,7 @@ const BannerForm = () => {
                     {isEditMode && (
                         <button
                             type="button"
-                            onClick={() => navigate(`/superadmin/banner/slides?id=${bannerId}`)}
+                            onClick={() => navigate(`/admin/banner/slides?id=${bannerId}`)}
                             className="bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-sm"
                         >
                             Manage Slides

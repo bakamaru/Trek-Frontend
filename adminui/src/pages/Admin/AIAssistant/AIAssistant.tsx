@@ -106,7 +106,7 @@ export default function AIAssistant() {
       label: "Name",
       render: (item: any) => (
         <Link
-          to={`/superadmin/aiassistant/detail/${item?.AIAssistantId}`}
+          to={`/admin/aiassistant/detail/${item?.AIAssistantId}`}
           className="flex items-center gap-2 group-hover:text-primary pr-2"
         >
           <span className=" break-words">{item.Name}</span>
@@ -134,12 +134,12 @@ export default function AIAssistant() {
       label: "Action",
       render: (row: any) => (
         <div className="flex items-center gap-2">
-           <button
+          <button
             title="Configure prompt"
             onClick={() => {
               const newParams = new URLSearchParams();
               newParams.set("id", row.AIAssistantId.toString());
-              window.location.href = `/superadmin/aiassistant/prompt?${newParams.toString()}`;
+              window.location.href = `/admin/aiassistant/prompt?${newParams.toString()}`;
             }}
             className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
           >
@@ -150,7 +150,7 @@ export default function AIAssistant() {
             onClick={() => {
               const newParams = new URLSearchParams();
               newParams.set("id", row.AIAssistantId.toString());
-              window.location.href = `/superadmin/aiassistant/setting?${newParams.toString()}`;
+              window.location.href = `/admin/aiassistant/setting?${newParams.toString()}`;
             }}
             className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
           >
@@ -161,7 +161,7 @@ export default function AIAssistant() {
             onClick={() => {
               const newParams = new URLSearchParams();
               newParams.set("id", row.AIAssistantId.toString());
-              window.location.href = `/superadmin/aiassistant/edit?${newParams.toString()}`;
+              window.location.href = `/admin/aiassistant/edit?${newParams.toString()}`;
             }}
             className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
           >
@@ -226,7 +226,7 @@ export default function AIAssistant() {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate("/superadmin/aiassistant/new");
+                    navigate("/admin/aiassistant/new");
                   }}
                   className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                 >

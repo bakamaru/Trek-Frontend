@@ -43,9 +43,10 @@ import BookingDetail from "../pages/Admin/Trek/Booking/BookingDetail";
 import TrekRegionForm from "../pages/Admin/Trek/Region/TrekRegionForm";
 import TrekRegionList from "../pages/Admin/Trek/Region/TrekRegionList";
 import TrekCategoryList from "../pages/Admin/Trek/Category/TrekCategoryList";
-import TrekCategoryForm from "../pages/Admin/Trek/Category/TrekCategoryForm";
 import AdminTrekManagement from "../pages/Admin/Trek/Trek/AdminTrekManagement";
 import TrekFormPage from "../pages/Admin/Trek/Trek/TrekFormPage";
+import DestinationList from "../pages/Admin/Trek/Destination/DestinationList";
+import DestinationForm from "../pages/Admin/Trek/Destination/DestinationForm";
 import MenuManagement from "../pages/Admin/Menu/MenuManagement";
 import BlogList from "../pages/Admin/Blog/BlogList";
 import BlogForm from "../pages/Admin/Blog/BlogForm";
@@ -62,6 +63,8 @@ import File from "../pages/Admin/Setting/File";
 import Web from "../pages/Admin/Setting/Web";
 import Localization from "../pages/Admin/Sys/Localization";
 import LocalizationForm from "../pages/Admin/Sys/LocalizationForm";
+import SEOList from "../pages/Admin/SEO/SEOList";
+import SEOForm from "../pages/Admin/SEO/SEOForm";
 import BuilderPage from "../pages/Admin/HtmlBuilder/BuilderPage";
 import MediaLibraryPage from "../pages/Admin/MediaLibrary/MediaLibraryPage";
 import ComponentBuilderList from "../pages/Admin/HtmlBuilder/ComponentBuilderList";
@@ -80,6 +83,8 @@ import ApiScopeList from "../pages/Admin/Client/ApiScopeList";
 import ApiScopeForm from "../pages/Admin/Client/ApiScopeForm";
 import IdentityResourceList from "../pages/Admin/Client/IdentityResourceList";
 import IdentityResourceForm from "../pages/Admin/Client/IdentityResourceForm";
+import AuthCallback from "../pages/AuthPages/AuthCallback";
+import TrekCategoryForm from "../pages/Admin/Trek/Category/TrekCategoryForm";
 
 const appRoutes: RouteObject[] = [
   {
@@ -89,7 +94,10 @@ const appRoutes: RouteObject[] = [
   {
     path: "/signin",
     element: <SignIn />,
-
+  },
+  {
+    path: "/auth/callback",
+    element: <AuthCallback />,
   },
   {
     path: "/signup",
@@ -152,9 +160,9 @@ const superUserRoutes: RouteObject = {
 
     //{ path: "setting/optimization", element: <Optimization /> },
 
-    { path: "sys/localization", element: <Localization /> },
-    { path: "sys/localization/new", element: <LocalizationForm /> },
-    { path: "sys/localization/edit/:id", element: <LocalizationForm /> },
+    { path: "localization", element: <Localization /> },
+    { path: "localization/new", element: <LocalizationForm /> },
+    { path: "localization/edit/:id", element: <LocalizationForm /> },
 
     { path: "blog", element: <BlogList /> },
     { path: "blog/new", element: <BlogForm /> },
@@ -162,7 +170,16 @@ const superUserRoutes: RouteObject = {
     { path: "blog/setting", element: <BlogSettingForm /> },
     { path: "blog/category", element: <PostCategoryList /> },
     { path: "blog/category/new", element: <PostCategoryForm /> },
+    { path: "blog/category/new", element: <PostCategoryForm /> },
     { path: "blog/category/edit", element: <PostCategoryForm /> },
+
+    { path: "seo", element: <SEOList /> },
+    { path: "seo/new", element: <SEOForm /> },
+    { path: "seo/edit", element: <SEOForm /> },
+
+    { path: "destination", element: <DestinationList /> },
+    { path: "destination/new", element: <DestinationForm /> },
+    { path: "destination/edit", element: <DestinationForm /> },
 
     { path: "llmprovider", element: <LLMProvider /> },
     { path: "llmprovider/new", element: <NewLLMProvider /> },
@@ -238,6 +255,8 @@ const superUserRoutes: RouteObject = {
     { path: "trek/category", element: <TrekCategoryList /> },
     { path: "trek/category/new", element: <TrekCategoryForm /> },
     { path: "trek/category/edit", element: <TrekCategoryForm /> },
+    { path: "trek/destination", element: <DestinationList /> },
+
 
     { path: "trek/booking", element: <BookingList /> },
     { path: "trek/booking/new", element: <BookingForm /> },

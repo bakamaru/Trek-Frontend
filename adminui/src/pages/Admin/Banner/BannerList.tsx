@@ -106,7 +106,7 @@ export default function BannerList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/banner/edit?id=${item?.BannerId}`}
+                    to={`/admin/banner/edit?id=${item?.BannerId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -141,7 +141,7 @@ export default function BannerList() {
                     <button
                         title="Edit Metadata"
                         onClick={() => {
-                            navigate(`/superadmin/banner/edit?id=${row.BannerId}`);
+                            navigate(`/admin/banner/edit?id=${row.BannerId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer hover:bg-gray-50 text-brand-500"
                     >
@@ -150,7 +150,7 @@ export default function BannerList() {
                     <button
                         title="Manage Slides"
                         onClick={() => {
-                            navigate(`/superadmin/banner/slides?id=${row.BannerId}`);
+                            navigate(`/admin/banner/slides?id=${row.BannerId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer hover:bg-gray-50 text-indigo-600"
                     >
@@ -217,7 +217,7 @@ export default function BannerList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/banner/new");
+                                        navigate("/admin/banner/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

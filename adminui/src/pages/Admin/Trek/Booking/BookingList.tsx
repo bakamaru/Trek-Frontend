@@ -127,7 +127,7 @@ export default function BookingList() {
             label: "Contact Name",
             render: (item: any) => {
                 const name = `${item.FirstName || ""} ${item.LastName || ""}`.trim();
-                const url = `/superadmin/trek/booking/detail?id=${item.BookingId}&producturl=${encodeURIComponent(item.ProductUrl || "")}&producttype=${item.ProductType || ""}`;
+                const url = `/admin/trek/booking/detail?id=${item.BookingId}&producturl=${encodeURIComponent(item.ProductUrl || "")}&producttype=${item.ProductType || ""}`;
                 return (
                     <Link
                         to={url}
@@ -182,7 +182,7 @@ export default function BookingList() {
             key: "actions",
             label: "Action",
             render: (row: any) => {
-                const url = `/superadmin/trek/booking/detail?id=${row.BookingId}&producturl=${encodeURIComponent(row.ProductUrl || "")}&producttype=${row.ProductType || ""}`;
+                const url = `/admin/trek/booking/detail?id=${row.BookingId}&producturl=${encodeURIComponent(row.ProductUrl || "")}&producttype=${row.ProductType || ""}`;
                 return (
                     <div className="flex items-center gap-2">
                         <button
@@ -230,7 +230,7 @@ export default function BookingList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/booking/new");
+                                        navigate("/admin/trek/booking/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

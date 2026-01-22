@@ -175,7 +175,7 @@ const TrekFormPage: React.FC = () => {
                     setTrekId(response.Data.TrekId);
                     setIsEditMode(true);
                     // Update URL to edit mode
-                    navigate(`/superadmin/trek/trek/edit?id=${response.Data.TrekId}`, { replace: true });
+                    navigate(`/admin/trek/trek/edit?id=${response.Data.TrekId}`, { replace: true });
                 }
             } else {
                 toaster.error("Failed to save trek.");
@@ -186,7 +186,7 @@ const TrekFormPage: React.FC = () => {
     };
 
     const handleCancel = () => {
-        navigate("/superadmin/trek/trek");
+        navigate("/admin/trek/trek");
     };
 
     const handleCityCreation = async (val: string) => {

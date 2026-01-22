@@ -106,7 +106,7 @@ export default function TourTypeList() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/trek/tourtype/edit?id=${item?.TourTypeId}`}
+                    to={`/admin/trek/tourtype/edit?id=${item?.TourTypeId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -137,7 +137,7 @@ export default function TourTypeList() {
                     <button
                         title="Edit"
                         onClick={() => {
-                            navigate(`/superadmin/trek/tourtype/edit?id=${row.TourTypeId}`);
+                            navigate(`/admin/trek/tourtype/edit?id=${row.TourTypeId}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -202,7 +202,7 @@ export default function TourTypeList() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        navigate("/superadmin/trek/tourtype/new");
+                                        navigate("/admin/trek/tourtype/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

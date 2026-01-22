@@ -105,7 +105,7 @@ export default function Theme() {
             label: "Name",
             render: (item: any) => (
                 <Link
-                    to={`/superadmin/assistant/theme/edit?id=${item?.AIAssistantThemeId}`}
+                    to={`/admin/assistant/theme/edit?id=${item?.AIAssistantThemeId}`}
                     className="flex items-center gap-2 group-hover:text-primary pr-2"
                 >
                     <span className=" break-words">{item.Name}</span>
@@ -122,7 +122,7 @@ export default function Theme() {
                         onClick={() => {
                             const NewParams = new URLSearchParams();
                             NewParams.set("id", Row.AIAssistantThemeId.toString());
-                            Navigate(`/superadmin/assistant/theme/edit?${NewParams.toString()}`);
+                            Navigate(`/admin/assistant/theme/edit?${NewParams.toString()}`);
                         }}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer"
                     >
@@ -186,7 +186,7 @@ export default function Theme() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        Navigate("/superadmin/assistant/theme/new");
+                                        Navigate("/admin/assistant/theme/new");
                                     }}
                                     className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                                 >

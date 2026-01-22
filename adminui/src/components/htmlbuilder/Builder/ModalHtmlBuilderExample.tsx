@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ModalHtmlBuilder from '../components/htmlbuilder/Builder/ModalHtmlBuilder';
+import ModalHtmlBuilder from './ModalHtmlBuilder';
 
 /**
  * Usage Example for ModalHtmlBuilder

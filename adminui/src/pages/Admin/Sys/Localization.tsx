@@ -239,7 +239,7 @@ const Localization = () => {
                     </button>
                     <button
                         title="Edit"
-                        onClick={() => navigate(`/superadmin/setting/localization/edit/${row.LocaleRegionId}`)}
+                        onClick={() => navigate(`/admin/setting/localization/edit/${row.LocaleRegionId}`)}
                         className="border p-2 rounded-md border-gray-300 text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-boxdark"
                     >
                         <MdOutlineEdit size={20} />
@@ -279,7 +279,7 @@ const Localization = () => {
                                 Import
                             </button>
                             <button
-                                onClick={() => navigate("/superadmin/setting/localization/new")}
+                                onClick={() => navigate("/admin/setting/localization/new")}
                                 className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                             >
                                 Add New
