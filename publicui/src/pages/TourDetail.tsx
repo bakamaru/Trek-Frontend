@@ -89,6 +89,8 @@ const TourDetail: React.FC<TourDetailProps> = () => {
         title={tour.title}
         description={`Experience ${tour.title} in ${tour.location}. ${tour.duration} tour starting from $${tour.price}.`}
         image={tour.image}
+        productId={Number(tour.id) || 0}
+        seoType="product"
         context={`${tour.title} is a ${tour.duration} tour in ${tour.location} costing $${tour.price}. Overview: ${tour.overview}`}
       />
       <Lightbox />

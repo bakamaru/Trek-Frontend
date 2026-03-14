@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useGetBannerItemsByKeyQuery } from '../redux/api/bannerAPI';
 import LoadingSpinner from './LoadingSpinner';
 import BannerSlideItem from './common/BannerSlideItem';
+import HeroSkeleton from './HeroSkeleton';
 
 type BannerItemDto = {
   BannerId: number;
@@ -33,10 +34,31 @@ const Hero: React.FC = () => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const autoPlayRef = useRef<number | null>(null);
 
+  // Cache key for Hero Banners
+  const CACHE_KEY = 'hero_banners_cache';
+
+  // State for cached data to show immediately
+  const [cachedData, setCachedData] = useState<BannerItemDto[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const { data: heroDataRaw, isLoading, error } = useGetBannerItemsByKeyQuery("landing");
 
-  const heroData = heroDataRaw as BannerResponse | undefined;
-  const slides: BannerItemDto[] = [...(heroData?.Data ?? [])].sort(
+  // Update cache when new data arrives
+  useEffect(() => {
+    if (heroDataRaw?.Data) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(heroDataRaw.Data));
+      setCachedData(heroDataRaw.Data);
+    }
+  }, [heroDataRaw]);
+
+  // Use API data if available, otherwise use cached data
+  const slides: BannerItemDto[] = [...(heroDataRaw?.Data ?? cachedData ?? [])].sort(
     (a, b) => (a.DisplayOrder ?? 0) - (b.DisplayOrder ?? 0)
   );
 
@@ -233,8 +255,8 @@ const Hero: React.FC = () => {
     }
   };
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-500 text-center p-4">Failed to load hero content</div>;
+  if (isLoading && slides.length === 0) return <HeroSkeleton />;
+  if (error && slides.length === 0) return <div className="text-red-500 text-center p-4">Failed to load hero content</div>;
 
   const alignClass = getContentAlignClass(activeSlide.ContentPosition);
   const animationClass = getAnimationClass(activeSlide.Animation);
@@ -286,7 +308,7 @@ const Hero: React.FC = () => {
           </div> */}
 
           {/* content placeholder (non-interactive) */}
-        
+
         </div>
       </div>
 
@@ -305,7 +327,7 @@ const Hero: React.FC = () => {
           </div>
         </div>
       )}
-    
+
     </section>
   );
 };

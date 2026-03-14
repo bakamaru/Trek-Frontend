@@ -5,9 +5,29 @@ import LoadingSpinner from './LoadingSpinner';
 import { GalleryImage } from '../types/types';
 
 const Gallery: React.FC = () => {
+  const CACHE_KEY = 'gallery_cache';
+
+  const [cachedGalleryImages, setCachedGalleryImages] = useState<GalleryImage[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data: galleryImages, isLoading, error } = useGetGalleryQuery(undefined);
+
+  useEffect(() => {
+    if (galleryImages) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(galleryImages));
+      setCachedGalleryImages(galleryImages);
+    }
+  }, [galleryImages]);
+
+  const images: GalleryImage[] = galleryImages ?? cachedGalleryImages ?? [];
 
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
@@ -22,14 +42,14 @@ const Gallery: React.FC = () => {
   };
 
   const nextImage = useCallback(() => {
-    if (!galleryImages) return;
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % galleryImages.length);
-  }, [galleryImages]);
+    if (images.length === 0) return;
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+  }, [images]);
 
   const prevImage = useCallback(() => {
-    if (!galleryImages) return;
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + galleryImages.length) % galleryImages.length);
-  }, [galleryImages]);
+    if (images.length === 0) return;
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  }, [images]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -51,9 +71,9 @@ const Gallery: React.FC = () => {
     });
   };
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-500 text-center p-4">Failed to load gallery</div>;
-  if (!galleryImages || galleryImages.length === 0) return <div className="text-center p-4">No images found</div>;
+  if (isLoading && images.length === 0) return <LoadingSpinner />;
+  if (error && images.length === 0) return <div className="text-red-500 text-center p-4">Failed to load gallery</div>;
+  if (!isLoading && images.length === 0) return <div className="text-center p-4">No images found</div>;
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800" id="gallery">
@@ -65,7 +85,7 @@ const Gallery: React.FC = () => {
 
         {/* Masonry Layout */}
         <div className="columns-1 sm:columns-2 md:columns-3 gap-4">
-          {galleryImages.map((image: GalleryImage, index: number) => (
+          {images.map((image: GalleryImage, index: number) => (
             <div
               key={image.id}
               className="mb-4 break-inside-avoid cursor-pointer group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
@@ -131,16 +151,16 @@ const Gallery: React.FC = () => {
           <div className="relative max-w-full max-h-full p-4" onClick={(e) => e.stopPropagation()}>
             <img
               key={currentIndex} // Force re-render for animation if needed
-              src={getHdUrl(galleryImages[currentIndex].src)}
-              alt={galleryImages[currentIndex].alt}
+              src={getHdUrl(images[currentIndex].src)}
+              alt={images[currentIndex].alt}
               className="max-w-[90vw] max-h-[85vh] object-contain shadow-2xl rounded-sm"
             />
             <div className="absolute bottom-0 left-0 right-0 text-center transform translate-y-full pt-4">
               <p className="text-white text-lg font-medium tracking-wide">
-                {galleryImages[currentIndex].alt}
+                {images[currentIndex].alt}
               </p>
               <p className="text-gray-400 text-sm mt-1">
-                {currentIndex + 1} / {galleryImages.length}
+                {currentIndex + 1} / {images.length}
               </p>
             </div>
           </div>

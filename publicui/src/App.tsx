@@ -69,11 +69,13 @@ import { Suspense } from "react";
 //import ErrorBoundary from "./components/ErrorBoundary";
 import AppRouter from "./routes/AppRouter";
 
+import HomeSkeleton from "./components/common/HomeSkeleton";
+
 function App() {
   return (
-    <Suspense fallback={<><p>Loading....</p></>}>
+    <Suspense fallback={<HomeSkeleton />}>
       {/* <ErrorBoundary> */}
-        <AppRouter />
+      <AppRouter />
       {/* </ErrorBoundary> */}
     </Suspense>
   );

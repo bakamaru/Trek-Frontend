@@ -24,6 +24,7 @@ import { miscAPI } from "./api/miscAPI";
 import { bookingAPI } from "./api/bookingAPI";
 import { userProfileCacheMiddleware } from "./middleware/cacheMiddleware";
 import { reviewAPI } from "./api/reviewAPI";
+import { seoAPI } from "./api/seoAPI";
 
 export const store = configureStore({
   reducer: {
@@ -49,6 +50,7 @@ export const store = configureStore({
     [miscAPI.reducerPath]: miscAPI.reducer,
     [reviewAPI.reducerPath]: reviewAPI.reducer,
     [bookingAPI.reducerPath]: bookingAPI.reducer,
+    [seoAPI.reducerPath]: seoAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -75,6 +77,7 @@ export const store = configureStore({
       bookingAPI.middleware,
       reviewAPI.middleware,
       userProfileCacheMiddleware, // Add cache middleware
+      seoAPI.middleware,
     ),
 });
 

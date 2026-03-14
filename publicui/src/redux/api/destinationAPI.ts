@@ -69,7 +69,14 @@ export const destinationAPI = createApi({
             },
             providesTags: ["Destination"],
         }),
-
+        getDestinationByCountryId: builder.query<any, { countryId: number; offset: number; limit: number }>({
+            query: ({ countryId, offset, limit }) => ({
+                url: `/api/v1/destination/bycountry/${countryId}`,
+                method: 'GET',
+                params: { offset, limit },
+            }),
+            providesTags: ["Destination"],
+        }),
         // GET /api/v1/destination/byslug/{slug}
         getDestinationBySlug: builder.query<any, string>({
             query: (slug) => ({
@@ -146,6 +153,7 @@ export const destinationAPI = createApi({
 });
 
 export const {
+    useGetDestinationByCountryIdQuery,
     useGetDestinationsActiveQuery,
     useGetDestinationsQuery,
     useGetDestinationBySlugQuery,

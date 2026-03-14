@@ -1,7 +1,0 @@
-VITE_API_BASE_URL="https://localhost:44314"
-VITE_API_PATH='/api/v1/'
-VITE_CDN_PATH="https://localhost:44314"
-VITE_IDENTITY_SERVER="https://localhost:44314"
-VITE_API_SERVER="https://localhost:44314"
-VITE_API_CLIENTID="test-client"
-VITE_API_SECRET="test-secret"

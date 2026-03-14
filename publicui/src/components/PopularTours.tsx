@@ -10,8 +10,30 @@ const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
   </svg>
 );
 
+import PopularToursSkeleton from './PopularToursSkeleton';
+
 const PopularTours: React.FC = () => {
-  const { data: tours, isLoading, error } = useGetPopularToursQuery(undefined);
+  const CACHE_KEY = 'popular_tours_cache';
+
+  const [cachedTours, setCachedTours] = React.useState<Tour[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const { data: rawData, isLoading, error } = useGetPopularToursQuery(undefined);
+
+  React.useEffect(() => {
+    if (rawData) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(rawData));
+      setCachedTours(rawData);
+    }
+  }, [rawData]);
+
+  const tours = rawData ?? cachedTours ?? [];
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800">
@@ -20,13 +42,13 @@ const PopularTours: React.FC = () => {
           <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">Most Popular Tours</h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2">Discover the tours that our customers love the most.</p>
         </div>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : error ? (
+        {isLoading && tours.length === 0 ? (
+          <PopularToursSkeleton />
+        ) : error && tours.length === 0 ? (
           <div className="text-red-500 text-center">Failed to load tours</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tours?.map((tour: Tour) => (
+            {tours.map((tour: Tour) => (
               <div key={tour.id} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden group">
                 <div className="relative">
                   <img src={tour.image} alt={tour.title} className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300" />

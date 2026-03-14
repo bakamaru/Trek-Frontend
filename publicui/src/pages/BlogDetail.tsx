@@ -48,7 +48,8 @@ const BlogDetail: React.FC<BlogDetailProps> = () => {
         title={post.Title}
         description={excerpt}
         image={post.CoverImage || post.ThumbnailImage}
-        type="article"
+        productId={post.PostId}
+        seoType="article"
         context={`Blog post titled "${post.Title}". Excerpt: ${excerpt}`}
       />
       <section

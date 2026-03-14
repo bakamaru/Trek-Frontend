@@ -16,6 +16,7 @@ import BlogList from "../pages/BlogList";
 import BlogDetail from "../pages/BlogDetail";
 import Destinations from "../pages/Destinations";
 import DestinationDetail from "../pages/DestinationDetail";
+import ExploreNepal from "../pages/ExploreNepal";
 import FlightList from "../pages/FlightList";
 import FlightDetail from "../pages/FlightDetail";
 import CarList from "../pages/CarList";
@@ -35,6 +36,8 @@ import Booking from "../pages/Booking";
 import TourBooking from "../pages/TourBooking";
 import TripPlanner from "../pages/TripPlanner";
 import SignIn from "../pages/AuthPages/SignIn";
+import SignInCallback from "../pages/AuthPages/CallBack";
+import SitemapRedirect from "../components/SitemapRedirect";
 
 
 const appRoutes: RouteObject[] = [
@@ -43,6 +46,13 @@ const appRoutes: RouteObject[] = [
     element: <PublicLayout />,
     children: [
       { index: true, element: <Home /> },
+    ],
+  },
+  {
+    path: "/auth/callback",
+    element: <PublicLayout />,
+    children: [
+      { index: true, element: <SignInCallback /> },
     ],
   },
   {
@@ -135,6 +145,13 @@ const appRoutes: RouteObject[] = [
     element: <PublicLayout />,
     children: [
       { index: true, element: <DestinationDetail /> },
+    ],
+  },
+  {
+    path: "/explore-nepal",
+    element: <PublicLayout />,
+    children: [
+      { index: true, element: <ExploreNepal /> },
     ],
   },
   // {
@@ -252,6 +269,10 @@ const appRoutes: RouteObject[] = [
   {
     path: "/signup",
     element: <SignIn />
+  },
+  {
+    path: "/sitemap.xml",
+    element: <SitemapRedirect />
   }
 
 ];

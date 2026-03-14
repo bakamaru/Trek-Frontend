@@ -4,6 +4,7 @@ import { Tour, DestinationDetail as DestinationDetailType } from '../types/types
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
 import { Link, useParams } from 'react-router-dom';
+import { getCDNUrl } from '../utils/helpers';
 
 
 const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
@@ -62,7 +63,7 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
     if (!isLoadingDest && destApi) {
       const mapped: DestinationDetailType = {
         slug: slug || String(destApi.DestinationId ?? ''),
-        country: destApi.CountryName ,
+        country: destApi.CountryName,
         subtitle: destApi.CountrySubtitle || '',
         name: destApi.Name || 'N/A',
         description: destApi.ShortDescription || destApi.Description || '',
@@ -99,13 +100,13 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
       {/* Hero Section */}
       <section
         className="h-[50vh] bg-cover bg-center flex items-center justify-center text-white relative"
-        style={{ backgroundImage: `url(${destination.heroImage})` }}
+        style={{ backgroundImage: `url(${getCDNUrl(destination.heroImage) + "?w=1920&h=650&mode=crop"})` }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
         <div className="container mx-auto px-4 z-10 text-center">
-          <h1 className="text-5xl lg:text-7xl font-extrabold">{destination.country}</h1>
+          <h1 className="text-5xl lg:text-7xl font-extrabold">{destination.country != "null" ? destination.country : "Nepal"}</h1>
           <p className="text-xl mt-4">
-            {destination.subtitle||""}
+            {destination.subtitle || ""}
           </p>
         </div>
       </section>
@@ -124,14 +125,16 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
       <section className="py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">Treks in {destination.name}</h2>
+            <h2 className="text-4xl font-extrabold text-gray-800 dark:text-gray-100">Trips in {destination.name}</h2>
             <p className="text-gray-600 dark:text-gray-400 mt-2">Explore our curated list of tours for an unforgettable experience.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {destination.tours.map((tour: Tour) => (
               <div key={tour.id} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden group">
                 <div className="relative">
-                  <img src={tour.image} alt={tour.title} className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300" />
+                  <a href={`/trek/${tour.slug}`}>
+                    <img src={getCDNUrl(tour.image) + "?w=400&h=200&mode=crop"} alt={tour.title} className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300" />
+                  </a>
                   <div className="absolute top-4 left-4 bg-blue-700 text-white text-lg font-bold px-4 py-2 rounded-md">${tour.price}</div>
                 </div>
                 <div className="p-6">
@@ -149,15 +152,15 @@ const DestinationDetail: React.FC<DestinationDetailProps> = () => {
                       </div>
                       <span className="text-gray-600 dark:text-gray-300 ml-2">({tour.reviews} reviews)</span>
                     </div>
-                    <Link to={`/trek/${tour.slug}`} className="text-blue-700 font-semibold hover:underline">
+                    <a href={`/trek/${tour.slug}`} className="text-blue-700 font-semibold hover:underline">
                       Know More
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>
             ))}
             {destination.tours.length === 0 && (
-              <p className="text-center text-gray-600 dark:text-gray-400 col-span-full">No tours/treks available for this destination at the moment.</p>
+              <p className="text-center text-gray-600 dark:text-gray-400 col-span-full">No trips available for this destination at the moment.</p>
             )}
           </div>
         </div>

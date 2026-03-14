@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { slugify } from '../utils/helpers';
+import { getCDNUrl, slugify } from '../utils/helpers';
 import { Destination } from '../types/types';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SEO from '../components/SEO';
 import { Link } from 'react-router-dom';
 import { useGetDestinationsActiveQuery } from '../redux/api/destinationAPI';
 
@@ -18,6 +19,7 @@ const Destinations: React.FC = () => {
 
   return (
     <div className="pt-20">
+      <SEO title="Destinations" description="Explore breathtaking locations from around the globe, handpicked for your next adventure." />
       <section className="bg-gray-100 dark:bg-gray-800 py-20 text-center">
         <div className="container mx-auto px-4">
           <h1 className="text-5xl font-extrabold text-gray-800 dark:text-gray-100">Our Destinations</h1>
@@ -34,20 +36,20 @@ const Destinations: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 {destinations.map((dest: any, index: number) => {
                   const name = dest.Name ?? dest.name ?? 'Destination';
-                  const image = dest.CoverImage ?? dest.ThumbnailImage ?? dest.image ?? '';
+                  const image = getCDNUrl(dest.CoverImage ?? dest.ThumbnailImage ?? dest.image ?? '');
                   const tours = dest.Tours ?? dest.tours ?? 0;
 
                   return (
-                    <Link to={`/destination/${slugify(name)}`} key={index}>
+                    <a href={`/destination/${slugify(name)}`} key={index}>
                       <div className="relative rounded-lg overflow-hidden group shadow-lg h-96">
-                        <img src={image} alt={name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300" />
+                        <img src={image + "?w=800&h=600&mode=crop"} alt={name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
                         <div className="absolute bottom-0 left-0 p-6 text-white">
                           <h3 className="text-2xl font-bold">{name}</h3>
-                          <p className="text-sm font-medium bg-blue-700 inline-block px-3 py-1 rounded-full mt-2">{tours} Treks</p>
+                          <p className="text-sm font-medium bg-blue-700 inline-block px-3 py-1 rounded-full mt-2">{tours} Trips</p>
                         </div>
                       </div>
-                    </Link>
+                    </a>
                   );
                 })}
               </div>

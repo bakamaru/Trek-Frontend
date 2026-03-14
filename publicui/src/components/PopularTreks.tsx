@@ -2,7 +2,8 @@ import React from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { Link } from 'react-router-dom';
 import { useGetAllPopularTrekQuery } from '../redux/api/trekAPI';
-import { slugify } from '../utils/helpers';
+import { getCDNUrl, slugify } from '../utils/helpers';
+import PopularTreksSkeleton from './PopularTreksSkeleton';
 
 const StarIcon: React.FC<{ filled: boolean }> = ({ filled }) => (
   <svg
@@ -65,14 +66,32 @@ type TrekApiResponse = {
 };
 
 const PopularTreks: React.FC = () => {
+  const CACHE_KEY = 'popular_treks_cache';
+
+  const [cachedTreks, setCachedTreks] = React.useState<TrekDto[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const { data: rawData, isLoading, error } = useGetAllPopularTrekQuery({
     offset: 1,
     limit: 6,
     query: '',
   });
 
+  React.useEffect(() => {
+    if (rawData?.Data) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(rawData.Data));
+      setCachedTreks(rawData.Data);
+    }
+  }, [rawData]);
+
   const response = rawData as TrekApiResponse | undefined;
-  const treks: TrekDto[] = response?.Data ?? [];
+  const treks: TrekDto[] = response?.Data ?? cachedTreks ?? [];
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800">
@@ -86,15 +105,15 @@ const PopularTreks: React.FC = () => {
           </p>
         </div>
 
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : error ? (
+        {isLoading && treks.length === 0 ? (
+          <PopularTreksSkeleton />
+        ) : error && treks.length === 0 ? (
           <div className="text-red-500 text-center">Failed to load treks</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {treks.map((trek) => {
               const price =
-                trek.PriceInUSD 
+                trek.PriceInUSD
 
               const durationLabel = trek.DurationDays
                 ? `${trek.DurationDays} Days`
@@ -105,7 +124,7 @@ const PopularTreks: React.FC = () => {
               const reviews = trek.TotalReviews || 0;
 
               // Choose image source (if you later add CoverImage/ThumbnailImage, this will just work)
-              const image = trek.ThumbnailImage ;
+              const image = getCDNUrl(trek.ThumbnailImage);
 
               const overview =
                 trek.OverviewDescription?.substring(0, 100) ?? '';
@@ -116,14 +135,17 @@ const PopularTreks: React.FC = () => {
                   key={trek.TrekId}
                   className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden group"
                 >
-                    <div className="relative">
-                    <img
-                      src={image}
-                      alt={trek.Name}
-                      className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
+                  <div className="relative">
+                    <a
+                      href={`/trek/${trekUrl}`}
+
+                    ><img
+                        src={image + "?w=500&h=300&mode=crop"}
+                        alt={trek.Name}
+                        className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                      /></a>
                     <div className="absolute top-4 left-4 bg-blue-700 text-white text-lg font-bold px-4 py-2 rounded-md">
-                      { `$${price}`}
+                      {`$${price}`}
                     </div>
                     {/* Region badge to attract attention */}
                     <div className="absolute top-4 right-4 bg-white/90 text-gray-900 text-sm font-semibold px-3 py-1 rounded-full shadow">
@@ -141,18 +163,19 @@ const PopularTreks: React.FC = () => {
                       <span>{durationLabel}</span>
                       <span
                         className={`font-bold px-2 py-1 rounded-full text-xs ${difficulty.toLowerCase().includes('strenuous') ||
-                            difficulty.toLowerCase().includes('hard')
-                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                          difficulty.toLowerCase().includes('hard')
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                           }`}
                       >
                         {difficulty}
                       </span>
                     </div>
 
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 h-16">
-                      {overview}...
-                    </p>
+                    <p
+                      className="text-gray-600 dark:text-gray-300 mb-4 h-16 line-clamp-3"
+                      dangerouslySetInnerHTML={{ __html: overview + '...' }}
+                    />
 
                     <div className="flex justify-between items-center border-t dark:border-gray-600 pt-4">
                       <div className="flex items-center">
@@ -165,12 +188,12 @@ const PopularTreks: React.FC = () => {
                           ({reviews} reviews)
                         </span>
                       </div>
-                      <Link
-                        to={`/trek/${trekUrl}`}
+                      <a
+                        href={`/trek/${trekUrl}`}
                         className="text-blue-700 font-semibold hover:underline"
                       >
                         Know More
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>

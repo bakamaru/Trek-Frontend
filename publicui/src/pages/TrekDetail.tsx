@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SEO from '../components/SEO';
 import { Link, useParams } from 'react-router-dom';
-import { useGetTrekDetailByUrlQuery } from '../redux/api/trekAPI';
+import { useGetTrekDetailByUrlQuery, useSubmitTrekReviewMutation } from '../redux/api/trekAPI';
 
 
 
@@ -128,10 +128,43 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
 
         // Trip facts
         const tripFacts = [
-            { label: 'Duration', value: `${d.DurationDays ?? d.Duration ?? 0} Days`, icon: '⏱' },
-            { label: 'Max Altitude', value: `${d.MaxAltitudeMeters ?? d.MaxAltitude ?? 0} m`, icon: '🗻' },
-            { label: 'Start', value: d.StartingPoint ?? d.StartCityName ?? '', icon: '📍' },
-            { label: 'End', value: d.EndingPoint ?? d.EndCityName ?? '', icon: '🏁' },
+            {
+                label: 'Duration',
+                value: `${d.DurationDays ?? d.Duration ?? 0} Days`,
+                icon: (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                )
+            },
+            {
+                label: 'Max Altitude',
+                value: `${d.MaxAltitudeMeters ?? d.MaxAltitude ?? 0} m`,
+                icon: (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 21h18M3 21l8-15 8 15M3 21l1.875-3.515" />
+                    </svg>
+                )
+            },
+            {
+                label: 'Start',
+                value: d.StartingPoint ?? d.StartCityName ?? '',
+                icon: (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                )
+            },
+            {
+                label: 'End',
+                value: d.EndingPoint ?? d.EndCityName ?? '',
+                icon: (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                    </svg>
+                )
+            },
         ];
 
         // Difficulty mapping from ActivityLevelId
@@ -153,12 +186,26 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
             price: Number(d.PriceInUSD ?? d.PriceInUSD) || 0,
             priceNpr: Number(d.PriceInNrs ?? d.PriceInNrs) || 0,
             rating: avgRating,
-            reviews: reviewsCount,
+            reviewCount: reviewsCount,
             gallery,
             itinerary,
             highlights,
-            // Equipment may not be present in DTO; default to empty array
-            equipment: Array.isArray(d.Equipment) ? d.Equipment.map((e: any) => ({ category: e.Category ?? e.Group ?? 'General', items: e.Items ?? e.List ?? [] })) : (d.EquipmentList || d.Equipments || []),
+            // Equipment from API response
+            equipment: Array.isArray(d.Equipments) ? d.Equipments : [],
+            // Maps from API response
+            maps: Array.isArray(d.Maps) ? d.Maps.map((m: any) => ({
+                id: m.TrekMapId ?? m.MapId,
+                title: m.Title ?? 'Trek Map',
+                imageUrl: m.ImageUrl ? normalizePath(m.ImageUrl) : null,
+                iframeUrl: m.IframeUrl ?? null,
+            })) : [],
+            // Reviews from API response
+            reviews: Array.isArray(d.Reviews) ? d.Reviews.filter((r: any) => r.IsApproved).map((r: any) => ({
+                id: r.TrekReviewId,
+                star: r.Star ?? 0,
+                review: r.Review ?? '',
+                reviewedBy: r.ReviewedByName ?? 'Anonymous',
+            })) : [],
             included: inclusions,
             excluded: exclusions,
             videoEmbedUrl: d.VideoLink ?? d.VideoUrl ?? null,
@@ -177,6 +224,11 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
     const [expandAll, setExpandAll] = useState(false);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+    // Review form state
+    const [reviewRating, setReviewRating] = useState(5);
+    const [reviewText, setReviewText] = useState('');
+    const [reviewerName, setReviewerName] = useState('');
+    const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
 
     useEffect(() => {
@@ -245,18 +297,16 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
     return (
         <div className="pt-20 bg-gray-50 dark:bg-gray-800">
             <SEO
-                title={trek.title}
-                description={`Book ${trek.title} - ${trek.duration} adventure. ${trek.overview.substring(0, 100)}...`}
-                image={trek.image}
-                context={`${trek.title} is a ${trek.difficulty} level trek lasting ${trek.duration}. Overview: ${trek.overview}`}
+                productId={trek.id}
+                seoType="product"
             />
             <Lightbox />
             {/* Hero Section */}
             <section
-                className="h-[50vh] bg-cover bg-center flex items-end text-white relative"
-                style={{ backgroundImage: `url(${trek.image})` }}
+                className="h-[70vh] bg-cover bg-center flex items-end text-white relative"
+                style={{ backgroundImage: `url(${trek.image}?w=1920&h=600&mode=crop)` }}
             >
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                <div className="absolute "></div>
                 <div className="container mx-auto px-4 z-10 pb-12">
                     <h1 className="text-5xl lg:text-6xl font-extrabold">{trek.title}</h1>
                     <div className="flex flex-wrap items-center mt-4 gap-x-4 gap-y-2">
@@ -266,7 +316,7 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                     <StarIcon key={i} filled={i < trek.rating} />
                                 ))}
                             </div>
-                            <span className="text-white ml-2">({trek.reviews} reviews)</span>
+                            <span className="text-white ml-2">({trek.reviewCount} reviews)</span>
                         </div>
                         <span className="text-lg hidden md:inline">|</span>
                         <span className="text-lg">{trek.duration}</span>
@@ -285,7 +335,10 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                             {/* Overview */}
                             <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
                                 <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">Trip Overview</h2>
-                                <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">{trek.overview}</p>
+                                <div
+                                    className="prose-content text-gray-600 dark:text-gray-300 text-base leading-relaxed"
+                                    dangerouslySetInnerHTML={{ __html: trek.overview }}
+                                />
                             </div>
 
                             {/* Highlights (just below Overview) */}
@@ -294,8 +347,10 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                     <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Highlights</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {trek.highlights.map((h: string, idx: number) => (
-                                            <div key={idx} className="flex items-start gap-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7l10 5v7l-10-5-10 5v-7l10-5z" /></svg>
+                                            <div key={idx} className="flex items-center gap-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-700 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clipRule="evenodd" />
+                                                </svg>
                                                 <p className="text-gray-700 dark:text-gray-300">{h}</p>
                                             </div>
                                         ))}
@@ -309,8 +364,9 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                 <div className="space-y-4">
                                     {trek.itinerary.map(item => (
                                         <div key={item.day} className="border dark:border-gray-600 rounded-lg overflow-hidden">
-                                            <button onClick={() => setActiveItinerary(activeItinerary === item.day ? null : item.day)} className="w-full text-left p-4 bg-gray-50 dark:bg-gray-600 hover:bg-blue-50 dark:hover:bg-gray-500 flex justify-between items-center transition-colors">
-                                                <h3 className="text-lg font-bold text-blue-800 dark:text-blue-300">Day {item.day}: {item.title}</h3>
+                                            <button onClick={() => setActiveItinerary(activeItinerary === item.day ? null : item.day)} className="w-full text-left p-4 bg-gray-50 dark:bg-gray-600 hover:bg-blue-50 dark:hover:bg-gray-500 flex justify-between items-start gap-3 transition-colors">
+                                                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider mr-3 mt-0.5 shrink-0">Day {item.day}</span>
+                                                <span className="text-base font-semibold text-gray-800 dark:text-gray-100 flex-1 leading-snug">{item.title}</span>
                                                 <span className={`transform transition-transform text-blue-700 ${activeItinerary === item.day ? 'rotate-180' : ''}`}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                                 </span>
@@ -326,19 +382,23 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
 
 
                                                     {item.dailyActivity ? (
-                                                        <div className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                                            {item.dailyActivity.split('\n').map((line: string, i: number) => (
-                                                                <p key={i} className="mb-2">{line}</p>
-                                                            ))}
-                                                        </div>
+                                                        <div
+                                                            className="prose-content text-gray-600 dark:text-gray-300 leading-relaxed"
+                                                            dangerouslySetInnerHTML={{ __html: item.dailyActivity }}
+                                                        />
                                                     ) : (
-                                                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{item.description}</p>
+                                                        <div
+                                                            className="prose-content text-gray-600 dark:text-gray-300 leading-relaxed"
+                                                            dangerouslySetInnerHTML={{ __html: item.description }}
+                                                        />
                                                     )}
-                                                    <div className="flex flex-wrap items-center gap-6 text-sm text-gray-700 dark:text-gray-300 font-medium mb-4">
+                                                    <div className="flex flex-wrap items-center gap-6 text-sm text-gray-700 dark:text-gray-300 font-medium mt-6 mb-4">
                                                         {/* Altitude */}
                                                         {item.altitude ? (
                                                             <div className="flex items-center gap-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2L2 9l3 8h10l3-8-8-7z" /></svg>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-700" viewBox="0 0 24 24" fill="currentColor">
+                                                                    <path d="M11.644 4.552a.75.75 0 0 0-1.288 0L2.347 15.87a.75.75 0 0 0 .644 1.155h17.018a.75.75 0 0 0 .644-1.155L11.644 4.552ZM10.25 10.5l1.75-2.625 1.75 2.625h-3.5Z" />
+                                                                </svg>
                                                                 <span><strong className="text-gray-800 dark:text-gray-100">Altitude:</strong> {item.altitude}m</span>
                                                             </div>
                                                         ) : null}
@@ -346,7 +406,9 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                                         {/* Trek Time / Duration */}
                                                         {item.trekTimeHours !== null && typeof item.trekTimeHours !== 'undefined' ? (
                                                             <div className="flex items-center gap-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a11 11 0 1011 11A11.013 11.013 0 0012 1zm1 12.59V7h-2v6l5 3 1-1.6z" /></svg>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-700" viewBox="0 0 24 24" fill="currentColor">
+                                                                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clipRule="evenodd" />
+                                                                </svg>
                                                                 <span><strong className="text-gray-800 dark:text-gray-100">Duration:</strong> {item.trekTimeHours ? `${item.trekTimeHours} hrs` : item.duration}</span>
                                                             </div>
                                                         ) : null}
@@ -354,7 +416,9 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                                         {/* Distance */}
                                                         {item.trekDistanceKM !== null && typeof item.trekDistanceKM !== 'undefined' ? (
                                                             <div className="flex items-center gap-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l2-2 4 4 8-8 4 4v6H3z" /></svg>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-700" viewBox="0 0 24 24" fill="currentColor">
+                                                                    <path fillRule="evenodd" d="m11.54 22.351.07.033.024.011a.75.75 0 0 0 .723 0l.024-.01.07-.033c.29-.136.765-.366 1.341-.692.934-.528 2.126-1.282 3.253-2.31 2.155-1.957 3.71-4.49 3.71-7.653 0-4.823-3.903-8.73-8.731-8.73S3.201 6.927 3.201 11.75c0 3.163 1.554 5.696 3.709 7.653 1.127 1.028 2.319 1.782 3.253 2.31.576.326 1.05.556 1.341.692ZM12 14a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clipRule="evenodd" />
+                                                                </svg>
                                                                 <span><strong className="text-gray-800 dark:text-gray-100">Distance:</strong> {item.trekDistanceKM} km</span>
                                                             </div>
                                                         ) : null}
@@ -362,7 +426,9 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                                         {/* Meals */}
                                                         {item.mealsIncluded ? (
                                                             <div className="flex items-center gap-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-600" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v12a4 4 0 004 4h4a4 4 0 004-4V2H6z" /></svg>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-700" viewBox="0 0 24 24" fill="currentColor">
+                                                                    <path d="M4.5 4.5a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-1.5 0v-4.5Zm4.5 0a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-1.5 0v-4.5Zm4.5 0a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-1.5 0v-4.5ZM18 4.5a.75.75 0 0 1 1.5 0v15a.75.75 0 0 1-1.5 0v-15ZM10.5 12a4.5 4.5 0 0 1 4.5 4.5v1.5a1.5 1.5 0 0 1-1.5 1.5H7.5A1.5 1.5 0 0 1 6 18v-1.5a4.5 4.5 0 0 1 4.5-4.5Z" />
+                                                                </svg>
                                                                 <span><strong className="text-gray-800 dark:text-gray-100">Meals:</strong> {item.mealsIncluded}</span>
                                                             </div>
                                                         ) : null}
@@ -370,7 +436,9 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                                         {/* Transport */}
                                                         {item.transportMethod ? (
                                                             <div className="flex items-center gap-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2l1-3h10l1 3h2v6h-2a2 2 0 01-2 2h-8a2 2 0 01-2-2H3v-6zM5 9a2 2 0 110-4 2 2 0 010 4z" /></svg>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-700" viewBox="0 0 24 24" fill="currentColor">
+                                                                    <path d="M5.566 4.657A4.505 4.505 0 0 1 9.6 2.25h4.8a4.505 4.505 0 0 1 4.034 2.407l1.813 3.627a3.75 3.75 0 0 1 .353 1.605v7.86a1.5 1.5 0 0 1-1.5 1.5H18a1.5 1.5 0 0 1-1.5-1.5v-1.5h-9v1.5A1.5 1.5 0 0 1 6 19.5H4.5a1.5 1.5 0 0 1-1.5-1.5v-7.86c0-.573.13-1.135.353-1.605l1.713-3.426ZM6.75 12a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm11.25.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                                                </svg>
                                                                 <span><strong className="text-gray-800 dark:text-gray-100">Transport:</strong> {item.transportMethod}</span>
                                                             </div>
                                                         ) : null}
@@ -403,19 +471,35 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                             </div>
 
                             {/* Equipment */}
-                            <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
-                                <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Equipment Checklist</h2>
-                                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                                    {trek.equipment.map(cat => (
-                                        <div key={cat.category}>
-                                            <h4 className="font-bold text-lg mb-2 text-blue-700 dark:text-blue-400">{cat.category}</h4>
-                                            <ul className="space-y-1 list-disc list-inside text-gray-600 dark:text-gray-300">
-                                                {cat.items.map((item, idx) => <li key={idx}>{item}</li>)}
-                                            </ul>
-                                        </div>
-                                    ))}
+                            {trek.equipment && trek.equipment.length > 0 && (
+                                <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
+                                    <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Equipment Checklist</h2>
+                                    <ul className="space-y-3">
+                                        {trek.equipment.map((equip: any) => (
+                                            <li key={equip.TrekEquipmentId} className="flex items-start text-gray-600 dark:text-gray-300">
+                                                <svg className="w-5 h-5 text-blue-700 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <div className="flex-1">
+                                                    <span className="font-medium text-gray-800 dark:text-gray-100">
+                                                        {equip.EquipmentName || `Equipment #${equip.EquipmentId}`}
+                                                    </span>
+                                                    {(equip.IsRequired || equip.IsOptional || equip.QTY > 1) && (
+                                                        <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                                                            {equip.IsRequired && '(Required)'}
+                                                            {equip.IsOptional && !equip.IsRequired && '(Optional)'}
+                                                            {equip.QTY > 1 && ` × ${equip.QTY}`}
+                                                        </span>
+                                                    )}
+                                                    {equip.Description && (
+                                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{equip.Description}</p>
+                                                    )}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Gallery & Video */}
                             <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
@@ -430,14 +514,56 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     {trek.gallery.map((imgSrc, index) => (
                                         <div key={index} className="cursor-pointer overflow-hidden rounded-lg group" onClick={() => openLightbox(index)}>
-                                            <img src={imgSrc} alt={`Trek gallery image ${index + 1}`} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" />
+                                            <img src={imgSrc + "?w=300&h=240&mode=crop"} alt={`Trek gallery image ${index + 1}`} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" />
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
-                            {/* Map */}
-                            {trek.mapEmbedUrl && (
+                            {/* Maps */}
+                            {trek.maps && trek.maps.length > 0 && (
+                                <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
+                                    <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Trek Route Maps</h2>
+                                    <div className="grid grid-cols-1 gap-6">
+                                        {trek.maps.map((map: any) => (
+                                            <div key={map.id} className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                                                {map.iframeUrl ? (
+                                                    <div className="w-full">
+                                                        <iframe
+                                                            src={map.iframeUrl}
+                                                            width="100%"
+                                                            height="500"
+                                                            style={{ border: 0 }}
+                                                            allowFullScreen={true}
+                                                            loading="lazy"
+                                                            referrerPolicy="no-referrer-when-downgrade"
+                                                            className="w-full"
+                                                        />
+                                                    </div>
+                                                ) : map.imageUrl ? (
+                                                    <div className="w-full bg-gray-100 dark:bg-gray-900">
+                                                        <img
+                                                            src={map.imageUrl}
+                                                            alt={map.title || 'Trek Map'}
+                                                            className="w-full h-auto object-contain"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-center py-12 bg-gray-50 dark:bg-gray-800">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-600 mb-3" viewBox="0 0 24 24" fill="currentColor">
+                                                            <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 0 1 1.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0 1 21.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 0 1-1.676 0l-4.994-2.497a.375.375 0 0 0-.336 0l-3.868 1.935A1.875 1.875 0 0 1 2.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437ZM9 6a.75.75 0 0 1 .75.75V15a.75.75 0 0 1-1.5 0V6.75A.75.75 0 0 1 9 6Zm6.75 3a.75.75 0 0 0-1.5 0v8.25a.75.75 0 0 0 1.5 0V9Z" clipRule="evenodd" />
+                                                        </svg>
+                                                        <p className="text-gray-500 dark:text-gray-400">No map available</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Legacy Map Embed (fallback) */}
+                            {trek.mapEmbedUrl && (!trek.maps || trek.maps.length === 0) && (
                                 <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
                                     <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Trek Route Map</h2>
                                     <div className="overflow-hidden rounded-lg">
@@ -457,6 +583,115 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                     </ul>
                                 </div>
                             )}
+
+                            {/* Reviews Section */}
+                            <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
+                                <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Reviews</h2>
+
+                                {/* Reviews List */}
+                                {trek.reviews && trek.reviews.length > 0 ? (
+                                    <div className="space-y-6 mb-8">
+                                        {trek.reviews.map((review: any) => (
+                                            <div key={review.id} className="border-b border-gray-200 dark:border-gray-600 pb-6 last:border-b-0">
+                                                <div className="flex items-center gap-3 mb-3">
+                                                    <div className="flex">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <StarIcon key={i} filled={i < review.star} />
+                                                        ))}
+                                                    </div>
+                                                    <span className="font-semibold text-gray-800 dark:text-gray-100">{review.reviewedBy}</span>
+                                                </div>
+                                                <p className="text-gray-600 dark:text-gray-300">{review.review}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500 dark:text-gray-400 mb-8">No reviews yet. Be the first to review this trek!</p>
+                                )}
+
+                                {/* Review Form */}
+                                <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+                                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Write a Review</h3>
+                                    {reviewSubmitted ? (
+                                        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 text-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-600 dark:text-green-400 mx-auto mb-3" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
+                                            </svg>
+                                            <p className="text-green-800 dark:text-green-200 font-semibold">Thank you for your review!</p>
+                                            <p className="text-green-700 dark:text-green-300 text-sm mt-2">Your review has been submitted and is pending approval.</p>
+                                        </div>
+                                    ) : (
+                                        <form onSubmit={(e) => {
+                                            e.preventDefault();
+                                            // TODO: Submit review to API
+                                            console.log({ rating: reviewRating, text: reviewText, name: reviewerName });
+                                            setReviewSubmitted(true);
+                                            // Reset form after 3 seconds
+                                            setTimeout(() => {
+                                                setReviewSubmitted(false);
+                                                setReviewText('');
+                                                setReviewerName('');
+                                                setReviewRating(5);
+                                            }, 3000);
+                                        }} className="space-y-4">
+                                            {/* Rating */}
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Rating</label>
+                                                <div className="flex gap-2">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <button
+                                                            key={star}
+                                                            type="button"
+                                                            onClick={() => setReviewRating(star)}
+                                                            className="focus:outline-none transition-transform hover:scale-110"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-8 w-8 ${star <= reviewRating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`} viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                            </svg>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Name */}
+                                            <div>
+                                                <label htmlFor="reviewerName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="reviewerName"
+                                                    value={reviewerName}
+                                                    onChange={(e) => setReviewerName(e.target.value)}
+                                                    required
+                                                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-transparent dark:bg-gray-800 dark:text-gray-100"
+                                                    placeholder="Enter your name"
+                                                />
+                                            </div>
+
+                                            {/* Review Text */}
+                                            <div>
+                                                <label htmlFor="reviewText" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Review</label>
+                                                <textarea
+                                                    id="reviewText"
+                                                    value={reviewText}
+                                                    onChange={(e) => setReviewText(e.target.value)}
+                                                    required
+                                                    rows={4}
+                                                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-transparent dark:bg-gray-800 dark:text-gray-100"
+                                                    placeholder="Share your experience..."
+                                                />
+                                            </div>
+
+                                            {/* Submit Button */}
+                                            <button
+                                                type="submit"
+                                                className="w-full bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors duration-300"
+                                            >
+                                                Submit Review
+                                            </button>
+                                        </form>
+                                    )}
+                                </div>
+                            </div>
 
                             {/* FAQs grouped by category: left category list + right FAQ panel */}
                             <div className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
@@ -525,7 +760,12 @@ const TrekDetail: React.FC<TrekDetailProps> = () => {
                                                         </button>
                                                         <div className={`transition-all duration-300 ease-in-out ${open ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
                                                             <div className="p-4 border-t dark:border-gray-600 text-gray-600 dark:text-gray-300">
-                                                                {f.answer ? f.answer.split('\n').map((ln: string, idx: number) => <p key={idx} className="mb-2">{ln}</p>) : <p>No answer provided.</p>}
+                                                                {f.answer ? (
+                                                                    <div
+                                                                        className="text-gray-600 dark:text-gray-300"
+                                                                        dangerouslySetInnerHTML={{ __html: f.answer }}
+                                                                    />
+                                                                ) : <p>No answer provided.</p>}
                                                             </div>
                                                         </div>
                                                     </div>

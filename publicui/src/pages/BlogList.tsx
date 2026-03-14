@@ -55,7 +55,7 @@ const BlogList: React.FC = () => {
             <div className="relative h-[50vh] min-h-[400px] flex items-center justify-center bg-gray-900 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+                        src="https://backend.territoryhimalaya.com/assets/bg/mountainrange.jpg?w=1800&h=500&mode=crop"
                         alt="Himalayan Mountains"
                         className="w-full h-full object-cover opacity-50"
                     />
@@ -96,7 +96,7 @@ const BlogList: React.FC = () => {
                                         id: post.Url, // Using Url as ID for navigation as per BlogDetail usage
                                         title: post.Title,
                                         slug: post.Url,
-                                        image: post.CoverImage || post.ThumbnailImage || '',
+                                        image: post.ThumbnailImage,
                                         date: new Date(post.PublishedOn).toLocaleDateString(),
                                         author: 'Admin', // Post DTO has PostAuthorId but no name, defaulting to Admin or empty
                                         excerpt: '', // Post DTO has Content, excerpt is usually derived

@@ -1,6 +1,6 @@
 
 
-import React from 'react';'../const/constants';
+import React from 'react';
 
 
 const Services: React.FC = () => {

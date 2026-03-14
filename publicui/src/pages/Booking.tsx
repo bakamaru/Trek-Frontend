@@ -12,6 +12,7 @@ import Select from 'react-select';
 // import Input from '../components/form/input/InputField';
 import { UserBookingOpenRequest, BookingTravellerDto, LeadCustomerDto } from '../redux/api/bookingAPI';
 import { toast } from 'react-toastify'; // Assuming react-toastify is available or use alert
+import { getCDNUrl } from '../utils/helpers';
 
 // Local Input Component to match specific design requirements
 const BookingInput = ({ labelName, error, errorMsg, className, ...props }: any) => (
@@ -743,7 +744,7 @@ const Booking: React.FC = () => {
                             <div className="sticky top-28 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border dark:border-gray-700">
                                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Your Booking Summary</h2>
 
-                                <img src={trek.CoverImage} alt={trek.Name} className="rounded-lg mb-4 w-full h-auto object-cover aspect-video" />
+                                <img src={getCDNUrl(trek.Gallery[0].ImagePath)} alt={trek.Name} className="rounded-lg mb-4 w-full h-auto object-cover aspect-video" />
 
                                 <h3 className="text-xl font-bold dark:text-gray-200 mb-4">{trek.Name}</h3>
                                 <div className="space-y-2 mb-4 text-sm text-gray-600 dark:text-gray-300">

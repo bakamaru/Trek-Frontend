@@ -6,6 +6,16 @@ export const menuAPI = createApi({
     baseQuery: baseQueryWithAuth,
     tagTypes: ["Menu", "MenuGroup", "Role"],
     endpoints: (builder) => ({
+        getMegaMenu: builder.query<
+            any,
+            any
+        >({
+            query: () => ({
+                url: `/api/v1/trek/menu/all`,
+                method: "GET",
+            }),
+            providesTags: ["Menu"],
+        }),
         // GET /api/v1/menu/mainnavigation
         getMainNavigation: builder.query<any, void>({
             query: () => ({
@@ -140,6 +150,7 @@ export const menuAPI = createApi({
 });
 
 export const {
+    useGetMegaMenuQuery,
     useGetMainNavigationQuery,
     useGetMenuByGroupQuery,
     useGetBackendMenusQuery,

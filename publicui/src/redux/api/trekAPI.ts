@@ -167,6 +167,15 @@ export const trekAPI = createApi({
             }),
             invalidatesTags: ["Trek"],
         }),
+        // Public review submission
+        submitTrekReview: builder.mutation<any, { trekId: number; star: number; review: string; reviewedByName: string }>({
+            query: ({ trekId, star, review, reviewedByName }) => ({
+                url: `/api/v1/trek/${trekId}/review/submit`,
+                method: "POST",
+                body: { Star: star, Review: review, ReviewedByName: reviewedByName },
+            }),
+            invalidatesTags: ["Trek"],
+        }),
     }),
 });
 
@@ -189,5 +198,6 @@ export const {
     useSaveTrekDeparturesMutation,
     useSaveTrekGuidesMutation,
     useDeleteTrekGalleryMutation,
-    useDeleteTrekReviewMutation
+    useDeleteTrekReviewMutation,
+    useSubmitTrekReviewMutation
 } = trekAPI;

@@ -30,7 +30,7 @@ const Contact: React.FC = () => {
             <div className="relative h-[50vh] min-h-[400px] flex items-center justify-center bg-gray-900 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+                        src="https://backend.territoryhimalaya.com/assets/bg/mountainrange.jpg?w=1800&h=500&mode=crop"
                         alt="Himalayan Mountains"
                         className="w-full h-full object-cover opacity-50"
                     />
@@ -92,11 +92,11 @@ const Contact: React.FC = () => {
                                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                     </div>
                                     <h3 className="font-bold text-gray-900 dark:text-white mb-2">Email Us</h3>
-                                    <a href="mailto:info@territoryhimalayas.com" className="text-blue-600 dark:text-blue-400 hover:underline text-sm block">
-                                        info@territoryhimalayas.com
+                                    <a href="mailto:info@territoryhimalaya.com" className="text-blue-600 dark:text-blue-400 hover:underline text-sm block">
+                                        info@territoryhimalaya.com
                                     </a>
-                                    <a href="mailto:support@territoryhimalayas.com" className="text-blue-600 dark:text-blue-400 hover:underline text-sm block mt-1">
-                                        support@territoryhimalayas.com
+                                    <a href="mailto:support@territoryhimalaya.com" className="text-blue-600 dark:text-blue-400 hover:underline text-sm block mt-1">
+                                        support@territoryhimalaya.com
                                     </a>
                                 </div>
 

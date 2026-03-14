@@ -1,38 +1,39 @@
 import React from 'react';
-import { slugify } from '../utils/helpers';
+import { getCDNUrl, slugify } from '../utils/helpers';
 import LoadingSpinner from './LoadingSpinner';
 import { Link } from 'react-router-dom';
-import { useGetTopDestinationsQuery } from '../redux/api/destinationAPI';
+import { useGetTopDestinationsQuery, Destination } from '../redux/api/destinationAPI';
+import DestinationsSkeleton from './DestinationsSkeleton';
 
-type ApiDestination = {
-  DestinationId: number;
-  CountryId: number;
-  CountryName: string;
-  CountrySubtitle: string;
-  Name: string;
-  Description: string;
-  ShortDescription: string;
-  CoverImage: string;
-  ThumbnailImage: string;
-  IsTopDestination: boolean;
-};
 
-type DestinationApiResponse = {
-  Code: number;
-  Message: string;
-  Data: ApiDestination[];
-  Errors?: any[];
-};
 
 const TopDestinations: React.FC = () => {
+  const CACHE_KEY = 'top_destinations_cache';
+
+  const [cachedDestinations, setCachedDestinations] = React.useState<Destination[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const { data: rawData, isLoading, error } = useGetTopDestinationsQuery({
     offset: 1,
     limit: 4,
     query: "",
   });
 
-  const response = rawData as DestinationApiResponse | undefined;
-  const destinations: ApiDestination[] = response?.Data ?? [];
+  React.useEffect(() => {
+    if (rawData?.Data) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(rawData.Data));
+      setCachedDestinations(rawData.Data);
+    }
+  }, [rawData]);
+
+  const destinations: Destination[] = rawData?.Data ?? cachedDestinations ?? [];
+  const noImageUrl = import.meta.env.VITE_CDN_PATH + "/no-td.png?w=600&h=400&mode=crop";
 
   return (
     <section className="py-20">
@@ -46,17 +47,16 @@ const TopDestinations: React.FC = () => {
           </p>
         </div>
 
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : error ? (
+        {isLoading && destinations.length === 0 ? (
+          <DestinationsSkeleton />
+        ) : error && destinations.length === 0 ? (
           <div className="text-red-500 text-center">Failed to load destinations</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
             {destinations.map((dest, index) => {
               const image =
-                dest.CoverImage ||
-                dest.ThumbnailImage ||
-                "https://via.placeholder.com/600x800?text=Destination";
+                getCDNUrl(dest.ThumbnailImage) ||
+                noImageUrl
 
               return (
                 <a
@@ -65,16 +65,16 @@ const TopDestinations: React.FC = () => {
                 >
                   <div className="relative rounded-lg overflow-hidden group shadow-lg h-80">
                     <img
-                      src={image + "?w=400&h=200&mode=crop"}
+                      src={image + "?w=600&h=400&mode=crop"}
                       alt={dest.Name}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70" />
                     <div className="absolute bottom-0 left-0 p-6 text-white">
-                      <h3 className="text-2xl font-bold">{dest.Name}</h3>
+                      <h3 className="text-2xl font-bold">{dest.Name || ""}</h3>
                       {dest.CountryName && (
                         <p className="text-sm font-medium bg-blue-700 inline-block px-3 py-1 rounded-full mt-2">
-                          {dest.CountryName}
+                          {dest.CountryName == "null" ? "Nepal" : (dest.CountryName || "")}
                         </p>
                       )}
                     </div>

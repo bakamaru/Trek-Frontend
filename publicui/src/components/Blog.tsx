@@ -4,59 +4,51 @@ import { Link } from 'react-router-dom';
 import BlogCard from './blog/BlogCard';
 import { useGetLatestPostsQuery } from '../redux/api/blogAPI';
 import { BlogPost } from '../types/types';
+import { Post } from '../types/blogTypes';
+import BlogSkeleton from './BlogSkeleton';
 
-// Backend Post model
-type ApiPost = {
-  PostId: number;
-  Title: string;
-  Url: string;
-  ThumbnailImage: string;
-  CoverImage: string;
-  Content: string;
-  Tags: string;
-  Categories: string;
-  PostAuthorId: number;
-  ViewCount: number;
-  PublishedOn: string;
-  IsVideoContent: boolean;
-  VideoLink: string;
-  RecommendationMetaTags: string;
-  IsPublic: boolean;
-};
 
-type BlogApiResponse = {
-  Code: number;
-  Message: string;
-  Data: ApiPost[];
-  Errors?: any[];
-};
 
 const Blog: React.FC = () => {
+  const CACHE_KEY = 'latest_blog_posts_cache';
+
+  const [cachedPosts, setCachedPosts] = React.useState<Post[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const {
     data: rawData,
     isLoading,
     error,
   } = useGetLatestPostsQuery({ offset: 1, limit: 3 });
 
-  const response = rawData as BlogApiResponse | undefined;
-  const apiPosts: ApiPost[] = response?.Data ?? [];
+  React.useEffect(() => {
+    if (rawData?.Data) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(rawData.Data));
+      setCachedPosts(rawData.Data);
+    }
+  }, [rawData]);
+
+  const apiPosts: Post[] = rawData?.Data ?? cachedPosts ?? [];
+  const noImageUrl = import.meta.env.VITE_CDN_PATH + "/no-image.png";
 
   // Map API Post -> your BlogPost type
-  var ps: any[] = apiPosts.map((p) => ({
-    id: p.PostId,
+  const ps: BlogPost[] = apiPosts.map((p) => ({
+    id: String(p.PostId),
     title: p.Title,
     slug: p.Url,
-    // choose cover first, then thumbnail, then fallback
-    image:
-      p.CoverImage ||
-      p.ThumbnailImage ||
-      'https://via.placeholder.com/800x600?text=Blog',
+    // choose thumbnail first, then fallback
+    image: p.ThumbnailImage || noImageUrl,
     // basic excerpt from content
     excerpt: p.Content ? p.Content.substring(0, 150) + '...' : '',
-    // you can tweak these depending on your BlogPost definition
-    author: '',
+    content: p.Content || '',
+    author: 'Admin',
     date: p.PublishedOn,
-    tags: p.Tags ? p.Tags.split(',').map((t) => t.trim()) : [],
   }));
 
   return (
@@ -71,9 +63,9 @@ const Blog: React.FC = () => {
           </p>
         </div>
 
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : error ? (
+        {isLoading && ps.length === 0 ? (
+          <BlogSkeleton />
+        ) : error && ps.length === 0 ? (
           <div className="text-red-500 text-center">Failed to load blog posts</div>
         ) : ps.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400">

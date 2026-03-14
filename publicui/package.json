@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "download-sitemap": "node scripts/download-sitemap.js",
+    "v2prebuild": "npm run download-sitemap",
+    "build": "tsc -b && vite build ",
+    "v2build": "tsc -b && npm run prebuild && vite build && npm run postbuild",
+    "v2postbuild": "node scripts/prerender.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -29,6 +33,7 @@
     "flatpickr": "^4.6.13",
     "framer-motion": "^12.23.26",
     "jwt-decode": "^4.0.0",
+    "oidc-client-ts": "^3.4.1",
     "query-string": "^9.2.2",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
@@ -36,7 +41,6 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.5",
-    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "react-phone-number-input": "^3.4.14",
@@ -59,8 +63,11 @@
     "eslint": "^9.19.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
+    "express": "^5.2.1",
     "globals": "^15.14.0",
     "postcss": "^8.5.2",
+    "puppeteer": "^24.39.1",
+    "serve-static": "^2.2.1",
     "tailwindcss": "^4.0.8",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
@@ -68,9 +75,6 @@
     "vite-plugin-svgr": "^4.3.0"
   },
   "overrides": {
-    "react-helmet-async": {
-      "react": "^16.8.0 || ^17 || ^18 || ^19"
-    },
     "@react-jvectormap/core": {
       "react": "^16.8.0 || ^17 || ^18 || ^19",
       "react-dom": "^16.8.0 || ^17 || ^18 || ^19"

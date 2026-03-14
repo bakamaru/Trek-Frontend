@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /*/booking
+Disallow: /checkout
+Disallow: /confirmation
+Disallow: /user/
+Disallow: /admin/
+
+Sitemap: https://territoryhimalaya.com/sitemap.xml

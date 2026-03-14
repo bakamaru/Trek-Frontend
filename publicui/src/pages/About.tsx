@@ -15,7 +15,7 @@ const About: React.FC = () => {
       <div className="relative h-[60vh] min-h-[500px] flex items-center justify-center bg-gray-900 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+            src="https://backend.territoryhimalaya.com/assets/bg/mountainrange.jpg?w=1800&h=500&mode=crop"
             alt="Himalayan Peaks"
             className="w-full h-full object-cover opacity-60"
           />
@@ -56,7 +56,7 @@ const About: React.FC = () => {
             <div className="order-2 lg:order-1 relative">
               <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2070&auto=format&fit=crop"
+                  src="https://backend.territoryhimalaya.com/assets/bg/mountainrange.jpg?w=800&h=600&mode=crop"
                   alt="Trekker looking at mountains"
                   className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
                 />
@@ -146,7 +146,7 @@ const About: React.FC = () => {
             {/* Team Member 1 */}
             <div className="text-center group">
               <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden shadow-lg border-4 border-white dark:border-gray-800">
-                <img src="https://images.unsplash.com/photo-1585938389612-a552a28d6914?q=80&w=2070&auto=format&fit=crop" alt="Member" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <img src="#" alt="Member" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">Bikram Lamichhane</h3>
               <p className="text-blue-600 dark:text-blue-400 font-medium">Founder & Lead Guide</p>
@@ -186,7 +186,7 @@ const About: React.FC = () => {
       <section className="py-20 bg-blue-900 relative is-dark">
         <div className="absolute inset-0 overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+            src="https://backend.territoryhimalaya.com/assets/bg/mountainrange.jpg?w=1800&h=500&mode=crop"
             alt="Background"
             className="w-full h-full object-cover opacity-20"
           />

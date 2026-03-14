@@ -24,6 +24,17 @@ type TestimonialApiResponse = {
 };
 
 const Testimonials: React.FC = () => {
+  const CACHE_KEY = 'testimonials_cache';
+
+  const [cachedTestimonials, setCachedTestimonials] = useState<ApiTestimonial[] | null>(() => {
+    try {
+      const saved = localStorage.getItem(CACHE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { data: rawData, isLoading, error } = useGetActiveTestimonialsQuery({
@@ -32,8 +43,15 @@ const Testimonials: React.FC = () => {
     query: "",
   });
 
+  useEffect(() => {
+    if (rawData?.Data) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(rawData.Data));
+      setCachedTestimonials(rawData.Data);
+    }
+  }, [rawData]);
+
   const response = rawData as TestimonialApiResponse | undefined;
-  const testimonials: ApiTestimonial[] = response?.Data ?? [];
+  const testimonials: ApiTestimonial[] = response?.Data ?? cachedTestimonials ?? [];
 
   useEffect(() => {
     if (!testimonials || testimonials.length === 0) return;
@@ -49,9 +67,9 @@ const Testimonials: React.FC = () => {
     setCurrentIndex(index);
   };
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-500 text-center p-4">Failed to load testimonials</div>;
-  if (!testimonials || testimonials.length === 0) return null;
+  if (isLoading && testimonials.length === 0) return <LoadingSpinner />;
+  if (error && testimonials.length === 0) return <div className="text-red-500 text-center p-4">Failed to load testimonials</div>;
+  if (!isLoading && testimonials.length === 0) return null;
 
   return (
     <section className="py-20">
@@ -104,8 +122,8 @@ const Testimonials: React.FC = () => {
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-colors duration-300 ${currentIndex === index
-                  ? 'bg-blue-700'
-                  : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
+                ? 'bg-blue-700'
+                : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             ></button>

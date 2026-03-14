@@ -233,7 +233,7 @@ const TripPlanner: React.FC = () => {
             <div className="relative h-[50vh] min-h-[400px] flex items-center justify-center bg-gray-900 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1714744715453-d472350a262d?q=80&w=2671&auto=format&fit=crop"
+                        src="https://backend.territoryhimalaya.com/assets/bg/mountainrange.jpg?w=1800&h=350&mode=crop"
                         alt="Himalayan Mountains"
                         className="w-full h-full object-cover opacity-50"
                     />

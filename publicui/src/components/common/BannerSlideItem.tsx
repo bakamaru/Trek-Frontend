@@ -17,9 +17,10 @@ export type BannerItemDto = {
 };
 
 export default function BannerSlideItem({ data, isActive }: { data?: BannerItemDto; isActive: boolean }) {
-  if (!isActive || !data) return null;
+  if (!data) return null;
 
   const getAnimClass = (delayStr: string) => {
+    if (!isActive) return 'opacity-0'; // Hide elements when not active
     switch (data.Animation) {
       case 'slide-up':
         return `animate-slide-up ${delayStr}`;
@@ -41,15 +42,14 @@ export default function BannerSlideItem({ data, isActive }: { data?: BannerItemD
   }[data.ContentPosition as string || 'center'];
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden">
+    <div className={`absolute inset-0 w-full h-full overflow-hidden transition-opacity duration-1000 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
       {/* Background Image with Zoom Effect */}
       <div className="absolute inset-0 bg-slate-900">
         {data.ImageUrl ? (
           <img
             src={data.ImageUrl}
             alt={data.Heading}
-            className="w-full h-full object-cover animate-[zoomIn_10s_ease-out_forwards]"
-            key={data.ImageUrl}
+            className={`w-full h-full object-cover ${isActive ? 'animate-[zoomIn_10s_ease-out_forwards]' : ''}`}
             onError={(e) => {
               (e.target as HTMLImageElement).src = 'https://via.placeholder.com/1920x1080?text=No+Image';
             }}
@@ -70,7 +70,7 @@ export default function BannerSlideItem({ data, isActive }: { data?: BannerItemD
         <div className="max-w-3xl">
           {/* Animated Heading */}
           <h1
-            key={`h-${data.BannerItemId}`}
+            key={`h-${data.BannerItemId}-${isActive}`}
             className={`text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-lg ${getAnimClass(
               ''
             )}`}
@@ -80,7 +80,7 @@ export default function BannerSlideItem({ data, isActive }: { data?: BannerItemD
 
           {/* Animated Subheading */}
           <p
-            key={`s-${data.BannerItemId}`}
+            key={`s-${data.BannerItemId}-${isActive}`}
             className={`text-lg md:text-2xl text-slate-200 mb-8 font-light drop-shadow-md ${getAnimClass('delay-100')}`}
           >
             {data.SubHeading}
@@ -88,11 +88,11 @@ export default function BannerSlideItem({ data, isActive }: { data?: BannerItemD
 
           {/* Animated CTA */}
           {data.CTAText && (
-            <div key={`b-${data.BannerItemId}`} className={`${getAnimClass('delay-200')}`}>
-                  <a
-                    href={data.CTALink || '#'}
-                    className="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-full font-semibold hover:bg-indigo-50 hover:scale-105 hover:shadow-xl transition-all duration-300 group"
-                  >
+            <div key={`b-${data.BannerItemId}-${isActive}`} className={`${getAnimClass('delay-200')}`}>
+              <a
+                href={data.CTALink || '#'}
+                className="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-full font-semibold hover:bg-indigo-50 hover:scale-105 hover:shadow-xl transition-all duration-300 group"
+              >
                 {data.CTAText}
                 <MdChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>

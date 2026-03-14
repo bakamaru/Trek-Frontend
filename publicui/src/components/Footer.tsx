@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import { useGetFooterMenu } from '../redux/api/menuAPI';
+import { FaFacebook, FaYoutube, FaInstagram, FaTiktok, FaLinkedin } from 'react-icons/fa';
+//import { useGetFooterMenuQuery } from '../redux/api/menuAPI';
 import LoadingSpinner from './LoadingSpinner';
 import { FooterMenu, FooterSection } from '../types/types';
 
 const Footer: React.FC = () => {
-  //const { data: footerData, isLoading, error } = useGetFooterMenuQuery(undefined);
+  // const { data: footerData, isLoading, error } = useGetFooterMenuQuery(undefined);
 
   // if (isLoading) return <LoadingSpinner />;
   // if (error) return <div className="text-red-500 text-center p-4">Failed to load footer</div>;
@@ -14,7 +15,34 @@ const Footer: React.FC = () => {
   //   sections: [],
   //   socialLinks: []
   // };
-
+  const socialLinks = [
+    {
+      platform: 'Facebook',
+      url: 'https://www.facebook.com/territoryhimalaya',
+      icon: <FaFacebook className="w-6 h-6" />
+    },
+    {
+      platform: 'Youtube',
+      url: 'https://www.youtube.com/@TerritoryHimalaya',
+      icon: <FaYoutube className="w-6 h-6" />
+    },
+    {
+      platform: 'Instagram',
+      url: 'https://www.instagram.com/territoryhimalaya',
+      icon: <FaInstagram className="w-6 h-6" />
+    },
+    {
+      platform: 'Tiktok',
+      url: 'https://www.tiktok.com/@territoryhimalaya',
+      icon: <FaTiktok className="w-6 h-6" />
+    },
+    {
+      platform: 'LinkedIn',
+      url: 'https://www.linkedin.com/company/territory-himalaya/',
+      icon: <FaLinkedin className="w-6 h-6" />
+    }
+  ];
+  const CDN_URL = (import.meta.env.VITE_CDN_PATH || '').replace(/\/+$/, '');
   return (
     <footer className="bg-gray-800 dark:bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-16">
@@ -22,17 +50,20 @@ const Footer: React.FC = () => {
           {/* About Section */}
           <div>
             <h3 className="text-3xl font-extrabold text-white mb-4">
-              <Link to="/" className="hover:text-white">
-                Territory Himalaya<span className="text-blue-700">Pathways</span>
-              </Link>
+              <a href="/" className="hover:text-white">
+                <img src={`${CDN_URL}/assets/logo/logo-v-dark.svg`} width={300} />
+
+              </a>
             </h3>
             <p className="mb-4">
               We are a passionate team of travel experts dedicated to creating unforgettable journeys for our clients.
             </p>
             <div className="flex space-x-4">
-              {/* {socialLinks?.map((link, index) => (
-                <a key={index} href={link.url} className="hover:text-blue-700 transition-colors duration-300">{link.platform}</a>
-              ))} */}
+              {socialLinks?.map((link, index) => (
+                <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-700 transition-colors duration-300" aria-label={link.platform}>
+                  {link.icon || link.platform}
+                </a>
+              ))}
             </div>
           </div>
 
@@ -76,7 +107,7 @@ const Footer: React.FC = () => {
       </div>
       <div className="bg-gray-900 dark:bg-black py-4">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Territory Himalayas. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Territory Himalaya. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

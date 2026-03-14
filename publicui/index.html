@@ -12,8 +12,25 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Jost', 'sans-serif'],
-          }
+            sans: ['"Poppins"', 'sans-serif'],
+            heading: ['"Michroma"', 'sans-serif'],
+          },
+          colors: {
+            // Override blue to match logo brand color #008cff
+            blue: {
+              50:  '#e6f4ff',
+              100: '#cce9ff',
+              200: '#99d3ff',
+              300: '#66bdff',
+              400: '#33a7ff',
+              500: '#008cff',
+              600: '#0070cc',
+              700: '#008cff',
+              800: '#0060b3',
+              900: '#004080',
+              950: '#002040',
+            },
+          },
 
         }
       }
@@ -21,7 +38,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Michroma&display=swap" rel="stylesheet">
   <script>
     // Default to light mode. Only enable dark mode if explicitly saved in localStorage.
     if (localStorage.theme === 'dark') {
